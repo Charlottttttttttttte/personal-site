@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charlotte · 作品集与数字花园</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 导航 -->
+  <header class="site-header">
+    <a class="brand" href="#hero">Charlotte</a>
+    <nav class="site-nav">
+      <a href="#works">作品集</a>
+      <a href="#garden">数字花园</a>
+      <a href="#about">关于</a>
+    </nav>
+  </header>
+
+  <!-- 首页第一屏：3D 互动场景 -->
+  <section id="hero" class="hero">
+    <canvas id="hero-3d" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <h1 class="hero-name">Charlotte</h1>
+      <p class="hero-tagline">用 AI 做视频和网站的创作者</p>
+    </div>
+    <div class="scroll-hint">向下滚动 ↓</div>
+  </section>
+
+  <!-- 正在学状态条 -->
+  <section id="learning" class="learning-bar">
+    <h2 class="section-label">正在学</h2>
+    <div class="learning-items">
+      <span class="pill">财经 · D11/28</span>
+      <span class="pill">Agent 平台 · 研究 Shannon 中</span>
+    </div>
+  </section>
+
+  <!-- 作品集 -->
+  <section id="works" class="section works">
+    <h2 class="section-title">作品集</h2>
+    <div class="card-grid">
+      <article class="card">
+        <div class="card-cover cover-finance">财经</div>
+        <div class="card-body">
+          <h3>财经知识卡片</h3>
+          <p>4 周学习项目 · 每日一考 · 错题本 · day01-21 系列卡片。占位：待放卡片图。</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-cover cover-calligraphy">书法</div>
+        <div class="card-body">
+          <h3>书法练习打卡</h3>
+          <p>每日打卡 + AI 工具（角度检测模型 / 临池录 / 网站自动化）。占位：待放打卡可视化。</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-cover cover-wiki">LLM-Wiki</div>
+        <div class="card-body">
+          <h3>Obsidian LLM-Wiki</h3>
+          <p>用 LLM 自动维护的个人知识库：476 来源 / 1057 页。占位：待放图谱截图。</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 数字花园 -->
+  <section id="garden" class="section garden">
+    <h2 class="section-title">数字花园</h2>
+    <p class="section-desc">占位：AI 工具收藏清单 + 概念笔记出口（wiki 链接）。</p>
+    <ul class="garden-list">
+      <li>占位条目 1：AI 工具</li>
+      <li>占位条目 2：概念笔记</li>
+    </ul>
+  </section>
+
+  <!-- 关于 -->
+  <section id="about" class="section about">
+    <h2 class="section-title">关于</h2>
+    <p class="section-desc">占位：自我介绍、在做什么、为什么做这个站。</p>
+  </section>
+
+  <footer class="site-footer">
+    <p>© 2026 Charlotte · 用 vibe coding 搭建 · <a href="#hero">回到顶部</a></p>
+  </footer>
+
+  <!-- 依赖：Three.js + GSAP（CDN，GitHub Pages 静态站用） -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
