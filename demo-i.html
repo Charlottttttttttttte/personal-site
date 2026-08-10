@@ -68,6 +68,15 @@ body {
   font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
 }
+.today-btn {
+  display: inline-block; margin-top: 10px;
+  background: var(--pink); border: 3px solid var(--ink); border-radius: 999px;
+  padding: 10px 26px; transform: rotate(-1deg);
+  font-family: 'Fredoka', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink); text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.today-btn:hover { transform: translate(3px,3px) rotate(-1deg); box-shadow: 2px 2px 0 var(--ink); }
 /* 轿厢内容招牌（CSS2D）：车厢上方悬浮白胶囊 */
 .cabin-tag-wrap { pointer-events: none; }
 .cabin-tag {
@@ -220,6 +229,9 @@ body {
     <h1 class="hero-name fun" id="heroName">Charlotte<span class="accent">.</span></h1>
   </div>
   <p class="hero-note">↻ 拖拽 · 点轿厢跳转</p>
+  <div style="text-align:center;position:relative;z-index:5;margin-top:6px;">
+    <a href="today.html" class="today-btn fun">今日学习 →</a>
+  </div>
   <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
 </section>
 
