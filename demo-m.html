@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo M · 新拟态</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #E0E5EC;
+  --hi:     #FFFFFF;
+  --lo:     #B8BFC9;
+  --text:   #4A5568;
+  --dim:    #8A97A8;
+  --accent: #6D8EF0;
+  --raise: -6px -6px 12px var(--hi), 6px 6px 12px var(--lo);
+  --sink:  inset -4px -4px 8px var(--hi), inset 4px 4px 8px var(--lo);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; line-height: 1.7;
+}
+.nun { font-family: 'Nunito', sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: 100svh; overflow: hidden; background: var(--bg); }
+#gl { position: absolute; inset: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none;
+}
+.hero-kicker { font-family: 'Nunito'; font-weight: 700; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.hero-name { font-family: 'Nunito'; font-weight: 800; font-size: 66px; line-height: 1.1; color: var(--text); }
+.hero-tag { margin-top: 18px; font-size: 15px; color: var(--dim); }
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Nunito'; font-weight: 700; font-size: 12px; letter-spacing: .25em; color: var(--dim);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 16px; margin-top: 4px; color: var(--accent); }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  font-size: 12px; color: var(--dim);
+  background: var(--bg); border-radius: 16px;
+  box-shadow: var(--raise); padding: 10px 16px;
+}
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 92px 24px; }
+.sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+.sec-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg); box-shadow: var(--raise);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito'; font-weight: 800; font-size: 15px; color: var(--accent);
+}
+.sec-title { font-weight: 700; font-size: 30px; color: var(--text); }
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 8px 0; }
+.learn-panel { padding: 26px 26px 22px; border-radius: 20px; background: var(--bg); box-shadow: var(--raise); }
+.learn-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.learn-label > span:first-child { font-size: 14px; font-weight: 600; }
+.learn-count { font-family: 'Nunito'; font-weight: 800; font-size: 18px; color: var(--accent); }
+.track { height: 16px; border-radius: 999px; background: var(--bg); box-shadow: var(--sink); padding: 3px; }
+.fill { height: 100%; width: 0; border-radius: 999px; background: var(--accent); box-shadow: 2px 2px 5px var(--lo); }
+.learn-topic { margin-top: 12px; font-size: 14px; color: var(--dim); }
+.stages { display: flex; align-items: center; margin: 16px 0 8px; }
+.stage-node { display: flex; align-items: center; flex: 1; }
+.stage-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--bg); box-shadow: var(--sink); flex: none; }
+.stage-dot.on { background: var(--accent); box-shadow: var(--raise); }
+.stage-seg { flex: 1; height: 6px; border-radius: 999px; background: var(--bg); box-shadow: var(--sink); }
+.stage-names { display: flex; justify-content: space-between; font-size: 13px; color: var(--dim); }
+.stage-names .on { color: var(--accent); font-weight: 700; }
+
+/* ---------- 作品卡 ---------- */
+.works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.work-card {
+  background: var(--bg); border: none; border-radius: 20px;
+  padding: 28px 26px 24px; cursor: pointer;
+  box-shadow: var(--raise);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.work-card:hover { box-shadow: var(--sink); transform: scale(.99); }
+.work-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.work-num { font-family: 'Nunito'; font-weight: 800; font-size: 13px; color: var(--accent); }
+.work-title { font-size: 20px; font-weight: 700; margin: 14px 0 8px; }
+.work-desc { font-size: 14px; color: var(--dim); }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 22px; padding-top: 14px;
+  font-family: 'Nunito'; font-weight: 700; font-size: 12px; color: var(--dim);
+}
+.work-foot .sep { height: 2px; border-radius: 2px; background: var(--bg); box-shadow: var(--sink); flex: 1; margin-right: 12px; }
+.work-arrow { transition: transform .2s ease; }
+.work-card:hover .work-arrow { transform: translateX(4px); }
+
+.footer-note {
+  text-align: center; padding: 40px 24px;
+  border-top: 2px solid transparent;
+  box-shadow: inset 0 2px 4px var(--lo), inset 0 -2px 4px var(--hi);
+  font-size: 12px; color: var(--dim);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { grid-template-columns: 1fr; gap: 30px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 46px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .hero-name { font-size: 32px; }
+  .hero-tag { font-size: 14px; padding: 0 24px; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 24px; }
+  .hero-note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 第一屏：软灰丘陵 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <p class="hero-kicker">Portfolio &amp; Digital Garden</p>
+    <h1 class="hero-name" id="heroName">Charlotte<span style="color:var(--accent)">.</span></h1>
+    <p class="hero-tag" id="heroTag">AI 内容创作者 · 学习者 —— 在做的和在读的，都放在这里</p>
+  </div>
+  <p class="hero-note">↻ 拖拽</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num nun">01</span>
+    <h2 class="sec-title">正在学</h2>
+  </div>
+  <div class="learning">
+    <div class="learn-panel" id="learn1">
+      <div class="learn-label">
+        <span>正在学 · 财经</span>
+        <span class="learn-count nun">D<span id="dayCount">0</span>/28</span>
+      </div>
+      <div class="track"><div class="fill" id="finFill" data-w="39"></div></div>
+      <p class="learn-topic">每天 5 分钟低功耗：财务报表入门，产出沉淀为概念卡片</p>
+    </div>
+    <div class="learn-panel" id="learn2">
+      <div class="learn-label">
+        <span>正在学 · Agent 平台</span>
+        <span class="learn-count nun">阶段 1/3</span>
+      </div>
+      <div class="stages">
+        <div class="stage-node" style="flex:none"><div class="stage-dot on"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+      </div>
+      <div class="stage-names">
+        <span class="on">调研</span><span>拆解</span><span>输出</span>
+      </div>
+      <p class="learn-topic">研究 Shannon——生产级多智能体编排：token 预算、沙箱执行、事件流</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num nun">02</span>
+    <h2 class="sec-title">作品集</h2>
+  </div>
+  <div class="works">
+    <div class="work-card" id="work1">
+      <span class="work-num nun">01.</span>
+      <h3 class="work-title">财经知识卡片</h3>
+      <p class="work-desc">4 周学习项目：每日一考 + 错题本 + 间隔复习，产出 day01-21 系列知识卡片。</p>
+      <div class="work-foot">
+        <span class="sep"></span>
+        <span>FINANCE / CARDS</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work2">
+      <span class="work-num nun">02.</span>
+      <h3 class="work-title">书法练习打卡</h3>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span class="sep"></span>
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work3">
+      <span class="work-num nun">03.</span>
+      <h3 class="work-title">Obsidian LLM-Wiki</h3>
+      <p class="work-desc">用 LLM 自动维护的个人知识库：476 来源 / 1057 页 / 321 概念。</p>
+      <div class="work-foot">
+        <span class="sep"></span>
+        <span>OBSIDIAN / WIKI</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-note">DEMO M · NEUMORPHISM —— 灵感：llm-wiki「15 种设计风格 Prompt 库」</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效（新拟态：软，不弹） -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!reduceMotion) {
+  gsap.from('#heroName', { opacity: 0, y: 18, duration: .7, ease: 'power2.out', delay: .2 });
+  gsap.from('#heroTag', { opacity: 0, y: 18, duration: .7, ease: 'power2.out', delay: .38 });
+  gsap.to('.hero-hint .arrow', { y: 6, duration: .8, ease: 'sine.inOut', repeat: -1, yoyo: true });
+}
+
+const finFill = document.getElementById('finFill');
+const dayCount = document.getElementById('dayCount');
+ScrollTrigger.create({
+  trigger: '.learning', start: 'top 80%', once: true,
+  onEnter() {
+    if (reduceMotion) { finFill.style.width = '39%'; dayCount.textContent = '11'; return; }
+    gsap.to(finFill, { width: '39%', duration: 1, ease: 'power2.out' });
+    gsap.to({ v: 0 }, { v: 11, duration: 1.1, ease: 'power2.out',
+      onUpdate() { dayCount.textContent = Math.round(this.targets()[0].v); } });
+    gsap.from('.stage-dot.on', { scale: .6, duration: .5, ease: 'power2.out', delay: .25 });
+  }
+});
+
+if (!reduceMotion) {
+  gsap.from('.work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 18, opacity: 0, duration: .7, ease: 'power2.out', stagger: .08
+  });
+}
+</script>
+
+<!-- Three.js：软灰丘陵 · 同色软阴影 -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, 3.4, 6.2);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+renderer.setClearColor(0xE0E5EC);   // 与页面同色，无缝
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+wrap.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0xcfd6e0, .9));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+sun.position.set(4, 7, 3);
+sun.castShadow = true;
+sun.shadow.mapSize.set(isMobile ? 512 : 1024, isMobile ? 512 : 1024);
+scene.add(sun);
+
+// 雾：把地面远缘融进背景色
+scene.fog = new THREE.Fog(0xE0E5EC, 8, 18);
+
+// 地面（与丘陵同色，影子落其上 = 3D 版"左上白右下黑"）
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(50, 50),
+  new THREE.MeshStandardMaterial({ color: 0xE0E5EC, roughness: .9, metalness: 0 }));
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -1.75;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// 3 个压扁球丘陵
+const hillGeo = new THREE.SphereGeometry(1.6, isMobile ? 24 : 48, isMobile ? 20 : 32);
+const hillMat = new THREE.MeshStandardMaterial({ color: 0xE0E5EC, roughness: .9, metalness: 0 });
+const hills = [
+  { x: 0,    y: -1.0,  z: 0 },
+  { x: 2.2,  y: -1.1,  z: .8 },
+  { x: -2.1, y: -1.05, z: -.6 },
+].map(p => {
+  const m = new THREE.Mesh(hillGeo, hillMat);
+  m.scale.set(1, .42, 1);
+  m.position.set(p.x, p.y, p.z);
+  m.castShadow = true; m.receiveShadow = true;
+  scene.add(m);
+  return m;
+});
+
+const controls = new OrbitControls(camera, renderer.domElement);
+renderer.domElement.style.touchAction = 'pan-y';
+controls.enableZoom = false; controls.enablePan = false;
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.target.set(0, 0, 0);
+controls.autoRotate = !reduceMotion;
+controls.autoRotateSpeed = .4;
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  if (!reduceMotion) {
+    hills.forEach((h, i) => {
+      h.scale.y = .43 + Math.sin(t * .8 + i * 2.094) * .05;   // 相位差 2π/3
+    });
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>

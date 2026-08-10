@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Agent 循环 · 玻璃拟态</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{width:900px;height:1200px;overflow:hidden;font-family:"Noto Sans SC","PingFang SC",sans-serif;}
+  .stage{position:relative;width:100%;height:100%;background:linear-gradient(135deg,#7C4DFF 0%,#2979FF 45%,#00BCD4 100%);display:flex;align-items:center;justify-content:center;}
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;}
+  .b1{width:420px;height:420px;background:#FF4081;top:-60px;left:-80px;}
+  .b2{width:380px;height:380px;background:#FFEB3B;bottom:-70px;right:-60px;opacity:.55;}
+  .b3{width:300px;height:300px;background:#18FFFF;top:30%;right:-90px;opacity:.5;}
+  .card{position:relative;width:780px;height:1060px;border-radius:28px;background:rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.38);box-shadow:0 24px 60px rgba(0,0,0,.28);padding:48px 48px 42px;display:flex;flex-direction:column;color:#fff;}
+  .brow{display:flex;justify-content:space-between;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,.85);font-weight:600;}
+  .rule{height:1px;background:rgba(255,255,255,.4);margin-top:14px;}
+  h1{font-size:96px;font-weight:900;letter-spacing:4px;margin-top:24px;line-height:1.08;text-shadow:0 6px 24px rgba(0,0,0,.22);}
+  .lede{margin-top:14px;font-size:18px;line-height:1.65;color:rgba(255,255,255,.92);font-weight:500;}
+  .lede b{color:#FFF59D;}
+  .loop{margin-top:30px;display:flex;align-items:center;justify-content:space-between;padding:24px 22px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);border-radius:20px;}
+  .step{display:flex;flex-direction:column;align-items:center;gap:10px;width:110px;}
+  .dot{width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#2979FF;box-shadow:0 8px 20px rgba(0,0,0,.2);}
+  .dot.lab{font-size:14px;font-weight:700;color:#fff;background:rgba(255,255,255,.28);}
+  .arr{font-size:26px;color:#FFF59D;font-weight:900;flex:0 0 auto;}
+  .points{margin-top:26px;display:flex;flex-direction:column;gap:12px;}
+  .pt{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32);border-radius:14px;padding:14px 18px;}
+  .pt .n{flex:0 0 30px;height:30px;border-radius:50%;background:#FFF59D;color:#1A237E;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;}
+  .pt p{font-size:15.5px;line-height:1.6;color:rgba(255,255,255,.95);}
+  .takeaway{margin-top:auto;text-align:center;font-size:22px;font-weight:800;letter-spacing:2px;color:#fff;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.4);border-radius:16px;padding:16px 18px;line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="card">
+    <div class="brow"><span>正在学 · AGENT 平台</span><span>DAY 1 · 4/28</span></div>
+    <div class="rule"></div>
+    <h1>Agent<br>循环</h1>
+    <p class="lede">所有 AI Agent 共享同一个迭代循环：<b>调用模型 → 执行工具 → 回传结果 → 再调用</b>，消息数组随迭代持续增长。</p>
+    <div class="loop">
+      <div class="step"><div class="dot lab">调用模型</div><div class="dot">🧠</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="dot lab">执行工具</div><div class="dot">🔧</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="dot lab">回传结果</div><div class="dot">📨</div></div>
+      <div class="arr">↺</div>
+    </div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>工具只是循环里的一步</b>——纯聊天不能调用工具，不是 Agent。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>每一步都基于完整历史</b>——消息数组越滚越长，Agent 才能连续决策。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>生产级再叠三层</b>——权限、预算、生命周期（何时该停）。</p></div>
+    </div>
+    <div class="takeaway">「能调工具、能接回结果，才配叫 Agent。」</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Agent 循环 · 孟菲斯</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{width:900px;height:1200px;overflow:hidden;font-family:"Noto Sans SC","PingFang SC",sans-serif;background:#FDF3E3;display:flex;align-items:center;justify-content:center;position:relative;}
+  .bg-deco{position:absolute;inset:0;pointer-events:none;}
+  .blob{position:absolute;border-radius:50%;opacity:.85;}
+  .c1{width:180px;height:180px;background:#FF6B6B;top:60px;left:50px;}
+  .c2{width:130px;height:130px;background:#4ECDC4;bottom:70px;right:60px;}
+  .c3{width:70px;height:70px;background:#FFD93D;top:180px;right:120px;}
+  .tri{width:0;height:0;border-left:46px solid transparent;border-right:46px solid transparent;border-bottom:80px solid #FF9F1C;position:absolute;bottom:140px;left:120px;transform:rotate(14deg);}
+  .wav{position:absolute;top:300px;left:0;right:0;height:60px;}
+  .card{position:relative;width:812px;height:1092px;background:#FFFDF7;border-radius:8px;box-shadow:0 14px 40px rgba(0,0,0,.12);display:flex;flex-direction:column;padding:52px 52px 44px;border:2px solid #1E1E1E;}
+  .brow{display:flex;justify-content:space-between;font-size:14px;font-weight:800;letter-spacing:2px;color:#1E1E1E;}
+  .brow .tag{background:#1E1E1E;color:#FFFDF7;padding:4px 12px;}
+  .brow .right{color:#FF6B6B;}
+  h1{font-size:124px;font-weight:900;line-height:1;margin-top:30px;letter-spacing:2px;color:#1E1E1E;}
+  h1 .hl{color:#FF6B6B;}
+  .lede{margin-top:20px;font-size:20px;line-height:1.8;font-weight:600;color:#333;background:#FFD93D;padding:14px 20px;transform:rotate(-.6deg);display:inline-block;align-self:flex-start;}
+  .loop{margin-top:38px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
+  .step{flex:1;border:3px solid #1E1E1E;background:#4ECDC4;padding:22px 8px;text-align:center;border-radius:10px;}
+  .step:nth-child(2){background:#FF6B6B;color:#fff;}
+  .step:nth-child(3){background:#FFD93D;}
+  .step .ic{font-size:42px;display:block;}
+  .step .lab{font-size:16px;font-weight:900;margin-top:12px;display:block;}
+  .step .sub{font-size:12px;font-weight:700;margin-top:6px;display:block;opacity:.8;}
+  .arr{flex:0 0 22px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;}
+  .points{margin-top:34px;display:flex;flex-direction:column;gap:12px;}
+  .pt{display:flex;gap:14px;align-items:center;border:2px solid #1E1E1E;padding:13px 16px;background:#fff;border-radius:8px;box-shadow:4px 4px 0 #1E1E1E;}
+  .pt:nth-child(1){background:#E8F8F5;}
+  .pt:nth-child(2){background:#FFF3F3;}
+  .pt:nth-child(3){background:#FFFBEA;}
+  .pt .n{flex:0 0 34px;height:34px;background:#1E1E1E;color:#fff;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+  .pt p{font-size:16px;font-weight:700;line-height:1.6;color:#1E1E1E;}
+  .takeaway{margin-top:auto;background:#1E1E1E;color:#FFFDF7;font-size:26px;font-weight:900;text-align:center;padding:20px 16px;border-radius:8px;letter-spacing:2px;border:3px solid #FF6B6B;}
+</style>
+</head>
+<body>
+<div class="bg-deco">
+  <div class="blob c1"></div><div class="blob c2"></div><div class="blob c3"></div><div class="tri"></div>
+  <svg class="wav" viewBox="0 0 900 60" preserveAspectRatio="none"><path d="M0,30 Q50,0 100,30 T200,30 T300,30 T400,30 T500,30 T600,30 T700,30 T800,30 T900,30" fill="none" stroke="#FF6B6B" stroke-width="5"/></svg>
+</div>
+<div class="card">
+  <div class="brow"><span class="tag">正在学 · AGENT</span><span class="right">DAY 1</span></div>
+  <h1>AGENT<br><span class="hl">循环</span></h1>
+  <p class="lede">调用模型 → 执行工具 → 回传结果，消息数组越滚越长 ↺</p>
+  <div class="loop">
+    <div class="step"><span class="ic">🧠</span><span class="lab">调用模型</span><span class="sub">决定下一步</span></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="ic">🔧</span><span class="lab">执行工具</span><span class="sub">读写/调用</span></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="ic">📨</span><span class="lab">回传结果</span><span class="sub">接回上下文</span></div>
+    <div class="arr">↺</div>
+  </div>
+  <div class="points">
+    <div class="pt"><div class="n">1</div><p>工具只是循环里的一步——纯聊天 ≠ Agent</p></div>
+    <div class="pt"><div class="n">2</div><p>每步都基于完整历史，才能连续决策</p></div>
+    <div class="pt"><div class="n">3</div><p>生产级再叠：权限 / 预算 / 生命周期</p></div>
+  </div>
+  <div class="takeaway">「能调工具、能接回结果，才配叫 Agent。」</div>
+</div>
+</body>
+</html>

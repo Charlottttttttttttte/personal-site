@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo I · 摩天轮综合页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #FFF9F0;   /* 米白底 */
+  --card:  #FFFFFF;
+  --ink:   #17171A;   /* 墨黑 */
+  --pink:  #FF87AB;
+  --yellow:#FFD23F;
+  --blue:  #6FB1FF;
+  --teal:  #4ECDC4;
+  --leaf:  #7FB77E;   /* 叶绿：仅治愈插画 */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--paper);
+  background-image: radial-gradient(rgba(23,23,26,.14) 2px, transparent 2.2px);
+  background-size: 34px 34px;
+  color: var(--ink);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px; line-height: 1.7;
+}
+.fun { font-family: 'Fredoka', sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; height: 100svh; overflow: hidden;
+  background: linear-gradient(180deg, #FFF4DF 0%, var(--paper) 90%);
+}
+#gl { position: absolute; inset: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none;
+  padding-bottom: 12vh;   /* 文字上移，给下方 3D 场景让位 */
+}
+.hero-name {
+  font-family: 'Fredoka', sans-serif; font-weight: 700;
+  font-size: 86px; line-height: 1.05; letter-spacing: .01em;
+  color: var(--ink); position: relative;
+}
+.hero-name .char:nth-child(4n+1) { color: var(--pink); }
+.hero-name .char:nth-child(4n+2) { color: var(--blue); }
+.hero-name .char:nth-child(4n+3) { color: var(--yellow); }
+.hero-name .char:nth-child(4n+4) { color: var(--teal); }
+.hero-name .char { text-shadow: 3px 3px 0 rgba(23,23,26,.18); }
+.hero-name .accent { color: var(--pink) !important; }
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Fredoka', sans-serif; font-size: 13px;
+  letter-spacing: .3em; color: var(--ink);
+  background: var(--card); border: 3px solid var(--ink); border-radius: 12px;
+  padding: 6px 16px; box-shadow: 3px 3px 0 var(--ink);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 22px; margin-top: 4px; }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  background: var(--teal); border: 3px solid var(--ink); border-radius: 12px;
+  padding: 8px 14px; transform: rotate(2deg);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+/* 轿厢内容招牌（CSS2D）：车厢上方悬浮白胶囊 */
+.cabin-tag-wrap { pointer-events: none; }
+.cabin-tag {
+  display: inline-block; white-space: nowrap;
+  background: var(--card); border: 2px solid var(--ink); border-radius: 999px;
+  padding: 1px 8px; box-shadow: 2px 2px 0 var(--ink);
+  font-family: 'Fredoka', 'Noto Sans SC', sans-serif; font-weight: 700; font-size: 11px; color: var(--ink);
+  transform: translateY(-100%);
+}
+.cabin-tag i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; }
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 88px 24px; }
+.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+.sec-num {
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--paper); background: var(--ink);
+  padding: 4px 12px; transform: rotate(-3deg);
+  border-radius: 4px; box-shadow: 3px 3px 0 var(--pink);
+}
+.sec-title {
+  font-family: 'Fredoka', 'Noto Sans SC', sans-serif; font-weight: 900;
+  font-size: 34px; color: var(--ink);
+}
+.sec-title::after { content: '●'; color: var(--yellow); font-size: 22px; margin-left: 10px; }
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; padding: 8px 0; align-items: start; }
+
+/* ---------- 作品卡 ---------- */
+.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+.works .work-card:only-child { max-width: 560px; justify-self: center; }
+.work-card {
+  position: relative; background: var(--card);
+  border: 3px solid var(--ink); border-radius: 14px;
+  padding: 26px 24px 22px; cursor: pointer; overflow: hidden;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.work-card::after {  /* 贴纸：黄色圆 */
+  content: ''; position: absolute; top: -18px; right: -18px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--yellow); border: 3px solid var(--ink);
+}
+.work-card:hover { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--ink); }
+.work-card:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.work-num {
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink);
+  display: inline-block; background: var(--pink);
+  border: 2px solid var(--ink); border-radius: 999px; padding: 0 10px;
+}
+.work-title { font-size: 21px; font-weight: 900; margin: 14px 0 8px; }
+.work-desc { font-size: 14px; color: var(--ink); opacity: .68; }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 22px; padding-top: 12px;
+  border-top: 3px solid var(--ink);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--ink);
+}
+.work-arrow { font-size: 20px; transition: transform .15s ease; }
+.work-card:hover .work-arrow { transform: translateX(5px); }
+.work-thumb {
+  display: block; width: 100%; height: 190px;
+  object-fit: cover; object-position: top;
+  border: 3px solid var(--ink); border-radius: 10px;
+  margin-bottom: 18px;
+}
+.work-thumb--full { height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+/* 学习卡片（竖版）：并排占满板块 */
+.work-card--tall { padding: 18px 20px 20px; }
+.work-card--tall .work-thumb--full { margin-bottom: 14px; }
+.work-card--tall .work-num { font-size: 14px; padding: 0 10px; margin-bottom: 10px; }
+.work-card--tall .work-desc { font-size: 14px; line-height: 1.6; }
+.work-card--tall .work-foot { margin-top: 16px; padding-top: 11px; font-size: 12px; }
+
+/* ---------- 数字花园 ---------- */
+.garden {
+  background-image: radial-gradient(rgba(23,23,26,.08) 2px, transparent 2.2px);
+  background-size: 52px 52px;
+}
+
+/* 知识图谱（3D 力导向） */
+.graph-wrap {
+  position: relative;
+  background: radial-gradient(ellipse at center, rgba(23,23,26,0) 52%, rgba(23,23,26,.07) 100%);
+  border-radius: 14px;
+}
+#kg { width: 100%; height: auto; aspect-ratio: 1000 / 560; display: block; position: relative; }
+#kg canvas { display: block; }
+.kg3d-label {
+  position: absolute;
+  font-family: 'Fredoka', 'Noto Sans SC', sans-serif; font-weight: 700; font-size: 10px;
+  color: var(--ink); background: var(--card);
+  border: 2px solid var(--ink); border-radius: 999px; padding: 1px 7px;
+  box-shadow: 2px 2px 0 var(--ink); white-space: nowrap;
+  transform: translate(-50%, -100%);
+}
+.kg-tip {
+  position: absolute; max-width: 300px; z-index: 5;
+  background: var(--card); border: 3px solid var(--ink); border-radius: 14px;
+  box-shadow: 5px 5px 0 var(--ink); padding: 14px 16px 12px;
+  font-size: 13px; line-height: 1.65; pointer-events: none;
+}
+.kg-tip b { display: block; font-size: 15px; margin-bottom: 4px; }
+.kg-tip .kg-tip-tag {
+  font-family: 'Fredoka', sans-serif; font-size: 11px; color: var(--pink);
+  letter-spacing: .08em; display: block; margin-bottom: 4px;
+}
+.kg-tip small { display: block; font-size: 11px; opacity: .65; margin-top: 4px; }
+
+/* 治愈插画（页尾收束） */
+.garden-coda { max-width: 1080px; margin: 72px auto 0; padding: 0 24px 88px; }
+.garden-coda svg { width: 100%; height: auto; }
+.birds { animation: fly 12s ease-in-out infinite alternate; }
+@keyframes fly { from { transform: translateX(0); } to { transform: translateX(-40px); } }
+.star { animation: twinkle 2.4s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+.coda-note { text-align: center; font-size: 14px; opacity: .7; margin-top: 16px; }
+.coda-note span { font-size: 12px; opacity: .6; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { gap: 28px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 60px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .learning { grid-template-columns: 1fr; }
+  .hero-name { font-size: 44px; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 26px; }
+  .hero-note { display: none; }
+  .cabin-tag { font-size: 9px; padding: 0 5px; }
+  .cabin-tag i { width: 5px; height: 5px; margin-right: 3px; }
+  .archive .archive-panel { padding: 24px 18px; }
+  .kg-tip { max-width: 240px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 第一屏：3D 摩天轮 + 星空粒子 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <h1 class="hero-name fun" id="heroName">Charlotte<span class="accent">.</span></h1>
+  </div>
+  <p class="hero-note">↻ 拖拽 · 点轿厢跳转</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section" id="learn">
+  <div class="sec-head">
+    <span class="sec-num fun">01</span>
+    <h2 class="sec-title fun">正在学</h2>
+  </div>
+  <div class="learning">
+    <div class="work-card work-card--tall" id="learn1">
+      <img class="work-thumb work-thumb--full" src="img/day12-card.png" alt="财经知识卡片 day12 钱转多快">
+      <span class="work-num fun">DAY 12 · 财经钱转多快</span>
+      <p class="work-desc">同样的钱，一年能赚几遍？给公司装个转速表——用存货、应收账款、总资产三个周转率，看懂茅台与伊利的生意节奏。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS · 12/28</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card work-card--tall" id="learn2" onclick="window.open('obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Loop','_blank')">
+      <img class="work-thumb work-thumb--full" src="img/agent-card.png" alt="Agent 学习卡片 DAY 1 · Agent 循环">
+      <span class="work-num fun">DAY 1 · Agent 循环</span>
+      <p class="work-desc">所有 AI Agent 共享的内核：调用模型 → 执行工具 → 回传结果。拓展见 Wiki：编排 / 上下文工程。</p>
+      <div class="work-foot">
+        <span>AGENT / LEARNING · 1/28</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集 ============ -->
+<section class="section" id="works">
+  <div class="sec-head">
+    <span class="sec-num fun">02</span>
+    <h2 class="sec-title fun">作品集</h2>
+  </div>
+  <div class="works">
+    <div class="work-card" id="work2">
+      <span class="work-num fun">02书法练习打卡</span>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 数字花园 ============ -->
+<section class="section garden" id="garden">
+  <div class="sec-head">
+    <span class="sec-num fun">03</span>
+    <h2 class="sec-title fun">数字花园</h2>
+  </div>
+  <div class="graph-wrap">
+    <div id="kg" role="img"
+         aria-label="知识图谱全览：328 个概念节点与 367 条双向链接"></div>
+    <div class="kg-tip" id="kgTip" role="tooltip" hidden></div>
+  </div>
+</section>
+
+<!-- 治愈插画：页尾收束 -->
+<div class="garden-coda">
+  <svg viewBox="0 0 1000 180" aria-hidden="true">
+    <rect y="150" width="1000" height="3" fill="#D8E6CF"/>
+    <path d="M110,150 C112,120 108,105 110,88" fill="none" stroke="#8A7B66" stroke-width="7" stroke-linecap="round"/>
+    <path d="M110,105 C135,95 150,85 168,72" fill="none" stroke="#8A7B66" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="96" cy="74" r="30" fill="#7FB77E"/>
+    <circle cx="128" cy="62" r="24" fill="#96C795"/>
+    <circle cx="112" cy="94" r="18" fill="#AFD8AE"/>
+    <polygon class="star" fill="#FFD23F" points="172,50 175.7,62.3 188,66 175.7,69.7 172,82 168.3,69.7 156,66 168.3,62.3"/>
+    <g class="birds" fill="none" stroke="#7A8B74" stroke-width="3" stroke-linecap="round">
+      <path d="M0,0 Q6,-7 12,0 Q18,-7 24,0" transform="translate(880,60)"/>
+      <path d="M0,0 Q5,-6 10,0 Q15,-6 20,0" transform="translate(800,88)"/>
+      <path d="M0,0 Q4.5,-5.4 9,0 Q13.5,-5.4 18,0" transform="translate(720,56)"/>
+      <path d="M0,0 Q4.25,-5.1 8.5,0 Q12.75,-5.1 17,0" transform="translate(640,92)"/>
+      <path d="M0,0 Q4,-4.8 8,0 Q12,-4.8 16,0" transform="translate(560,70)"/>
+    </g>
+  </svg>
+  <p class="coda-note">候鸟有来回，人生无返程。<span>——把学到的都种在这里</span></p>
+</div>
+
+<!-- 知识图谱数据（真实 wiki 子图：15 节点 20 边） -->
+<script type="application/json" id="kg-data">
+{"nodes":[{"id":"10x-Growth","dist":99},{"id":"3D个人主页","dist":99},{"id":"3D互动网页","dist":0},{"id":"3D动作生成","dist":99},{"id":"60秒价值验证","dist":99},{"id":"AB-Testing","dist":5},{"id":"ACT 笔记系统","dist":99},{"id":"AEO","dist":99},{"id":"AGENTS-as-Evolution-Protocol","dist":99},{"id":"AI 辅助卡片连结","dist":99},{"id":"AI-Agent-Architecture","dist":1},{"id":"AI-Agent-Deployment","dist":99},{"id":"AI-Agent-Memory","dist":2},{"id":"AI-Board","dist":99},{"id":"AI-Cost-Optimization","dist":99},{"id":"AI-Education","dist":99},{"id":"AI-Industry-Chain","dist":99},{"id":"AI-Interactive-Game","dist":99},{"id":"AI-Long-Term-Memory","dist":99},{"id":"AI-News-Daily","dist":99},{"id":"AI-PPT","dist":99},{"id":"AI-Product-Market-Fit","dist":99},{"id":"AI-Productivity","dist":99},{"id":"AIGC","dist":99},{"id":"AI创业","dist":99},{"id":"AI原生内容创作","dist":99},{"id":"AI图像生成","dist":99},{"id":"AI学术写作","dist":99},{"id":"AI建站","dist":99},{"id":"AI手绘动画","dist":99},{"id":"AI浏览器","dist":99},{"id":"AI游戏美术管线","dist":99},{"id":"AI生成PPT","dist":4},{"id":"AI生成UI","dist":4},{"id":"AI系统状态可视化","dist":99},{"id":"AI绘本","dist":99},{"id":"AI自进化","dist":5},{"id":"AI视频生成","dist":99},{"id":"AI评审团","dist":99},{"id":"AI语音输入","dist":99},{"id":"AI辅助开发","dist":99},{"id":"AI配音","dist":99},{"id":"AI音乐生成","dist":99},{"id":"Admin-Dashboard","dist":2},{"id":"Agent-Builder","dist":99},{"id":"Agent-Loop","dist":1},{"id":"Agent-Orchestration","dist":0},{"id":"Agent-Skills","dist":2},{"id":"Agent-Team","dist":1},{"id":"Agent-md","dist":99},{"id":"Agent杠杆率","dist":99},{"id":"Agent行为策略","dist":99},{"id":"Atomic-Knowledge-Representation","dist":99},{"id":"AutoResearch","dist":5},{"id":"Bootstrap","dist":1},{"id":"Briefing API","dist":99},{"id":"Build-Your-Own-X","dist":99},{"id":"CC0协议","dist":99},{"id":"CLAUDE-md","dist":99},{"id":"Claude-Code-Skill","dist":99},{"id":"Claude-账号风控","dist":99},{"id":"Code-Review-Lite","dist":99},{"id":"Compiled-Truth","dist":99},{"id":"Context-Engineering","dist":3},{"id":"Context-Management","dist":2},{"id":"Context-over-Persona","dist":99},{"id":"DESIGN-md","dist":4},{"id":"Data-Visualization","dist":99},{"id":"Design-to-Code","dist":99},{"id":"Digital-Companion","dist":99},{"id":"Digital-Twin","dist":99},{"id":"Document-Review","dist":99},{"id":"ETF联接基金","dist":99},{"id":"Emotional-Value","dist":99},{"id":"Financial-Freedom","dist":99},{"id":"Financial-Statements","dist":99},{"id":"Four-Layer-Memory","dist":99},{"id":"Frontend-Design-Skill","dist":99},{"id":"GitHub-MCP","dist":99},{"id":"Goal-Aligned-Review","dist":99},{"id":"Goal-Definition-for-Agents","dist":99},{"id":"HTML动画","dist":99},{"id":"HTML模板","dist":1},{"id":"HTML演示文稿","dist":4},{"id":"Hackathon","dist":99},{"id":"ICP备案","dist":99},{"id":"Important-Work-Mental-Models","dist":99},{"id":"Indie-Hacker","dist":99},{"id":"Interactive-Learning","dist":99},{"id":"Karpathy-Guidelines","dist":99},{"id":"Kimi-Code-Swarm","dist":99},{"id":"LLM-Wiki","dist":3},{"id":"Landing-Page","dist":2},{"id":"Language-Learning","dist":99},{"id":"Long-Running-Task-Execution","dist":99},{"id":"MCP","dist":2},{"id":"MVP","dist":99},{"id":"Meaning-Economy","dist":99},{"id":"Meta-Prompt","dist":99},{"id":"Micro-Sync","dist":99},{"id":"MoE架构","dist":99},{"id":"Model-Evaluation","dist":4},{"id":"Next-js","dist":99},{"id":"OCR","dist":99},{"id":"Obsidian-小说写作","dist":99},{"id":"Obsidian插件开发","dist":99},{"id":"Onboarding","dist":99},{"id":"Open-Source-Intelligence","dist":99},{"id":"OpenClaw-Skill","dist":99},{"id":"PRD","dist":3},{"id":"Personal-Finance","dist":99},{"id":"Plan-Execute-Review","dist":3},{"id":"Pretext","dist":99},{"id":"Prompt-Driven-Development","dist":99},{"id":"Prompt模板库","dist":99},{"id":"Public-Thinking","dist":99},{"id":"RAG","dist":4},{"id":"RSS简报","dist":4},{"id":"Raw Truth vs Synthesized Knowledge","dist":99},{"id":"ReAct循环","dist":99},{"id":"Reddit-SEO","dist":99},{"id":"Reverse-Questioning","dist":99},{"id":"SOP","dist":99},{"id":"SOW","dist":2},{"id":"SRE","dist":99},{"id":"Schema-as-Code","dist":99},{"id":"Secondary-Model","dist":99},{"id":"Skill-System","dist":99},{"id":"Skill-Vetter","dist":3},{"id":"Skillpack","dist":99},{"id":"Slash-Commands","dist":99},{"id":"Source Map 泄露","dist":99},{"id":"Super-Ego","dist":99},{"id":"Superpowers-Framework","dist":99},{"id":"Tailwind-CSS","dist":1},{"id":"Time-Management","dist":99},{"id":"Tool-Use","dist":99},{"id":"UGC","dist":99},{"id":"UGC广告获客","dist":99},{"id":"UI复刻","dist":4},{"id":"Wealth-Building","dist":99},{"id":"Web-Scraping","dist":99},{"id":"Web3","dist":99},{"id":"Web安全漏洞","dist":99},{"id":"Weekly-Compound","dist":99},{"id":"Workflow-Automation","dist":99},{"id":"Workflow-Layering","dist":99},{"id":"Zettelkasten","dist":99},{"id":"html-in-canvas","dist":0},{"id":"index","dist":2},{"id":"llm","dist":2},{"id":"memory-system","dist":2},{"id":"one-person-company","dist":3},{"id":"personal-operating-system","dist":1},{"id":"prompt-engineering","dist":1},{"id":"reveal-js","dist":3},{"id":"skill-creator","dist":99},{"id":"subagent","dist":2},{"id":"vibe-coding","dist":0},{"id":"一源多用","dist":99},{"id":"三分化训练","dist":99},{"id":"三大报表","dist":99},{"id":"中央银行","dist":99},{"id":"主动回忆","dist":99},{"id":"书法练习","dist":99},{"id":"书法耗材选购","dist":99},{"id":"二元评估","dist":99},{"id":"云端记忆库","dist":99},{"id":"互动网页","dist":99},{"id":"交互动效","dist":99},{"id":"交互式科学实验","dist":99},{"id":"代码知识图谱","dist":99},{"id":"传统健身功法","dist":99},{"id":"估值","dist":99},{"id":"信息获取","dist":99},{"id":"像素风素材","dist":99},{"id":"元认知","dist":99},{"id":"全栈开发路径","dist":99},{"id":"关税","dist":99},{"id":"内容机器","dist":99},{"id":"净利率","dist":99},{"id":"净资产收益率","dist":99},{"id":"创意编程","dist":1},{"id":"利润表","dist":99},{"id":"利率与LPR","dist":99},{"id":"前端动效","dist":99},{"id":"剥洋葱式引导","dist":99},{"id":"博弈论","dist":3},{"id":"卡密变现","dist":99},{"id":"卡片交互","dist":99},{"id":"去AI痕迹","dist":99},{"id":"双字幕精听法","dist":99},{"id":"口译复盘法","dist":99},{"id":"可控角色生成","dist":99},{"id":"可自生长的知识库","dist":99},{"id":"可观测性","dist":99},{"id":"合同负债","dist":99},{"id":"吸引力法则","dist":99},{"id":"响应式布局","dist":99},{"id":"响应式设计","dist":0},{"id":"回溯校验机制","dist":99},{"id":"地图拼接","dist":99},{"id":"复利式知识管理","dist":99},{"id":"多Agent协作","dist":1},{"id":"大模型安全","dist":99},{"id":"好公司三问","dist":99},{"id":"存货周转率","dist":99},{"id":"学习路径","dist":99},{"id":"实时排版","dist":99},{"id":"实际利率","dist":99},{"id":"对抗式需求澄清","dist":99},{"id":"小游戏分发平台","dist":99},{"id":"尚雯婕学习法","dist":99},{"id":"工作流自动化","dist":3},{"id":"平台内容归档","dist":99},{"id":"年报","dist":99},{"id":"微交互","dist":99},{"id":"快捷指令自动化","dist":99},{"id":"快速原型","dist":99},{"id":"思维导图","dist":99},{"id":"意象化设计","dist":99},{"id":"成长型思维","dist":99},{"id":"打卡系统","dist":99},{"id":"投机解码","dist":99},{"id":"投资决策流程","dist":99},{"id":"抽卡","dist":99},{"id":"换窗失忆","dist":99},{"id":"接力棒式总结","dist":99},{"id":"数值与逻辑分离","dist":99},{"id":"数字游民","dist":99},{"id":"数据驱动需求挖掘","dist":99},{"id":"文档驱动AI开发","dist":99},{"id":"新拟态","dist":99},{"id":"最佳燃脂心率","dist":99},{"id":"本地大模型","dist":99},{"id":"机器学习","dist":99},{"id":"杜邦分析","dist":99},{"id":"架构图复现","dist":99},{"id":"核心与侧腰训练","dist":99},{"id":"根因调试","dist":99},{"id":"模型量化","dist":99},{"id":"止损纪律","dist":99},{"id":"死互联网理论","dist":99},{"id":"每日复盘","dist":99},{"id":"毛利率","dist":99},{"id":"沉浸式交互","dist":99},{"id":"沙画式交互","dist":99},{"id":"流动比率","dist":99},{"id":"测试驱动开发","dist":99},{"id":"液态交互","dist":99},{"id":"深度学习","dist":99},{"id":"渐进式披露","dist":99},{"id":"游戏化学习","dist":99},{"id":"游戏素材库","dist":99},{"id":"源码逆向学习","dist":99},{"id":"爆款拆解","dist":99},{"id":"状态机","dist":99},{"id":"独居应急准备","dist":99},{"id":"独立开发","dist":99},{"id":"独立游戏出海","dist":99},{"id":"独立游戏开发","dist":99},{"id":"猫咪口腔护理","dist":99},{"id":"现金流量表","dist":99},{"id":"目标极简","dist":99},{"id":"知识可视化","dist":99},{"id":"知识复利","dist":99},{"id":"知识库 Bookkeeping","dist":99},{"id":"知识库 Lint","dist":99},{"id":"知识库 Schema","dist":99},{"id":"知识库原生技能","dist":99},{"id":"知识编译","dist":99},{"id":"知识蒸馏","dist":99},{"id":"确定性自动化","dist":99},{"id":"确认偏误","dist":99},{"id":"社会融资规模","dist":99},{"id":"私募股权投资","dist":99},{"id":"端到端AI应用开发","dist":99},{"id":"笔译考试","dist":99},{"id":"第一性原理","dist":99},{"id":"第二大脑","dist":99},{"id":"算法刷题","dist":99},{"id":"算法可视化","dist":99},{"id":"精准编辑","dist":99},{"id":"系统架构设计","dist":99},{"id":"结构化笔记生成","dist":99},{"id":"编程式视频","dist":99},{"id":"美术策划案","dist":99},{"id":"翻译服务","dist":99},{"id":"肌肉量与抗衰老","dist":99},{"id":"脑区式信息组织","dist":99},{"id":"自动设计工具","dist":99},{"id":"自学CS","dist":99},{"id":"自我投资","dist":99},{"id":"自然语言工作流","dist":99},{"id":"视频剪辑自动化","dist":99},{"id":"视频转写","dist":99},{"id":"角色表","dist":99},{"id":"记忆分层","dist":99},{"id":"记忆库聚类维护","dist":99},{"id":"记忆归档终端","dist":99},{"id":"设计系统","dist":3},{"id":"证据链验证","dist":99},{"id":"负面约束","dist":99},{"id":"货币供应量","dist":99},{"id":"货币政策工具","dist":99},{"id":"费曼学习法","dist":99},{"id":"资产负债率","dist":99},{"id":"资产负债表","dist":99},{"id":"赛马机制","dist":99},{"id":"转码","dist":99},{"id":"软件著作权","dist":99},{"id":"迭代式AI使用","dist":99},{"id":"追加回顾笔记法","dist":99},{"id":"选择题型提问","dist":99},{"id":"通货膨胀","dist":99},{"id":"遮罩转场","dist":99},{"id":"链接即知识资产","dist":99},{"id":"锯齿状智能","dist":99},{"id":"闪念捕捉","dist":99},{"id":"间隔复习","dist":99},{"id":"间隔重复","dist":99},{"id":"需求验证","dist":99},{"id":"静态站点生成器","dist":2},{"id":"静态部署","dist":99},{"id":"韩语学习","dist":99},{"id":"项目驱动学习","dist":99},{"id":"风格迁移","dist":99},{"id":"首尾帧","dist":99}],"edges":[["Landing-Page","响应式设计"],["Landing-Page","Tailwind-CSS"],["美术策划案","设计系统"],["大模型安全","深度学习"],["大模型安全","模型量化"],["AI学术写作","Prompt模板库"],["AI学术写作","Agent-Skills"],["HTML模板","Landing-Page"],["HTML模板","静态站点生成器"],["HTML模板","响应式设计"],["HTML模板","Tailwind-CSS"],["Bootstrap","响应式设计"],["Bootstrap","Tailwind-CSS"],["Bootstrap","HTML模板"],["AI配音","vibe-coding"],["平台内容归档","第二大脑"],["打卡系统","间隔重复"],["打卡系统","每日复盘"],["传统健身功法","肌肉量与抗衰老"],["Document-Review","第二大脑"],["Document-Review","每日复盘"],["Document-Review","Plan-Execute-Review"],["Document-Review","证据链验证"],["AI游戏美术管线","vibe-coding"],["AI游戏美术管线","AI生成UI"],["AI游戏美术管线","数值与逻辑分离"],["AI生成PPT","index"],["Frontend-Design-Skill","设计系统"],["Agent-Orchestration","Agent-Team"],["Agent-Orchestration","多Agent协作"],["可自生长的知识库","第二大脑"],["GitHub-MCP","index"],["UGC","index"],["AI语音输入","vibe-coding"],["AI语音输入","视频转写"],["AI-Agent-Deployment","Agent-Team"],["AI-Agent-Deployment","MCP"],["AI-Agent-Deployment","可观测性"],["AI-Agent-Deployment","AI-Agent-Memory"],["AI-Agent-Deployment","端到端AI应用开发"],["AB-Testing","Agent-Skills"],["AB-Testing","Context-Engineering"],["Important-Work-Mental-Models","LLM-Wiki"],["Important-Work-Mental-Models","第二大脑"],["AIGC","AI图像生成"],["AIGC","vibe-coding"],["AIGC","prompt-engineering"],["AIGC","AI视频生成"],["AIGC","AI生成UI"],["Agent-md","CLAUDE-md"],["Agent-md","vibe-coding"],["Agent-md","Karpathy-Guidelines"],["Financial-Freedom","Meaning-Economy"],["Financial-Freedom","Important-Work-Mental-Models"],["AI图像生成","风格迁移"],["AI图像生成","prompt-engineering"],["AI图像生成","AI视频生成"],["快速原型","项目驱动学习"],["AI-Interactive-Game","AIGC"],["Source Map 泄露","第二大脑"],["好公司三问","年报"],["好公司三问","毛利率"],["OpenClaw-Skill","index"],["Long-Running-Task-Execution","vibe-coding"],["Long-Running-Task-Execution","subagent"],["Long-Running-Task-Execution","多Agent协作"],["Admin-Dashboard","Bootstrap"],["Admin-Dashboard","响应式设计"],["Admin-Dashboard","HTML模板"],["Reverse-Questioning","prompt-engineering"],["AI-News-Daily","index"],["算法刷题","项目驱动学习"],["Agent-Builder","Agent-Skills"],["AI系统状态可视化","微交互"],["AI系统状态可视化","Agent-Loop"],["AI系统状态可视化","交互动效"],["Context-over-Persona","index"],["prompt-engineering","vibe-coding"],["复利式知识管理","第二大脑"],["响应式布局","响应式设计"],["响应式布局","设计系统"],["估值","好公司三问"],["估值","年报"],["估值","净资产收益率"],["估值","净利率"],["AI-Board","index"],["社会融资规模","货币供应量"],["剥洋葱式引导","知识可视化"],["剥洋葱式引导","渐进式披露"],["Meta-Prompt","index"],["Goal-Definition-for-Agents","LLM-Wiki"],["Goal-Definition-for-Agents","第二大脑"],["Goal-Aligned-Review","LLM-Wiki"],["Goal-Aligned-Review","第二大脑"],["中央银行","货币政策工具"],["中央银行","通货膨胀"],["中央银行","货币供应量"],["中央银行","利率与LPR"],["机器学习","深度学习"],["机器学习","项目驱动学习"],["SOP","知识库 Schema"],["SOP","工作流自动化"],["SOP","Workflow-Layering"],["确认偏误","证据链验证"],["现金流量表","资产负债表"],["Wealth-Building","现金流量表"],["Wealth-Building","资产负债表"],["AI辅助开发","端到端AI应用开发"],["AI辅助开发","vibe-coding"],["3D动作生成","index"],["Design-to-Code","vibe-coding"],["Design-to-Code","MCP"],["Design-to-Code","响应式布局"],["Design-to-Code","设计系统"],["快捷指令自动化","确定性自动化"],["可控角色生成","地图拼接"],["Public-Thinking","one-person-company"],["沉浸式交互","渐进式披露"],["AGENTS-as-Evolution-Protocol","LLM-Wiki"],["AGENTS-as-Evolution-Protocol","Agent-Skills"],["llm","vibe-coding"],["llm","prompt-engineering"],["AI视频生成","vibe-coding"],["AI视频生成","AI音乐生成"],["AI视频生成","prompt-engineering"],["AI视频生成","一源多用"],["Prompt-Driven-Development","index"],["one-person-company","vibe-coding"],["数字游民","独立开发"],["核心与侧腰训练","肌肉量与抗衰老"],["意象化设计","设计系统"],["AI-Productivity","AIGC"],["AI-Productivity","独立开发"],["AI-Productivity","工作流自动化"],["AI-Productivity","AI辅助开发"],["书法练习","间隔重复"],["知识库 Bookkeeping","第二大脑"],["云端记忆库","第二大脑"],["HTML演示文稿","index"],["Next-js","index"],["Raw Truth vs Synthesized Knowledge","第二大脑"],["Secondary-Model","第二大脑"],["Reddit-SEO","UGC"],["Indie-Hacker","MVP"],["Atomic-Knowledge-Representation","MCP"],["Atomic-Knowledge-Representation","prompt-engineering"],["AI自进化","AutoResearch"],["Obsidian插件开发","第二大脑"],["Obsidian插件开发","personal-operating-system"],["Obsidian插件开发","vibe-coding"],["AI创业","Indie-Hacker"],["AI-Agent-Memory","LLM-Wiki"],["AI-Agent-Memory","Agent-Skills"],["DESIGN-md","UI复刻"],["DESIGN-md","设计系统"],["AI-Cost-Optimization","MoE架构"],["AI-Cost-Optimization","本地大模型"],["AI-Cost-Optimization","AI辅助开发"],["AI-Cost-Optimization","模型量化"],["独立开发","设计系统"],["Zettelkasten","第二大脑"],["Skill-Vetter","工作流自动化"],["subagent","vibe-coding"],["Agent杠杆率","index"],["ACT 笔记系统","LLM-Wiki"],["ACT 笔记系统","第二大脑"],["净资产收益率","杜邦分析"],["净资产收益率","资产负债率"],["Web-Scraping","数据驱动需求挖掘"],["Web-Scraping","工作流自动化"],["Slash-Commands","index"],["UI复刻","设计系统"],["3D互动网页","personal-operating-system"],["3D互动网页","响应式设计"],["3D互动网页","vibe-coding"],["3D互动网页","创意编程"],["AI-Product-Market-Fit","数据驱动需求挖掘"],["AI-Product-Market-Fit","one-person-company"],["AI-Product-Market-Fit","Indie-Hacker"],["源码逆向学习","第二大脑"],["AI-Industry-Chain","AI-Interactive-Game"],["AI-Industry-Chain","AIGC"],["知识库 Schema","第二大脑"],["AI-Long-Term-Memory","LLM-Wiki"],["AI-Long-Term-Memory","第二大脑"],["OCR","llm"],["三大报表","间隔重复"],["三大报表","主动回忆"],["投资决策流程","止损纪律"],["游戏素材库","独立游戏开发"],["接力棒式总结","第二大脑"],["Web3","项目驱动学习"],["HTML动画","vibe-coding"],["HTML动画","响应式布局"],["Prompt模板库","prompt-engineering"],["AI评审团","内容机器"],["AI评审团","Agent-Team"],["AI原生内容创作","内容机器"],["AI原生内容创作","工作流自动化"],["AI原生内容创作","爆款拆解"],["AI原生内容创作","AI评审团"],["Agent-Loop","index"],["货币供应量","通货膨胀"],["ICP备案","vibe-coding"],["年报","现金流量表"],["年报","资产负债表"],["AI-Education","Interactive-Learning"],["AI-Education","llm"],["AI-Education","Agent-Skills"],["利润表","现金流量表"],["利润表","资产负债表"],["SOW","多Agent协作"],["Hackathon","端到端AI应用开发"],["Hackathon","项目驱动学习"],["Hackathon","MVP"],["最佳燃脂心率","核心与侧腰训练"],["最佳燃脂心率","肌肉量与抗衰老"],["吸引力法则","确认偏误"],["Superpowers-Framework","第二大脑"],["RSS简报","personal-operating-system"],["RSS简报","工作流自动化"],["Claude-Code-Skill","LLM-Wiki"],["AI 辅助卡片连结","LLM-Wiki"],["AI 辅助卡片连结","第二大脑"],["Skill-System","index"],["全栈开发路径","独立开发"],["全栈开发路径","项目驱动学习"],["Meaning-Economy","Public-Thinking"],["Meaning-Economy","one-person-company"],["Agent行为策略","index"],["Four-Layer-Memory","index"],["Workflow-Layering","第二大脑"],["Micro-Sync","index"],["CC0协议","独立游戏开发"],["CC0协议","游戏素材库"],["净利率","利润表"],["净利率","毛利率"],["净利率","杜邦分析"],["AEO","Compiled-Truth"],["Briefing API","LLM-Wiki"],["Briefing API","第二大脑"],["Digital-Twin","云端记忆库"],["Digital-Twin","第二大脑"],["Digital-Twin","Long-Running-Task-Execution"],["memory-system","personal-operating-system"],["实际利率","通货膨胀"],["小游戏分发平台","软件著作权"],["小游戏分发平台","独立游戏出海"],["Workflow-Automation","index"],["学习路径","费曼学习法"],["Web安全漏洞","index"],["架构图复现","第二大脑"],["Time-Management","每日复盘"],["换窗失忆","第二大脑"],["Code-Review-Lite","index"],["Plan-Execute-Review","personal-operating-system"],["Plan-Execute-Review","subagent"],["AI生成UI","UI复刻"],["AI生成UI","DESIGN-md"],["AI生成UI","设计系统"],["内容机器","工作流自动化"],["内容机器","爆款拆解"],["Build-Your-Own-X","源码逆向学习"],["Build-Your-Own-X","深度学习"],["Build-Your-Own-X","项目驱动学习"],["Agent-Team","SOW"],["Agent-Team","MCP"],["Agent-Team","subagent"],["Agent-Team","多Agent协作"],["Compiled-Truth","LLM-Wiki"],["3D个人主页","独立开发"],["3D个人主页","vibe-coding"],["3D个人主页","3D互动网页"],["3D个人主页","互动网页"],["自动设计工具","设计系统"],["Schema-as-Code","第二大脑"],["像素风素材","独立游戏开发"],["像素风素材","游戏素材库"],["AI浏览器","Agent-Orchestration"],["AI浏览器","Agent-Loop"],["AI浏览器","工作流自动化"],["CLAUDE-md","vibe-coding"],["CLAUDE-md","prompt-engineering"],["CLAUDE-md","Karpathy-Guidelines"],["成长型思维","间隔重复"],["Kimi-Code-Swarm","LLM-Wiki"],["Kimi-Code-Swarm","第二大脑"],["转码","项目驱动学习"],["AI音乐生成","prompt-engineering"],["Karpathy-Guidelines","vibe-coding"],["Karpathy-Guidelines","prompt-engineering"],["Emotional-Value","personal-operating-system"],["UGC广告获客","vibe-coding"],["UGC广告获客","one-person-company"],["ReAct循环","index"],["index","personal-operating-system"],["index","vibe-coding"],["index","prompt-engineering"],["index","静态站点生成器"],["index","llm"],["index","设计系统"],["index","subagent"],["index","one-person-company"],["index","博弈论"],["index","reveal-js"],["index","响应式设计"],["index","memory-system"],["杜邦分析","资产负债率"],["杜邦分析","毛利率"],["AI手绘动画","vibe-coding"],["AI手绘动画","AI视频生成"],["互动网页","微交互"],["互动网页","前端动效"],["Onboarding","index"],["独立游戏出海","软件著作权"],["存货周转率","杜邦分析"],["存货周转率","资产负债表"],["MVP","数据驱动需求挖掘"],["MVP","PRD"],["MVP","独立开发"],["交互式科学实验","游戏化学习"],["知识库 Lint","第二大脑"],["自学CS","转码"],["Digital-Companion","personal-operating-system"],["Digital-Companion","Emotional-Value"],["代码知识图谱","源码逆向学习"],["利率与LPR","实际利率"],["主动回忆","间隔重复"],["主动回忆","每日复盘"],["知识库原生技能","第二大脑"],["LLM-Wiki","personal-operating-system"],["LLM-Wiki","RAG"],["Weekly-Compound","index"],["Tailwind-CSS","响应式设计"],["AI绘本","AI配音"],["AI绘本","AI视频生成"],["地图拼接","工作流自动化"],["元认知","第二大脑"],["元认知","每日复盘"],["知识复利","第二大脑"],["Personal-Finance","每日复盘"],["Personal-Finance","项目驱动学习"],["Personal-Finance","Zettelkasten"],["Personal-Finance","第二大脑"],["Personal-Finance","personal-operating-system"],["Language-Learning","index"],["AI-Agent-Architecture","Agent-Team"],["AI-Agent-Architecture","AI-Agent-Memory"],["AI-Agent-Architecture","Context-Management"],["AI-Agent-Architecture","Agent-Skills"],["AI-Agent-Architecture","多Agent协作"],["Claude-账号风控","index"],["AI-PPT","AI生成UI"],["AI-PPT","reveal-js"],["知识编译","第二大脑"],["60秒价值验证","index"],["合同负债","资产负债率"],["合同负债","资产负债表"],["AI建站","index"],["ETF联接基金","止损纪律"],["ETF联接基金","年报"],["ETF联接基金","投资决策流程"],["ETF联接基金","估值"],["Agent-Skills","Skill-Vetter"],["Agent-Skills","MCP"],["Agent-Skills","Context-Engineering"],["Agent-Skills","工作流自动化"]],"core":["vibe-coding","3D互动网页","html-in-canvas","响应式设计","Agent-Orchestration"]}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效 -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const name = document.getElementById('heroName');
+name.innerHTML = [...name.textContent].map(c =>
+  c === '.' ? '<span class="accent char">.</span>' : `<span class="char">${c}</span>`).join('');
+if (!reduceMotion) {
+  gsap.from('.char', { y: 30, opacity: 0, duration: .7, ease: 'back.out(1.8)', stagger: .05, delay: .2 });
+  gsap.to('.hero-hint .arrow', { y: 8, duration: .7, ease: 'sine.inOut', repeat: -1, yoyo: true });
+}
+
+if (!reduceMotion) {
+  gsap.from('.learning .work-card', {
+    scrollTrigger: { trigger: '.learning', start: 'top 80%', once: true },
+    y: 34, opacity: 0, duration: .7, ease: 'power3.out', stagger: .1
+  });
+  gsap.from('.works .work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 34, opacity: 0, duration: .7, ease: 'power3.out', stagger: .1
+  });
+  // 数字花园：图谱 / 页尾治愈插画
+  gsap.from('.graph-wrap', {
+    scrollTrigger: { trigger: '.graph-wrap', start: 'top 85%', once: true },
+    y: 30, opacity: 0, duration: .7, ease: 'power3.out'
+  });
+  gsap.from('.garden-coda', {
+    scrollTrigger: { trigger: '.garden-coda', start: 'top 90%', once: true },
+    y: 30, opacity: 0, duration: .7, ease: 'power3.out'
+  });
+}
+</script>
+
+<!-- 知识图谱组件（3D 力导向 · Three.js，参照 obsidian-3d-graph：旋转/缩放/平移、悬停高亮、单击聚焦、节点拖拽、动能冷却） -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+(function () {
+  const KG = JSON.parse(document.getElementById('kg-data').textContent);
+  const wrap = document.getElementById('kg');
+  const tip = document.getElementById('kgTip');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- 数据：只保留有连线的节点（Obsidian 式） ----
+  const deg = {};
+  KG.nodes.forEach(n => deg[n.id] = 0);
+  KG.edges.forEach(e => { deg[e[0]]++; deg[e[1]]++; });
+  const nodes = KG.nodes.filter(n => deg[n.id] > 0);
+  const idSet = new Set(nodes.map(n => n.id));
+  const edges = KG.edges.filter(e => idSet.has(e[0]) && idSet.has(e[1]));
+  const index = {};
+  nodes.forEach((n, i) => index[n.id] = i);
+  const coreSet = new Set(KG.core);
+  const nb = {};
+  edges.forEach(e => { (nb[e[0]] = nb[e[0]] || []).push(e[1]); (nb[e[1]] = nb[e[1]] || []).push(e[0]); });
+
+  // ---- 配色（保持原配色：红/黄/蓝核心 + 亮蓝/蓝紫层 + 三原色外层）----
+  const coreColors = ['#E4573D', '#F2C94C', '#2F80ED'];
+  const isoColors = ['#E4573D', '#F2C94C', '#2F80ED'];
+  function nodeColor(n, i) {
+    if (coreSet.has(n.id)) return coreColors[KG.core.indexOf(n.id) % 3];
+    if (n.dist === 1) return '#E4573D';
+    if (n.dist === 2) return '#F2C94C';
+    if (n.dist === 3) return '#2F80ED';
+    if (n.dist === 4) return '#8278D7';
+    return isoColors[i % 3];
+  }
+  function nodeRadius(n, i) {
+    if (coreSet.has(n.id)) return .3;
+    const base = n.dist === 1 ? .17 : n.dist === 2 ? .14 : n.dist === 3 ? .12 : n.dist === 4 ? .11 : .08;
+    return base + Math.sqrt(deg[n.id]) * .022;
+  }
+
+  // ---- 场景 ----
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, wrap.clientWidth / wrap.clientHeight, .01, 100);
+  camera.position.set(0, 3, 12);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  renderer.domElement.style.display = 'block';
+  wrap.appendChild(renderer.domElement);
+
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.inset = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  wrap.appendChild(labelRenderer.domElement);
+
+  // ---- 节点 ----
+  const N = nodes.length;
+  const nodeObjs = [];
+  const anchored = new Set();   // 被拖拽固定的节点，物理不再推动
+  nodes.forEach((n, i) => {
+    const r = nodeRadius(n, i);
+    const m = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 16, 12),
+      new THREE.MeshBasicMaterial({ color: nodeColor(n, i), transparent: n.dist >= 99, opacity: n.dist >= 99 ? .75 : 1 })
+    );
+    m.userData = { i, id: n.id, baseR: r, baseC: nodeColor(n, i) };
+    scene.add(m);
+    nodeObjs.push(m);
+  });
+
+  // ---- 边（vertexColors：悬停时相连边变红）----
+  const edgePos = new Float32Array(edges.length * 6);
+  const edgeCol = new Float32Array(edges.length * 6);
+  const edgeGeo = new THREE.BufferGeometry();
+  edgeGeo.setAttribute('position', new THREE.BufferAttribute(edgePos, 3));
+  edgeGeo.setAttribute('color', new THREE.BufferAttribute(edgeCol, 3));
+  const edgeMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .55 });
+  const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
+  scene.add(edgeLines);
+  const EDGE_BASE = [.46, .46, .5], EDGE_HOT = [.9, .34, .24];
+  let hoverId = null;
+  function syncEdges() {
+    for (let k = 0; k < edges.length; k++) {
+      const a = index[edges[k][0]] * 3, b = index[edges[k][1]] * 3;
+      edgePos[k * 6] = pos[a]; edgePos[k * 6 + 1] = pos[a + 1]; edgePos[k * 6 + 2] = pos[a + 2];
+      edgePos[k * 6 + 3] = pos[b]; edgePos[k * 6 + 4] = pos[b + 1]; edgePos[k * 6 + 5] = pos[b + 2];
+      const on = hoverId && (hoverId === edges[k][0] || hoverId === edges[k][1]);
+      const c = on ? EDGE_HOT : EDGE_BASE;
+      edgeCol[k * 6] = c[0]; edgeCol[k * 6 + 1] = c[1]; edgeCol[k * 6 + 2] = c[2];
+      edgeCol[k * 6 + 3] = c[0]; edgeCol[k * 6 + 4] = c[1]; edgeCol[k * 6 + 5] = c[2];
+    }
+    edgeGeo.attributes.position.needsUpdate = true;
+    edgeGeo.attributes.color.needsUpdate = true;
+  }
+
+  // ---- 物理：斥力 + 弹簧 + 中心引力 + 阻尼（动能冷却）----
+  const pos = new Float32Array(N * 3);
+  const vel = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const a = Math.random() * Math.PI * 2, c = Math.random() * 2 - 1, s = Math.sqrt(1 - c * c), r = 2 + Math.random() * 5;
+    pos[i * 3] = r * s * Math.cos(a);
+    pos[i * 3 + 1] = r * c * 1.5;
+    pos[i * 3 + 2] = r * s * Math.sin(a);
+  }
+  const LINK = 2.1, REP = 1.6, GRAV = .05;
+  function stepPhysics() {
+    // 斥力
+    for (let i = 0; i < N; i++) {
+      if (anchored.has(i)) continue;
+      for (let j = i + 1; j < N; j++) {
+        const dx = pos[i * 3] - pos[j * 3], dy = pos[i * 3 + 1] - pos[j * 3 + 1], dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+        const d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 > 60) continue;
+        const d = Math.sqrt(d2) || .001;
+        const f = Math.min(REP / (d2 + .04), .55);
+        const fx = dx / d * f, fy = dy / d * f, fz = dz / d * f;
+        vel[i * 3] += fx; vel[i * 3 + 1] += fy; vel[i * 3 + 2] += fz;
+        vel[j * 3] -= fx; vel[j * 3 + 1] -= fy; vel[j * 3 + 2] -= fz;
+      }
+    }
+    // 弹簧
+    for (let k = 0; k < edges.length; k++) {
+      const a = index[edges[k][0]], b = index[edges[k][1]];
+      const dx = pos[b * 3] - pos[a * 3], dy = pos[b * 3 + 1] - pos[a * 3 + 1], dz = pos[b * 3 + 2] - pos[a * 3 + 2];
+      const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || .001;
+      const f = Math.max(-1.2, Math.min(1.2, (d - LINK) * .11));
+      const fx = dx / d * f, fy = dy / d * f, fz = dz / d * f;
+      if (!anchored.has(a)) { vel[a * 3] += fx; vel[a * 3 + 1] += fy; vel[a * 3 + 2] += fz; }
+      if (!anchored.has(b)) { vel[b * 3] -= fx; vel[b * 3 + 1] -= fy; vel[b * 3 + 2] -= fz; }
+    }
+    // 中心引力 + 更新 + 阻尼
+    let e = 0;
+    for (let i = 0; i < N; i++) {
+      if (anchored.has(i)) continue;
+      vel[i * 3] += -pos[i * 3] * GRAV;
+      vel[i * 3 + 1] += -pos[i * 3 + 1] * GRAV;
+      vel[i * 3 + 2] += -pos[i * 3 + 2] * GRAV;
+      pos[i * 3] += vel[i * 3]; pos[i * 3 + 1] += vel[i * 3 + 1]; pos[i * 3 + 2] += vel[i * 3 + 2];
+      vel[i * 3] = Math.max(-2, Math.min(2, vel[i * 3] * .82));
+      vel[i * 3 + 1] = Math.max(-2, Math.min(2, vel[i * 3 + 1] * .82));
+      vel[i * 3 + 2] = Math.max(-2, Math.min(2, vel[i * 3 + 2] * .82));
+      e += vel[i * 3] * vel[i * 3] + vel[i * 3 + 1] * vel[i * 3 + 1] + vel[i * 3 + 2] * vel[i * 3 + 2];
+    }
+    return e / N;
+  }
+  function syncNodes() {
+    nodeObjs.forEach((m, i) => m.position.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]));
+  }
+
+  // ---- 核心概念常驻小标签 ----
+  const coreLabelOf = {};
+  KG.core.forEach(id => {
+    const div = document.createElement('div');
+    div.className = 'kg3d-label';
+    div.textContent = id;
+    const l = new CSS2DObject(div);
+    l.position.set(0, .55, 0);
+    scene.add(l);
+    coreLabelOf[id] = l;
+  });
+
+  // ---- 交互：悬停高亮 / 单击聚焦 / 拖拽节点 ----
+  const raycaster = new THREE.Raycaster();
+  const pointerV = new THREE.Vector2();
+  let hoverObj = null, lastTip = null, dragNode = null, interacted = false;
+  let downX = 0, downY = 0;
+
+  function pick(e) {
+    const r = renderer.domElement.getBoundingClientRect();
+    pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    raycaster.setFromCamera(pointerV, camera);
+    const hits = raycaster.intersectObjects(nodeObjs, false);
+    return hits.length ? hits[0].object : null;
+  }
+  function nodeScreenPos(obj) {
+    const v = new THREE.Vector3().setFromMatrixPosition(obj.matrixWorld).project(camera);
+    return { x: (v.x + 1) / 2 * wrap.clientWidth, y: (-v.y + 1) / 2 * wrap.clientHeight };
+  }
+  function showTip(obj) {
+    const n = nodes[obj.userData.i];
+    const links = nb[n.id] || [];
+    if (n.id !== lastTip) {
+      lastTip = n.id;
+      tip.innerHTML = '<b>' + n.id + '</b>'
+        + (coreSet.has(n.id) ? '<span class="kg-tip-tag">CORE CONCEPT</span>' : '')
+        + '<small>相连 ' + links.length + ' 个概念'
+        + (links.length ? ' · ' + links.slice(0, 3).join(' / ') + (links.length > 3 ? ' …' : '') : '') + '</small>';
+      tip.hidden = false;
+    }
+    const s = nodeScreenPos(obj);
+    tip.style.left = Math.min(s.x + 16, wrap.clientWidth - tip.offsetWidth - 8) + 'px';
+    tip.style.top = Math.max(4, s.y - tip.offsetHeight - 10) + 'px';
+  }
+  function setHover(obj) {
+    hoverObj = obj;
+    hoverId = obj.userData.id;
+    obj.scale.setScalar(1.45);
+    syncEdges();
+    showTip(obj);
+    renderer.domElement.style.cursor = 'pointer';
+  }
+  function clearHover() {
+    if (hoverObj) { hoverObj.scale.setScalar(1); hoverObj = null; }
+    hoverId = null; lastTip = null; tip.hidden = true;
+    syncEdges();
+    renderer.domElement.style.cursor = 'grab';
+  }
+
+  renderer.domElement.style.cursor = 'grab';
+  renderer.domElement.addEventListener('pointermove', e => {
+    if (dragNode !== null) {
+      const r = renderer.domElement.getBoundingClientRect();
+      pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+      raycaster.setFromCamera(pointerV, camera);
+      const obj = nodeObjs[dragNode];
+      const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(camera.getWorldDirection(new THREE.Vector3()), obj.position);
+      const hit = new THREE.Vector3();
+      if (raycaster.ray.intersectPlane(plane, hit)) {
+        obj.position.copy(hit);
+        pos[dragNode * 3] = hit.x; pos[dragNode * 3 + 1] = hit.y; pos[dragNode * 3 + 2] = hit.z;
+        syncEdges();
+      }
+      return;
+    }
+    const obj = pick(e);
+    if (obj !== hoverObj) {
+      if (hoverObj) clearHover();
+      if (obj) setHover(obj);
+    } else if (obj) {
+      showTip(obj);
+    }
+  });
+  renderer.domElement.addEventListener('pointerdown', e => {
+    interacted = true;
+    downX = e.clientX; downY = e.clientY;
+    const obj = pick(e);
+    if (obj) { dragNode = obj.userData.i; anchored.add(dragNode); renderer.domElement.style.cursor = 'grabbing'; }
+  });
+  renderer.domElement.addEventListener('pointerup', e => {
+    const moved = Math.hypot(e.clientX - downX, e.clientY - downY) > 6;
+    const wasDragging = dragNode !== null;
+    dragNode = null;
+    renderer.domElement.style.cursor = hoverObj ? 'pointer' : 'grab';
+    if (wasDragging && moved) { clearHover(); return; }
+    if (!moved) {
+      const obj = pick(e);
+      if (obj) focusNode(obj);
+    }
+  });
+  renderer.domElement.addEventListener('pointerleave', () => { if (hoverObj) clearHover(); });
+
+  // 单击聚焦：镜头平滑飞到该概念
+  const focusFrom = { x: 0, y: 0, z: 0 }, focusTo = { x: 0, y: 0, z: 0 }, focusTg = { x: 0, y: 0, z: 0 };
+  let focusT = 0;
+  function easeInOut(v) { return v < .5 ? 2 * v * v : 1 - Math.pow(-2 * v + 2, 2) / 2; }
+  function tweenCamera(px, py, pz, tx, ty, tz) {
+    if (reduceMotion) {
+      camera.position.set(px, py, pz);
+      controls.target.set(tx, ty, tz);
+      controls.update();
+    } else {
+      focusFrom.x = camera.position.x; focusFrom.y = camera.position.y; focusFrom.z = camera.position.z;
+      focusTo.x = px; focusTo.y = py; focusTo.z = pz;
+      focusTg.x = tx; focusTg.y = ty; focusTg.z = tz;
+      focusT = .001;
+    }
+  }
+  // 落位完成后自动取景：整图居中
+  function fitView() {
+    let cx = 0, cy = 0, cz = 0;
+    for (let i = 0; i < N; i++) { cx += pos[i * 3]; cy += pos[i * 3 + 1]; cz += pos[i * 3 + 2]; }
+    cx /= N; cy /= N; cz /= N;
+    let r = 0;
+    for (let i = 0; i < N; i++) {
+      r = Math.max(r, Math.hypot(pos[i * 3] - cx, pos[i * 3 + 1] - cy, pos[i * 3 + 2] - cz));
+    }
+    const d = Math.max(r * 2.3, 4);
+    tweenCamera(cx, cy + d * .3, cz + d, cx, cy, cz);
+  }
+  function focusNode(obj) {
+    const p = obj.position;
+    tweenCamera(p.x, p.y, p.z + 4.2, p.x, p.y, p.z);
+    if (hoverObj) clearHover();
+    setHover(obj);
+  }
+
+  // ---- 控件：旋转 / 缩放 / 平移 ----
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = .08;
+  controls.minDistance = 2.5;
+  controls.maxDistance = 32;
+
+  // ---- 主循环 ----
+  let settling = !reduceMotion, energy = 1, settleSteps = 0, fitDone = false;
+  if (reduceMotion) { for (let s = 0; s < 800; s++) stepPhysics(); settling = false; }
+  syncNodes();
+  syncEdges();
+  const clock = new THREE.Clock();
+  function tick() {
+    requestAnimationFrame(tick);
+    if (settling) {
+      for (let s = 0; s < 4; s++) energy = stepPhysics();
+      settleSteps += 4;
+      if (energy < 5e-4 || settleSteps > 2000) settling = false;
+      syncNodes();
+      syncEdges();
+    }
+    if (!settling && !fitDone) {
+      fitDone = true;
+      if (!interacted) fitView();
+    }
+    // 聚焦动画
+    if (focusT > 0 && focusT < 1) {
+      focusT = Math.min(1, focusT + .03);
+      const k = easeInOut(focusT);
+      camera.position.set(
+        focusFrom.x + (focusTo.x - focusFrom.x) * k,
+        focusFrom.y + (focusTo.y - focusFrom.y) * k,
+        focusFrom.z + (focusTo.z - focusFrom.z) * k);
+      controls.target.set(focusTg.x, focusTg.y, focusTg.z);
+    }
+    // 核心标签跟随节点
+    KG.core.forEach(id => {
+      const idx = index[id];
+      if (idx === undefined) return;
+      const l = coreLabelOf[id];
+      l.position.set(pos[idx * 3], pos[idx * 3 + 1] + .55, pos[idx * 3 + 2]);
+    });
+    controls.update();
+    labelRenderer.render(scene, camera);
+    renderer.render(scene, camera);
+  }
+  tick();
+
+  // ---- 尺寸自适应 ----
+  const ro = new ResizeObserver(() => {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    labelRenderer.setSize(w, h);
+  });
+  ro.observe(wrap);
+})();
+</script>
+
+
+<!-- Three.js：摩天轮 + 星空粒子 + 点击跳转 -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, isMobile ? 1.4 : 1.2, isMobile ? 9.6 : 7.6);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+// 轿厢内容招牌（CSS2D：跟随轿厢的 DOM 标签）
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(wrap.clientWidth, wrap.clientHeight);
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.inset = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+wrap.appendChild(labelRenderer.domElement);
+
+const ink = 0x17171A;
+function memphisMesh(mesh, color) {
+  const m = new THREE.Mesh(mesh, new THREE.MeshBasicMaterial({ color }));
+  m.add(new THREE.LineSegments(new THREE.EdgesGeometry(mesh), new THREE.LineBasicMaterial({ color: ink })));
+  return m;
+}
+
+// ---- 星空粒子：亮底层上的"墨点星空"（星星 = 深色小点） ----
+const STAR_N = isMobile ? 220 : 600;
+const starGeo = new THREE.BufferGeometry();
+const starPos = new Float32Array(STAR_N * 3);
+const starCol = new Float32Array(STAR_N * 3);
+const inkC = new THREE.Color(0x17171A);
+const pastelC = [0xFF87AB, 0x6FB1FF, 0xFFD23F, 0x4ECDC4].map(c => new THREE.Color(c));
+for (let i = 0; i < STAR_N; i++) {
+  const r = 14 + Math.random() * 16;
+  const th = Math.random() * Math.PI * 2;
+  const y = (Math.random() * .9 + .1) * 10 - 2;
+  starPos[i * 3] = Math.cos(th) * r;
+  starPos[i * 3 + 1] = y;
+  starPos[i * 3 + 2] = Math.sin(th) * r * .6 - 6;
+  const c = Math.random() < .8 ? inkC : pastelC[i % 4];
+  starCol[i * 3] = c.r; starCol[i * 3 + 1] = c.g; starCol[i * 3 + 2] = c.b;
+}
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
+const starMat = new THREE.PointsMaterial({
+  size: isMobile ? .12 : .09, sizeAttenuation: true, vertexColors: true,
+  transparent: true, opacity: .55, depthWrite: false,
+});
+const stars = new THREE.Points(starGeo, starMat);
+scene.add(stars);   // 加在 scene：拖拽转轮，星空不转
+
+const R = 2.2;
+const park = new THREE.Group();
+scene.add(park);
+if (isMobile) park.scale.setScalar(.78);
+
+const wheel = new THREE.Group();
+wheel.position.y = 1.35;
+park.add(wheel);
+
+wheel.add(memphisMesh(new THREE.TorusGeometry(R, .1, 8, 36), 0xFFD23F));
+wheel.add(memphisMesh(new THREE.TorusGeometry(R * .85, .06, 8, 32), 0x4ECDC4));
+
+for (let i = 0; i < 8; i++) {
+  const a = (i / 8) * Math.PI * 2;
+  const spoke = memphisMesh(new THREE.CylinderGeometry(.03, .03, R, 4), ink);
+  spoke.position.set(Math.sin(a) * R / 2, Math.cos(a) * R / 2, 0);
+  spoke.rotation.z = a - Math.PI / 2;
+  wheel.add(spoke);
+}
+wheel.add(memphisMesh(new THREE.CylinderGeometry(.18, .18, .35, 6), 0xFF87AB));
+
+const colors = [0xFF87AB, 0x6FB1FF, 0xFFD23F, 0x4ECDC4, 0xFF87AB, 0x6FB1FF];
+const targets = ['#learn', '#works', '#garden', '#top', '', ''];
+const cabinCss = ['#FF87AB', '#6FB1FF', '#FFD23F', '#4ECDC4', '#FF87AB', '#6FB1FF'];
+const cabinLabels = ['正在学', '作品集', '数字花园', 'TOP', '', ''];
+const clickables = [];
+const cabins = [];
+for (let i = 0; i < 6; i++) {
+  const a = (i / 6) * Math.PI * 2;
+  const cabin = new THREE.Group();
+  const hanger = memphisMesh(new THREE.CylinderGeometry(.05, .05, .5, 4), ink);
+  hanger.position.y = .26;
+  const empty = !targets[i];
+  const body = memphisMesh(new THREE.BoxGeometry(.52, .4, .4), empty ? 0xE7E0D4 : colors[i]);
+  cabin.add(hanger, body);
+  // 内容招牌（车厢上方悬浮胶囊）；空位不挂招牌
+  if (!empty) {
+    const tagDiv = document.createElement('div');
+    tagDiv.className = 'cabin-tag-wrap';
+    tagDiv.innerHTML = '<span class="cabin-tag"><i style="background:' + cabinCss[i] + '"></i>' + cabinLabels[i] + '</span>';
+    const tag = new CSS2DObject(tagDiv);
+    tag.position.set(0, .62, 0);
+    cabin.add(tag);
+  }
+  cabin.position.set(Math.sin(a) * R, Math.cos(a) * R, 0);
+  cabin.userData.target = targets[i];
+  cabin.userData.scale0 = 1;
+  wheel.add(cabin);
+  cabins.push(cabin);
+  if (!empty) clickables.push(cabin);
+}
+
+const legL = memphisMesh(new THREE.CylinderGeometry(.09, .09, 3.7, 6), ink);
+legL.position.set(-.3, -.45, 0); legL.rotation.z = .16;
+const legR = memphisMesh(new THREE.CylinderGeometry(.09, .09, 3.7, 6), ink);
+legR.position.set(.3, -.45, 0); legR.rotation.z = -.16;
+const baseBar = memphisMesh(new THREE.BoxGeometry(2.7, .24, .32), 0x4ECDC4);
+baseBar.position.y = -2.35;
+park.add(legL, legR, baseBar);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+renderer.domElement.style.touchAction = 'pan-y';
+controls.enableZoom = false; controls.enablePan = false;
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.target.set(0, 1.2, 0);
+
+let spinPaused = false;
+
+const raycaster = new THREE.Raycaster();
+const pointerV = new THREE.Vector2();
+let downX = 0, downY = 0;
+renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+renderer.domElement.addEventListener('pointerup', e => {
+  if (Math.hypot(e.clientX - downX, e.clientY - downY) > 8) return;
+  const r = renderer.domElement.getBoundingClientRect();
+  pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointerV, camera);
+  const hits = raycaster.intersectObjects(clickables, true);
+  if (hits.length) {
+    let o = hits[0].object;
+    while (o && !o.userData.target) o = o.parent;
+    if (o && o.userData.target) {
+      const sec = document.querySelector(o.userData.target);
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+});
+let hovered = null;
+function setHover(g, on) {
+  if (on) {
+    g.scale.setScalar(g.userData.scale0 * 1.12);
+    g.traverse(c => { if (c.isMesh) { c.userData.mat0 ||= c.material; c.material = new THREE.MeshBasicMaterial({ color: 0xFFD23F }); } });
+  } else {
+    g.scale.setScalar(g.userData.scale0);
+    g.traverse(c => { if (c.isMesh && c.userData.mat0) { c.material = c.userData.mat0; delete c.userData.mat0; } });
+  }
+}
+renderer.domElement.addEventListener('pointermove', e => {
+  const r = renderer.domElement.getBoundingClientRect();
+  pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointerV, camera);
+  const hits = raycaster.intersectObjects(clickables, true);
+  let h = null;
+  if (hits.length) { h = hits[0].object; while (h && !h.userData.target) h = h.parent; }
+  if (h !== hovered) {
+    if (hovered) setHover(hovered, false);
+    hovered = h;
+    if (hovered) setHover(hovered, true);
+    renderer.domElement.style.cursor = h ? 'pointer' : 'grab';
+  }
+  spinPaused = raycaster.intersectObjects(park.children, true).length > 0;
+});
+renderer.domElement.addEventListener('pointerleave', () => {
+  if (hovered) { setHover(hovered, false); hovered = null; }
+  spinPaused = false;
+  renderer.domElement.style.cursor = 'grab';
+});
+
+const clock = new THREE.Clock();
+let spin = 0;
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  const t = clock.getElapsedTime();
+  if (!reduceMotion && !spinPaused) {
+    spin += dt * .3;
+    wheel.rotation.z = spin;
+    cabins.forEach(c => { c.rotation.z = -spin; });
+  }
+  if (!reduceMotion) {
+    starMat.opacity = .4 + Math.sin(t * 1.6) * .15;   // 星星闪烁独立于轮子
+    stars.rotation.y = t * .01;                        // 极慢自转，防"死图"
+  } else {
+    starMat.opacity = .5;
+  }
+  controls.update();
+  labelRenderer.render(scene, camera);
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  labelRenderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>

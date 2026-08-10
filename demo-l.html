@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo L · 玻璃拟态</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #14122B;
+  --glow-1:    #667eea;
+  --glow-2:    #764ba2;
+  --glow-3:    #f093fb;
+  --glass:     rgba(255,255,255,.08);
+  --glass-brd: rgba(255,255,255,.18);
+  --text:      #F2F3FF;
+  --text-dim:  rgba(235,238,255,.6);
+  --accent:    #A8BFFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans SC', sans-serif; font-size: 15px; line-height: 1.7; }
+
+/* 固定光斑（玻璃后的流动色彩） */
+.glow { position: fixed; border-radius: 50%; filter: blur(90px); z-index: -1; pointer-events: none; }
+.glow.g1 { width: 44vw; height: 44vw; background: var(--glow-1); opacity: .5; top: -10vw; left: -8vw; }
+.glow.g2 { width: 38vw; height: 38vw; background: var(--glow-2); opacity: .45; bottom: 5vh; right: -6vw; }
+
+/* 玻璃工具类 */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--glass-brd);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.24);
+}
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: 100svh; overflow: hidden; background: var(--bg); }
+#gl { position: absolute; inset: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none;
+}
+.hero-panel { padding: 40px 48px; }
+.hero-kicker { font-family: 'Inter'; font-weight: 600; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+.hero-name { font-family: 'Inter'; font-weight: 700; font-size: 68px; line-height: 1.1; color: var(--text); }
+.hero-tag { margin-top: 18px; font-size: 15px; color: var(--text-dim); }
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Inter'; font-weight: 600; font-size: 11px; letter-spacing: .25em; color: var(--text-dim);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 16px; margin-top: 4px; color: var(--accent); }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  font-size: 12px; color: var(--text-dim);
+  padding: 8px 14px;
+}
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 92px 24px; }
+.sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 36px; }
+.sec-num { font-family: 'Inter'; font-weight: 700; font-size: 13px; color: var(--accent); }
+.sec-title { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 700; font-size: 32px; color: var(--text); }
+.sec-line { width: 40px; height: 3px; border-radius: 2px; margin-top: 10px; background: linear-gradient(90deg, var(--glow-1), var(--glow-2)); }
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 8px 0; }
+.learn-panel { padding: 26px 26px 22px; }
+.learn-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.learn-label > span:first-child { font-size: 14px; color: var(--text-dim); }
+.learn-count { font-family: 'Inter'; font-weight: 600; font-size: 18px; color: var(--accent); }
+.track { height: 12px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid var(--glass-brd); }
+.fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--glow-1), #A78BFA); box-shadow: 0 0 12px rgba(102,126,234,.55); }
+.learn-topic { margin-top: 12px; font-size: 14px; color: var(--text-dim); }
+.stages { display: flex; align-items: center; margin: 16px 0 8px; }
+.stage-node { display: flex; align-items: center; flex: 1; }
+.stage-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.1); border: 1px solid var(--glass-brd); flex: none; }
+.stage-dot.on { background: linear-gradient(135deg, var(--glow-1), var(--glow-2)); border-color: transparent; box-shadow: 0 0 10px rgba(102,126,234,.6); }
+.stage-seg { flex: 1; height: 2px; background: rgba(255,255,255,.15); }
+.stage-names { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); }
+.stage-names .on { color: var(--text); font-weight: 600; }
+
+/* ---------- 作品卡 ---------- */
+.works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.work-card {
+  padding: 26px 24px 22px; cursor: pointer;
+  transition: transform .3s ease, border-color .3s ease;
+}
+.work-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.35); }
+.work-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.work-num { font-family: 'Inter'; font-weight: 600; font-size: 12px; color: var(--accent); }
+.work-title { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-weight: 700; font-size: 20px; margin: 14px 0 8px; }
+.work-desc { font-size: 14px; color: var(--text-dim); }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--glass-brd);
+  font-family: 'Inter'; font-weight: 500; font-size: 12px; color: var(--text-dim);
+}
+.work-arrow { transition: transform .3s ease; }
+.work-card:hover .work-arrow { transform: translateX(4px); }
+
+.footer-note { text-align: center; padding: 40px 24px; border-top: 1px solid var(--glass-brd); font-size: 12px; color: var(--text-dim); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { grid-template-columns: 1fr; gap: 30px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 48px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .hero-name { font-size: 34px; }
+  .hero-tag { font-size: 14px; padding: 0 16px; }
+  .hero-panel { padding: 24px 20px; }
+  .glass { backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%); }
+  .glow { filter: blur(60px); }
+  .glow.g2 { display: none; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 26px; }
+  .hero-note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+
+<!-- ============ 第一屏：漂移球群 + 毛玻璃面板 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <div class="hero-panel glass" id="heroPanel">
+      <p class="hero-kicker">Portfolio &amp; Digital Garden</p>
+      <h1 class="hero-name" id="heroName">Charlotte<span style="color:var(--accent)">.</span></h1>
+      <p class="hero-tag" id="heroTag">AI 内容创作者 · 学习者 —— 在做的和在读的，都放在这里</p>
+    </div>
+  </div>
+  <p class="hero-note glass">↻ 移动鼠标</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num">01 ·</span>
+    <div>
+      <h2 class="sec-title">正在学</h2>
+      <div class="sec-line"></div>
+    </div>
+  </div>
+  <div class="learning">
+    <div class="learn-panel glass" id="learn1">
+      <div class="learn-label">
+        <span>正在学 · 财经</span>
+        <span class="learn-count">D<span id="dayCount">0</span>/28</span>
+      </div>
+      <div class="track"><div class="fill" id="finFill" data-w="39"></div></div>
+      <p class="learn-topic">每天 5 分钟低功耗：财务报表入门，产出沉淀为概念卡片</p>
+    </div>
+    <div class="learn-panel glass" id="learn2">
+      <div class="learn-label">
+        <span>正在学 · Agent 平台</span>
+        <span class="learn-count">阶段 1/3</span>
+      </div>
+      <div class="stages">
+        <div class="stage-node" style="flex:none"><div class="stage-dot on"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+      </div>
+      <div class="stage-names">
+        <span class="on">调研</span><span>拆解</span><span>输出</span>
+      </div>
+      <p class="learn-topic">研究 Shannon——生产级多智能体编排：token 预算、沙箱执行、事件流</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num">02 ·</span>
+    <div>
+      <h2 class="sec-title">作品集</h2>
+      <div class="sec-line"></div>
+    </div>
+  </div>
+  <div class="works">
+    <div class="work-card glass" id="work1">
+      <span class="work-num">01 →</span>
+      <h3 class="work-title">财经知识卡片</h3>
+      <p class="work-desc">4 周学习项目：每日一考 + 错题本 + 间隔复习，产出 day01-21 系列知识卡片。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card glass" id="work2">
+      <span class="work-num">02 →</span>
+      <h3 class="work-title">书法练习打卡</h3>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card glass" id="work3">
+      <span class="work-num">03 →</span>
+      <h3 class="work-title">Obsidian LLM-Wiki</h3>
+      <p class="work-desc">用 LLM 自动维护的个人知识库：476 来源 / 1057 页 / 321 概念。</p>
+      <div class="work-foot">
+        <span>OBSIDIAN / WIKI</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-note">DEMO L · GLASSMORPHISM —— 灵感：llm-wiki「15 种设计风格 Prompt 库」</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效（玻璃：只有"浮现"一种语法） -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!reduceMotion) {
+  gsap.from('#heroPanel', { opacity: 0, y: 24, scale: .96, duration: .9, ease: 'power3.out', delay: .2 });
+  gsap.to('.hero-hint .arrow', { y: 6, duration: .8, ease: 'sine.inOut', repeat: -1, yoyo: true });
+}
+
+const finFill = document.getElementById('finFill');
+const dayCount = document.getElementById('dayCount');
+ScrollTrigger.create({
+  trigger: '.learning', start: 'top 80%', once: true,
+  onEnter() {
+    if (reduceMotion) { finFill.style.width = '39%'; dayCount.textContent = '11'; return; }
+    gsap.to(finFill, { width: '39%', duration: 1.1, ease: 'power3.out' });
+    gsap.to({ v: 0 }, { v: 11, duration: 1.2, ease: 'power3.out',
+      onUpdate() { dayCount.textContent = Math.round(this.targets()[0].v); } });
+    gsap.from('.stage-dot.on', { scale: 0, duration: .5, ease: 'power2.out', delay: .25 });
+  }
+});
+
+if (!reduceMotion) {
+  gsap.from('.work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 24, opacity: 0, duration: .8, ease: 'power3.out', stagger: .1
+  });
+}
+</script>
+
+<!-- Three.js：漂移渐变球群（玻璃的"后面"） -->
+<script type="module">
+import * as THREE from 'three';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, 0, 6);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+function ball(color, x, y, phase, r = 1.4) {
+  const b = new THREE.Mesh(new THREE.SphereGeometry(r, 48, 32),
+    new THREE.MeshBasicMaterial({ color }));
+  b.position.set(x, y, 0);
+  b.userData.phase = phase;
+  b.userData.x0 = x;
+  b.userData.y0 = y;
+  scene.add(b);
+  return b;
+}
+const balls = [ball(0x667eea, -1.8, .8, 0), ball(0x764ba2, 1.8, -.8, 2.1)];
+if (!isMobile) balls.push(ball(0xF093FB, 1.9, -2.1, 4.2, .9));
+
+let mx = 0, my = 0;
+if (!reduceMotion) {
+  addEventListener('pointermove', e => {
+    mx = (e.clientX / innerWidth - .5) * .3;
+    my = (e.clientY / innerHeight - .5) * .2;
+  }, { passive: true });
+}
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  if (!reduceMotion) {
+    balls.forEach((b, i) => {
+      b.position.x = b.userData.x0 + Math.sin(t * .9 + b.userData.phase) * .5;
+      b.position.y = b.userData.y0 + Math.cos(t * .7 + b.userData.phase) * .5;
+    });
+    camera.position.x += (mx - camera.position.x) * .04;
+    camera.position.y += (my - camera.position.y) * .04;
+    camera.lookAt(0, 0, 0);
+  }
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>

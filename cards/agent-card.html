@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Agent 循环 · 正式卡 D1</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{width:900px;height:1200px;overflow:hidden;font-family:"Noto Sans SC","PingFang SC",sans-serif;background:#F2EFE7;display:flex;align-items:center;justify-content:center;}
+  .card{width:812px;height:1092px;background:#FFFEF9;border:5px solid #111;box-shadow:12px 12px 0 #111;display:flex;flex-direction:column;padding:36px 44px 32px;position:relative;}
+  .brow{display:flex;justify-content:space-between;font-size:13px;font-weight:800;letter-spacing:2px;border:3px solid #111;padding:7px 12px;background:#FFDE59;transform:rotate(-1deg);}
+  .brow .right{background:#111;color:#fff;padding:2px 10px;transform:rotate(2deg);}
+  h1{font-size:104px;font-weight:900;line-height:.98;margin-top:18px;letter-spacing:2px;}
+  .accent-badge{display:inline-block;background:#FF5D5D;border:3px solid #111;padding:4px 14px;font-size:16px;font-weight:900;margin-top:6px;transform:rotate(1.5deg);box-shadow:5px 5px 0 #111;}
+  .lede{margin-top:18px;font-size:18px;line-height:1.7;font-weight:600;border-left:12px solid #111;padding-left:16px;}
+  .lede b{background:#9BFF57;padding:0 6px;}
+  .loop{margin-top:24px;display:flex;align-items:stretch;justify-content:space-between;gap:6px;}
+  .step{flex:1;border:4px solid #111;background:#D6F5FF;padding:13px 8px;text-align:center;box-shadow:5px 5px 0 #111;}
+  .step:nth-child(2){background:#FFDE59;}
+  .step:nth-child(3){background:#FFB3C7;}
+  .step .ic{font-size:34px;font-weight:900;display:block;}
+  .step .lab{font-size:15px;font-weight:900;margin-top:8px;display:block;}
+  .step .sub{font-size:11px;font-weight:700;color:#333;margin-top:4px;display:block;}
+  .arr{flex:0 0 22px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;}
+  .points{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
+  .pt{display:flex;gap:14px;align-items:center;border:3px solid #111;padding:9px 13px;background:#fff;box-shadow:4px 4px 0 #111;}
+  .pt .n{flex:0 0 30px;height:30px;background:#111;color:#fff;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;}
+  .pt p{font-size:14.5px;font-weight:700;line-height:1.5;}
+  /* 拓展区（A 方案）：wiki 相关但卡片没细讲 */
+  .extra{margin-top:20px;border:3px solid #111;background:#F2EFE7;}
+  .extra-head{display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff;font-size:12.5px;font-weight:900;letter-spacing:2px;padding:6px 12px;}
+  .extra-head .from{background:#FFDE59;color:#111;padding:1px 8px;font-size:10.5px;transform:rotate(1deg);}
+  .extra-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+  .ex{display:flex;gap:10px;font-size:12.5px;line-height:1.5;font-weight:600;}
+  .ex .tag{flex:0 0 auto;background:#9BFF57;border:2px solid #111;padding:0 7px;font-size:11px;font-weight:900;align-self:flex-start;}
+  .ex code{background:#fff;border:2px solid #111;padding:0 5px;font-size:11.5px;font-weight:700;}
+  .ex .arrow{color:#FF5D5D;font-weight:900;}
+  .takeaway{margin-top:auto;background:#111;color:#fff;font-size:22px;font-weight:900;text-align:center;padding:14px 14px;letter-spacing:2px;transform:rotate(-.6deg);}
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11.5px;font-weight:800;letter-spacing:1px;color:#555;}
+  .foot .wiki-link{background:#D6F5FF;border:2px solid #111;padding:3px 10px;color:#111;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brow"><span>正在学 · AGENT 平台</span><span class="right">DAY 1</span></div>
+  <h1>AGENT<br>循环</h1>
+  <span class="accent-badge">所有 Agent 的共同内核</span>
+  <p class="lede">反复执行：<b>调用模型 → 执行工具 → 回传结果</b>，直到模型不再要工具，消息数组越滚越长。</p>
+  <div class="loop">
+    <div class="step"><span class="ic">🧠</span><span class="lab">调用模型</span><span class="sub">决定下一步</span></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="ic">🔧</span><span class="lab">执行工具</span><span class="sub">读写 / 调用</span></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="ic">📨</span><span class="lab">回传结果</span><span class="sub">接回上下文</span></div>
+    <div class="arr">↺</div>
+  </div>
+  <div class="points">
+    <div class="pt"><div class="n">1</div><p>工具只是循环里的一步——纯聊天不能调工具，<b>不是 Agent</b></p></div>
+    <div class="pt"><div class="n">2</div><p>每步都基于<b>完整历史</b>决策，消息数组越滚越长</p></div>
+    <div class="pt"><div class="n">3</div><p>生产级再叠三层：<b>policy 策略 / permission 权限 / lifecycle 生命周期</b></p></div>
+  </div>
+  <div class="extra">
+    <div class="extra-head">📎 拓展 · Wiki 相关 <span class="from">LLM-WIKI</span></div>
+    <div class="extra-body">
+      <div class="ex"><span class="tag">伪代码</span><span>循环骨架：<code>messages → create()</code>，若 <code>stop_reason == "tool_use"</code> 执行工具，结果 append 回数组再送模型。</span></div>
+      <div class="ex"><span class="tag">膨胀</span><span>每次结果都追加进 messages——这就是 Agent 上下文越用越大的根因 <span class="arrow">→</span> 引向上下文管理。</span></div>
+      <div class="ex"><span class="tag">升级</span><span>单 Agent 循环搞不定 → 多 Agent 编排（Shannon：执行策略 / Swarm / 预算 / 沙箱）。</span></div>
+    </div>
+  </div>
+  <div class="takeaway">「能调工具、能接回结果，才配叫 Agent。」</div>
+  <div class="foot">
+    <span>LEARNING PROJECT · 1/28</span>
+    <span class="wiki-link">↗ Wiki：Agent-Loop · 编排 · 上下文</span>
+  </div>
+</div>
+</body>
+</html>

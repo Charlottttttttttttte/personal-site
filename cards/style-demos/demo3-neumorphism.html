@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Agent 循环 · 新拟态</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{width:900px;height:1200px;overflow:hidden;font-family:"Noto Sans SC","PingFang SC",sans-serif;background:#E6E9F0;display:flex;align-items:center;justify-content:center;}
+  .card{width:780px;height:1070px;background:#E6E9F0;border-radius:42px;box-shadow:20px 20px 48px #c3c8d4,-20px -20px 48px #ffffff;padding:56px 54px;display:flex;flex-direction:column;color:#4B5563;}
+  .brow{display:flex;justify-content:space-between;font-size:15px;font-weight:700;letter-spacing:3px;color:#8892A6;}
+  h1{font-size:112px;font-weight:800;letter-spacing:4px;margin-top:36px;color:#3D4456;}
+  .lede{margin-top:16px;font-size:20px;line-height:1.8;color:#5B6476;border-radius:22px;padding:20px 24px;background:#E6E9F0;box-shadow:inset 6px 6px 14px #c3c8d4,inset -6px -6px 14px #ffffff;}
+  .lede b{color:#2D6CDF;}
+  .loop{margin-top:42px;display:flex;align-items:center;justify-content:space-between;padding:32px 22px;border-radius:26px;background:#E6E9F0;box-shadow:inset 8px 8px 18px #c3c8d4,inset -8px -8px 18px #ffffff;}
+  .step{display:flex;flex-direction:column;align-items:center;gap:14px;width:118px;}
+  .dot{width:86px;height:86px;border-radius:26px;background:#E6E9F0;box-shadow:9px 9px 20px #c3c8d4,-9px -9px 20px #ffffff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#3D4456;}
+  .ic{font-size:30px;}
+  .arr{font-size:26px;color:#8892A6;font-weight:900;}
+  .points{margin-top:38px;display:flex;flex-direction:column;gap:16px;}
+  .pt{display:flex;gap:16px;align-items:center;border-radius:20px;padding:16px 20px;background:#E6E9F0;box-shadow:8px 8px 18px #c3c8d4,-8px -8px 18px #ffffff;}
+  .pt .n{flex:0 0 36px;height:36px;border-radius:14px;background:#E6E9F0;box-shadow:inset 4px 4px 8px #c3c8d4,inset -4px -4px 8px #ffffff;color:#2D6CDF;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;}
+  .pt p{font-size:17px;font-weight:600;line-height:1.6;color:#4B5563;}
+  .takeaway{margin-top:auto;text-align:center;font-size:25px;font-weight:800;color:#3D4456;border-radius:24px;padding:22px 18px;background:#E6E9F0;box-shadow:inset 6px 6px 14px #c3c8d4,inset -6px -6px 14px #ffffff;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brow"><span>正在学 · AGENT 平台</span><span>DAY 1 · 4/28</span></div>
+  <h1>Agent<br>循环</h1>
+  <p class="lede">所有 AI Agent 共享的迭代循环：<b>调用模型 → 执行工具 → 回传结果 → 再调用</b>，消息数组随迭代持续增长。</p>
+  <div class="loop">
+    <div class="step"><div class="dot"><span class="ic">🧠</span></div><div>调用模型</div></div>
+    <div class="arr">→</div>
+    <div class="step"><div class="dot"><span class="ic">🔧</span></div><div>执行工具</div></div>
+    <div class="arr">→</div>
+    <div class="step"><div class="dot"><span class="ic">📨</span></div><div>回传结果</div></div>
+    <div class="arr">↺</div>
+  </div>
+  <div class="points">
+    <div class="pt"><div class="n">1</div><p><b>工具只是循环里的一步</b>——纯聊天不能调用工具，不是 Agent。</p></div>
+    <div class="pt"><div class="n">2</div><p><b>每一步都基于完整历史</b>——消息数组越滚越长，Agent 才能连续决策。</p></div>
+    <div class="pt"><div class="n">3</div><p><b>生产级再叠三层</b>——权限、预算、生命周期（何时该停）。</p></div>
+  </div>
+  <div class="takeaway">「能调工具、能接回结果，才配叫 Agent。」</div>
+</div>
+</body>
+</html>

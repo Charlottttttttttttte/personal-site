@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Agent 循环 · 杂志编辑风</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{width:900px;height:1200px;overflow:hidden;font-family:"Noto Sans SC","PingFang SC",sans-serif;background:#171A21;display:flex;align-items:center;justify-content:center;}
+  .card{width:800px;height:1084px;background:#0F1116;border-radius:4px;display:flex;flex-direction:column;padding:54px 54px 46px;color:#EDEFF4;position:relative;overflow:hidden;}
+  .card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 20% 0%,rgba(94,114,235,.14),transparent 55%);}
+  .brow{display:flex;justify-content:space-between;font-size:14px;letter-spacing:3px;color:#7C8496;font-weight:600;position:relative;z-index:1;}
+  .rule{height:1px;background:linear-gradient(90deg,#5E72EB,transparent);margin-top:16px;position:relative;z-index:1;}
+  h1{font-family:"Noto Serif SC",Georgia,serif;font-size:120px;font-weight:900;line-height:1.05;margin-top:32px;letter-spacing:2px;position:relative;z-index:1;}
+  h1 .thin{color:#5E72EB;font-weight:300;}
+  .lede{margin-top:18px;font-size:19px;line-height:1.8;color:#A9B1C4;position:relative;z-index:1;font-weight:500;}
+  .lede b{color:#EDEFF4;border-bottom:2px solid #5E72EB;padding-bottom:2px;}
+  .loop{margin-top:40px;display:flex;align-items:center;justify-content:space-between;padding:28px 18px;border:1px solid rgba(237,239,244,.14);background:rgba(255,255,255,.03);position:relative;z-index:1;}
+  .step{display:flex;flex-direction:column;align-items:center;gap:12px;width:120px;}
+  .dot{width:74px;height:74px;border-radius:50%;border:1px solid #5E72EB;display:flex;align-items:center;justify-content:center;font-size:24px;color:#EDEFF4;}
+  .step .lab{font-size:15px;font-weight:700;color:#C3CADB;}
+  .arr{font-size:24px;color:#5E72EB;font-weight:900;}
+  .points{margin-top:36px;display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(237,239,244,.14);position:relative;z-index:1;}
+  .pt{display:flex;gap:18px;align-items:baseline;padding:17px 4px;border-bottom:1px solid rgba(237,239,244,.08);}
+  .pt .n{flex:0 0 44px;font-family:Georgia,serif;font-size:22px;font-style:italic;color:#5E72EB;font-weight:700;}
+  .pt p{font-size:16.5px;line-height:1.7;color:#C3CADB;}
+  .pt p b{color:#EDEFF4;}
+  .takeaway{margin-top:auto;text-align:center;font-family:"Noto Serif SC",Georgia,serif;font-size:26px;font-weight:700;letter-spacing:2px;line-height:1.6;color:#EDEFF4;position:relative;z-index:1;}
+  .takeaway::before{content:"";display:block;width:56px;height:2px;background:#5E72EB;margin:0 auto 24px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brow"><span>正在学 · AGENT 平台</span><span>DAY 1 · 4/28</span></div>
+  <div class="rule"></div>
+  <h1>Agent<br><span class="thin">循环</span></h1>
+  <p class="lede">所有 AI Agent 共享的迭代循环：<b>调用模型 → 执行工具 → 回传结果 → 再调用</b>，消息数组随迭代持续增长。</p>
+  <div class="loop">
+    <div class="step"><div class="dot">🧠</div><span class="lab">调用模型</span></div>
+    <div class="arr">→</div>
+    <div class="step"><div class="dot">🔧</div><span class="lab">执行工具</span></div>
+    <div class="arr">→</div>
+    <div class="step"><div class="dot">📨</div><span class="lab">回传结果</span></div>
+    <div class="arr">↺</div>
+  </div>
+  <div class="points">
+    <div class="pt"><span class="n">01</span><p><b>工具只是循环里的一步</b>——纯聊天不能调用工具，不是 Agent。</p></div>
+    <div class="pt"><span class="n">02</span><p><b>每一步都基于完整历史</b>——消息数组越滚越长，Agent 才能连续决策。</p></div>
+    <div class="pt"><span class="n">03</span><p><b>生产级再叠三层</b>——权限、预算、生命周期（何时该停）。</p></div>
+  </div>
+  <div class="takeaway">「能调工具、能接回结果，才配叫 Agent。」</div>
+</div>
+</body>
+</html>

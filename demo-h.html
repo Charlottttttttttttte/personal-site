@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo H · 星球/书本/纸飞机</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #FFF9F0;   /* 米白底 */
+  --card:  #FFFFFF;
+  --ink:   #17171A;   /* 墨黑 */
+  --pink:  #FF87AB;
+  --yellow:#FFD23F;
+  --blue:  #6FB1FF;
+  --teal:  #4ECDC4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--paper);
+  background-image: radial-gradient(rgba(23,23,26,.14) 2px, transparent 2.2px);
+  background-size: 34px 34px;
+  color: var(--ink);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px; line-height: 1.7;
+}
+.fun { font-family: 'Fredoka', sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; height: 100svh; overflow: hidden;
+  background: linear-gradient(180deg, #FFF4DF 0%, var(--paper) 90%);
+}
+#gl { position: absolute; inset: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none;
+}
+.hero-kicker {
+  display: inline-block; background: var(--card);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 6px 20px; transform: rotate(-2deg);
+  font-family: 'Fredoka', sans-serif; font-size: 13px;
+  letter-spacing: .18em; color: var(--ink);
+  margin-bottom: 24px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.hero-name {
+  font-family: 'Fredoka', sans-serif; font-weight: 700;
+  font-size: 86px; line-height: 1.05; letter-spacing: .01em;
+  color: var(--ink); position: relative;
+}
+.hero-name .char:nth-child(4n+1) { color: var(--pink); }
+.hero-name .char:nth-child(4n+2) { color: var(--blue); }
+.hero-name .char:nth-child(4n+3) { color: var(--yellow); }
+.hero-name .char:nth-child(4n+4) { color: var(--teal); }
+.hero-name .char { text-shadow: 3px 3px 0 rgba(23,23,26,.18); }
+.hero-name .accent { color: var(--pink) !important; }
+.hero-tag {
+  margin-top: 20px; font-size: 17px; font-weight: 500;
+  display: inline-block; background: var(--yellow);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 6px 18px; transform: rotate(1deg);
+  box-shadow: 4px 4px 0 var(--ink);
+  text-wrap: pretty;
+}
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Fredoka', sans-serif; font-size: 13px;
+  letter-spacing: .3em; color: var(--ink);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 22px; margin-top: 4px; }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  background: var(--teal); border: 3px solid var(--ink); border-radius: 12px;
+  padding: 8px 14px; transform: rotate(2deg);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 88px 24px; }
+.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+.sec-num {
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--paper); background: var(--ink);
+  padding: 4px 12px; transform: rotate(-3deg);
+  border-radius: 4px; box-shadow: 3px 3px 0 var(--pink);
+}
+.sec-title {
+  font-family: 'Fredoka', 'Noto Sans SC', sans-serif; font-weight: 900;
+  font-size: 34px; color: var(--ink);
+}
+.sec-title::after { content: '●'; color: var(--yellow); font-size: 22px; margin-left: 10px; }
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; padding: 8px 0; }
+.learn-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.learn-label > span:first-child { font-size: 14px; font-weight: 700; color: var(--ink); }
+.learn-count { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px; color: var(--pink); }
+.track {
+  position: relative; height: 18px; border-radius: 999px;
+  border: 3px solid var(--ink); background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.fill {
+  position: absolute; left: 3px; top: 3px; height: calc(100% - 6px); width: 0;
+  border-radius: 999px;
+  background-color: var(--yellow);
+  background-image: radial-gradient(rgba(23,23,26,.35) 1.5px, transparent 1.6px);
+  background-size: 12px 12px;
+}
+.learn-topic { margin-top: 14px; font-size: 14px; color: var(--ink); opacity: .72; }
+.stages { display: flex; align-items: center; margin: 16px 0 8px; }
+.stage-node { display: flex; align-items: center; flex: 1; }
+.stage-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 3px solid var(--ink); flex: none; }
+.stage-dot.on { background: var(--blue); }
+.stage-seg { flex: 1; height: 5px; background: rgba(23,23,26,.15); }
+.stage-seg.done { background: var(--ink); opacity: 1; }
+.stage-names { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--ink); opacity: .55; }
+.stage-names .on { color: var(--ink); opacity: 1; }
+
+/* ---------- 作品卡 ---------- */
+.works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.work-card {
+  position: relative; background: var(--card);
+  border: 3px solid var(--ink); border-radius: 14px;
+  padding: 26px 24px 22px; cursor: pointer; overflow: hidden;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.work-card::after {  /* 贴纸：黄色圆 */
+  content: ''; position: absolute; top: -18px; right: -18px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--yellow); border: 3px solid var(--ink);
+}
+.work-card:hover { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--ink); }
+.work-num {
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink);
+  display: inline-block; background: var(--pink);
+  border: 2px solid var(--ink); border-radius: 999px; padding: 0 10px;
+}
+.work-title { font-size: 21px; font-weight: 900; margin: 14px 0 8px; }
+.work-desc { font-size: 14px; color: var(--ink); opacity: .68; }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 22px; padding-top: 12px;
+  border-top: 3px solid var(--ink);
+  font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--ink);
+}
+.work-arrow { font-size: 20px; transition: transform .15s ease; }
+.work-card:hover .work-arrow { transform: translateX(5px); }
+
+.footer-note {
+  text-align: center; padding: 44px 24px;
+  border-top: 4px solid var(--ink);
+  font-family: 'Fredoka', sans-serif; font-size: 13px; color: var(--ink);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { grid-template-columns: 1fr; gap: 32px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 60px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .hero-name { font-size: 44px; }
+  .hero-tag { font-size: 14px; padding: 4px 12px; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 26px; }
+  .hero-note { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 第一屏：3D 星球/书本/纸飞机 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <p class="hero-kicker">Portfolio &amp; Digital Garden</p>
+    <h1 class="hero-name fun" id="heroName">Charlotte<span class="accent">.</span></h1>
+    <p class="hero-tag" id="heroTag">AI 内容创作者 · 学习者 —— 在做的和在读的，都放在这里</p>
+  </div>
+  <p class="hero-note">↻ 拖拽 · 点物件跳转</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num fun">01</span>
+    <h2 class="sec-title fun">正在学</h2>
+  </div>
+  <div class="learning">
+    <div id="learn1">
+      <div class="learn-label">
+        <span>正在学 · 财经</span>
+        <span class="learn-count fun">D<span id="dayCount">0</span>/28</span>
+      </div>
+      <div class="track"><div class="fill" id="finFill" data-w="39"></div></div>
+      <p class="learn-topic">每天 5 分钟低功耗：财务报表入门，产出沉淀为概念卡片</p>
+    </div>
+    <div id="learn2">
+      <div class="learn-label">
+        <span>正在学 · Agent 平台</span>
+        <span class="learn-count fun">阶段 1/3</span>
+      </div>
+      <div class="stages">
+        <div class="stage-node" style="flex:none"><div class="stage-dot on"></div></div>
+        <div class="stage-seg done"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+      </div>
+      <div class="stage-names">
+        <span class="on">调研</span><span>拆解</span><span>输出</span>
+      </div>
+      <p class="learn-topic">研究 Shannon——生产级多智能体编排：token 预算、沙箱执行、事件流</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num fun">02</span>
+    <h2 class="sec-title fun">作品集</h2>
+  </div>
+  <div class="works">
+    <div class="work-card" id="work1">
+      <span class="work-num fun">01</span>
+      <h3 class="work-title">财经知识卡片</h3>
+      <p class="work-desc">4 周学习项目：每日一考 + 错题本 + 间隔复习，产出 day01-21 系列知识卡片。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work2">
+      <span class="work-num fun">02</span>
+      <h3 class="work-title">书法练习打卡</h3>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work3">
+      <span class="work-num fun">03</span>
+      <h3 class="work-title">Obsidian LLM-Wiki</h3>
+      <p class="work-desc">用 LLM 自动维护的个人知识库：476 来源 / 1057 页 / 321 概念。</p>
+      <div class="work-foot">
+        <span>OBSIDIAN / WIKI</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-note">DEMO H · 星球/书本/纸飞机 —— 孟菲斯页面 + 可点击跳转 3D</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效 -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const name = document.getElementById('heroName');
+name.innerHTML = [...name.textContent].map(c =>
+  c === '.' ? '<span class="accent char">.</span>' : `<span class="char">${c}</span>`).join('');
+if (!reduceMotion) {
+  gsap.from('.char', { y: 30, opacity: 0, duration: .7, ease: 'back.out(1.8)', stagger: .05, delay: .2 });
+  gsap.from('#heroTag', { scale: .8, opacity: 0, duration: .6, ease: 'back.out(2)', delay: .9 });
+  gsap.to('.hero-hint .arrow', { y: 8, duration: .7, ease: 'sine.inOut', repeat: -1, yoyo: true });
+}
+
+const finFill = document.getElementById('finFill');
+const dayCount = document.getElementById('dayCount');
+ScrollTrigger.create({
+  trigger: '.learning', start: 'top 80%', once: true,
+  onEnter() {
+    if (reduceMotion) { finFill.style.width = '39%'; dayCount.textContent = '11'; return; }
+    gsap.to(finFill, { width: '39%', duration: 1, ease: 'power3.out' });
+    gsap.to({ v: 0 }, { v: 11, duration: 1.2, ease: 'power3.out',
+      onUpdate() { dayCount.textContent = Math.round(this.targets()[0].v); } });
+    gsap.from('.stage-dot.on', { scale: 0, duration: .5, ease: 'back.out(2.4)', delay: .3 });
+  }
+});
+
+if (!reduceMotion) {
+  gsap.from('.work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 34, opacity: 0, duration: .7, ease: 'power3.out', stagger: .1
+  });
+}
+</script>
+
+<!-- Three.js：星球/书本/纸飞机 + 点击跳转 -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, isMobile ? .6 : .4, isMobile ? 10.8 : 7.6);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+const ink = 0x17171A;
+function memphisMesh(mesh, color) {
+  const m = new THREE.Mesh(mesh, new THREE.MeshBasicMaterial({ color }));
+  m.add(new THREE.LineSegments(new THREE.EdgesGeometry(mesh), new THREE.LineBasicMaterial({ color: ink })));
+  return m;
+}
+
+const group = new THREE.Group();
+scene.add(group);
+const clickables = [];
+
+// 星球（带环）→ 正在学·财经
+const planet = new THREE.Group();
+planet.add(memphisMesh(new THREE.SphereGeometry(.95, 20, 16), 0x6FB1FF));
+const ring = memphisMesh(new THREE.TorusGeometry(1.4, .08, 8, 28), 0x4ECDC4);
+ring.rotation.x = 1.15;
+planet.add(ring);
+planet.position.set(-2.6, .7, -.3);
+planet.userData.target = '#learn1';
+planet.userData.scale0 = 1;
+group.add(planet);
+clickables.push(planet);
+
+// 书本 → 作品集
+const book = new THREE.Group();
+book.add(memphisMesh(new THREE.BoxGeometry(1.15, .18, .8), 0xFFD23F));
+const pages = memphisMesh(new THREE.BoxGeometry(1.02, .34, .72), 0xFFFFFF);
+pages.position.y = .2;
+book.add(pages);
+book.position.set(1.9, -1.15, .4);
+book.rotation.z = -.18;
+book.scale.setScalar(1.5);
+book.userData.target = '#works';
+book.userData.scale0 = 1;
+group.add(book);
+clickables.push(book);
+
+// 纸飞机 → LLM-Wiki 卡片
+const plane = new THREE.Group();
+plane.add(memphisMesh(new THREE.BoxGeometry(.42, .05, 1.25), 0xFF87AB));  // 翼
+plane.add(memphisMesh(new THREE.BoxGeometry(1.25, .05, .3), 0xFF87AB));   // 机身
+plane.position.set(2.5, .7, -.5);
+plane.rotation.z = .24;
+plane.userData.target = '#work3';
+plane.userData.scale0 = 1;
+group.add(plane);
+clickables.push(plane);
+
+// 移动端：整体缩小 + 三件重摆入画
+if (isMobile) {
+  group.scale.setScalar(.72);
+  planet.position.set(-1.6, .45, -.3);
+  plane.position.set(1.6, .6, -.6);
+  book.position.set(0, -1.75, .3);
+  book.scale.setScalar(2.4);
+  book.rotation.set(.15, .45, -.15);
+}
+
+const controls = new OrbitControls(camera, renderer.domElement);
+renderer.domElement.style.touchAction = 'pan-y';
+controls.enableZoom = false; controls.enablePan = false;
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.target.set(0, .2, 0);
+
+// 点击跳转（拖拽与点击区分）
+const raycaster = new THREE.Raycaster();
+const pointerV = new THREE.Vector2();
+let downX = 0, downY = 0;
+renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+renderer.domElement.addEventListener('pointerup', e => {
+  if (Math.hypot(e.clientX - downX, e.clientY - downY) > 8) return;  // 拖拽不算点击
+  const r = renderer.domElement.getBoundingClientRect();
+  pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointerV, camera);
+  const hits = raycaster.intersectObjects(clickables, true);
+  if (hits.length) {
+    let o = hits[0].object;
+    while (o && !o.userData.target) o = o.parent;
+    if (o && o.userData.target) {
+      const sec = document.querySelector(o.userData.target);
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+});
+// hover 高亮 + 手型
+let hovered = null;
+function setHover(g, on) {
+  if (on) {
+    g.scale.setScalar(g.userData.scale0 * 1.12);
+    g.traverse(c => { if (c.isMesh) { c.userData.mat0 ||= c.material; c.material = new THREE.MeshBasicMaterial({ color: 0xFFD23F }); } });
+  } else {
+    g.scale.setScalar(g.userData.scale0);
+    g.traverse(c => { if (c.isMesh && c.userData.mat0) { c.material = c.userData.mat0; delete c.userData.mat0; } });
+  }
+}
+renderer.domElement.addEventListener('pointermove', e => {
+  const r = renderer.domElement.getBoundingClientRect();
+  pointerV.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  pointerV.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointerV, camera);
+  const hits = raycaster.intersectObjects(clickables, true);
+  let h = null;
+  if (hits.length) { h = hits[0].object; while (h && !h.userData.target) h = h.parent; }
+  if (h !== hovered) {
+    if (hovered) setHover(hovered, false);
+    hovered = h;
+    if (hovered) setHover(hovered, true);
+    renderer.domElement.style.cursor = h ? 'pointer' : 'grab';
+  }
+});
+renderer.domElement.addEventListener('pointerleave', () => {
+  if (hovered) { setHover(hovered, false); hovered = null; }
+  renderer.domElement.style.cursor = 'grab';
+});
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  const t = clock.getElapsedTime();
+  if (!reduceMotion) {
+    planet.rotation.y += dt * .5;
+    ring.rotation.z += dt * .2;
+    book.rotation.y += dt * .3;
+    plane.rotation.y += dt * .4;
+    group.position.y = Math.sin(t * .8) * .08;   // 整体轻浮
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>

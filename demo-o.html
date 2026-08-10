@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo O · 酸性设计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #0B0B0F;
+  --panel:  #131318;
+  --pink:   #FF3CAC;
+  --purple: #784BA0;
+  --green:  #2BFF88;
+  --text:   #EDEDF2;
+  --dim:    #8B8B96;
+  --line:   rgba(255,255,255,.12);
+  --chrome: linear-gradient(180deg, #F5F5F7 0%, #9A9AA5 45%, #E8E8EC 60%, #6E6E78 100%);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; line-height: 1.7;
+  background-image: repeating-conic-gradient(rgba(255,255,255,.015) 0 .0001%, transparent 0 .0002%);
+  background-size: 180px;
+}
+.orb { font-family: 'Orbitron', sans-serif; font-variant-numeric: tabular-nums; }
+.qk  { font-family: 'ZCOOL QingKe HuangYou', cursive; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: 100svh; overflow: hidden; background: var(--bg); }
+#gl { position: absolute; inset: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none;
+  padding-bottom: 14vh;   /* 文字上移，避开结体 */
+}
+.hero-kicker { font-family: 'Orbitron'; font-weight: 700; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.hero-name { font-family: 'Orbitron'; font-weight: 900; font-size: 64px; line-height: 1.1; letter-spacing: .06em; color: var(--text); }
+.hero-name .accent { color: var(--pink); }
+.hero-tag { margin-top: 18px; font-size: 15px; color: var(--dim); }
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Orbitron'; font-weight: 500; font-size: 10px; letter-spacing: .3em;
+  color: var(--text);
+  text-shadow: 0 0 8px rgba(0,0,0,.9), 0 0 16px rgba(0,0,0,.6);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 14px; margin-top: 4px; color: var(--green); }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  font-family: 'Orbitron'; font-size: 10px; letter-spacing: .2em; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 4px; padding: 8px 12px;
+}
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 92px 24px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 40px; }
+.sec-num { font-family: 'Orbitron'; font-weight: 900; font-size: 13px; color: var(--pink); }
+.sec-title {
+  position: relative; font-family: 'ZCOOL QingKe HuangYou'; font-size: 40px; color: var(--text);
+}
+.sec-title::before {   /* 描边幻影字 */
+  content: attr(data-ghost); position: absolute; left: -8px; top: -14px; z-index: -1;
+  font-size: 64px; color: transparent;
+  -webkit-text-stroke: 1px rgba(255,60,172,.35); white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 8px 0; }
+.learn-panel { padding: 26px 26px 22px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+.learn-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.learn-label > span:first-child { font-size: 14px; color: var(--text); }
+.learn-count { font-family: 'Orbitron'; font-weight: 700; font-size: 16px; color: var(--pink); }
+.track { height: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.fill {
+  height: 100%; width: 0; border-radius: 2px;
+  background: linear-gradient(90deg, var(--pink), var(--purple), var(--green));
+  background-size: 200% 100%;
+  animation: liquid 3s linear infinite;
+}
+@keyframes liquid { to { background-position: 200% 0; } }
+.learn-topic { margin-top: 12px; font-size: 14px; color: var(--dim); }
+.stages { display: flex; align-items: center; margin: 16px 0 8px; }
+.stage-node { display: flex; align-items: center; flex: 1; }
+.stage-dot {
+  width: 14px; height: 14px; border-radius: 50%; flex: none;
+  background: conic-gradient(from 210deg, #F5F5F7, #9A9AA5, #E8E8EC, #6E6E78, #F5F5F7);
+  border: 1px solid var(--line);
+}
+.stage-dot.on { box-shadow: 0 0 12px var(--pink); }
+.stage-seg { flex: 1; height: 0; border-top: 1px solid var(--line); }
+.stage-seg.done { border-top: 1px solid var(--dim); }
+.stage-names { display: flex; justify-content: space-between; }
+.stage-names span { font-family: 'Orbitron'; font-size: 11px; letter-spacing: .2em; color: var(--dim); }
+.stage-names .on { color: var(--text); }
+
+/* ---------- 作品卡 ---------- */
+.works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.work-card {
+  position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
+  padding: 26px 24px 22px; cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--pink), var(--purple), var(--green)); }
+.work-card:hover { transform: translateY(-3px); border-color: var(--pink); }
+.work-card:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+.work-num {
+  font-family: 'Orbitron'; font-weight: 700; font-size: 11px; letter-spacing: .1em; color: var(--dim);
+}
+.work-title { font-family: 'ZCOOL QingKe HuangYou'; font-size: 22px; margin: 14px 0 8px; }
+.work-desc { font-size: 14px; color: var(--dim); }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line);
+  font-family: 'Orbitron'; font-size: 10px; letter-spacing: .2em; color: var(--dim);
+}
+.work-arrow { transition: color .2s ease, transform .2s ease; }
+.work-card:hover .work-arrow { color: var(--pink); transform: translateX(4px); }
+
+.footer-note {
+  text-align: center; padding: 40px 24px; border-top: 1px solid var(--line);
+  font-family: 'Orbitron'; font-size: 10px; letter-spacing: .2em; color: var(--dim);
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { grid-template-columns: 1fr; gap: 30px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 46px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .hero-name { font-size: 32px; }
+  .hero-tag { font-size: 14px; padding: 0 24px; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 32px; }
+  .sec-title::before { font-size: 48px; }
+  .hero-note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 第一屏：铬环面结 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <p class="hero-kicker">Portfolio &amp; Digital Garden</p>
+    <h1 class="hero-name" id="heroName">Charlotte<span class="accent">.</span></h1>
+    <p class="hero-tag" id="heroTag">AI 内容创作者 · 学习者 —— 在做的和在读的，都放在这里</p>
+  </div>
+  <p class="hero-note">↻ 拖拽</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num">01 /</span>
+    <h2 class="sec-title" data-ghost="正在学">正在学</h2>
+  </div>
+  <div class="learning">
+    <div class="learn-panel" id="learn1">
+      <div class="learn-label">
+        <span>正在学 · 财经</span>
+        <span class="learn-count orb">D<span id="dayCount">0</span>/28</span>
+      </div>
+      <div class="track"><div class="fill" id="finFill" data-w="39"></div></div>
+      <p class="learn-topic">每天 5 分钟低功耗：财务报表入门，产出沉淀为概念卡片</p>
+    </div>
+    <div class="learn-panel" id="learn2">
+      <div class="learn-label">
+        <span>正在学 · Agent 平台</span>
+        <span class="learn-count orb">阶段 1/3</span>
+      </div>
+      <div class="stages">
+        <div class="stage-node" style="flex:none"><div class="stage-dot on"></div></div>
+        <div class="stage-seg done"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+      </div>
+      <div class="stage-names">
+        <span class="on">调研</span><span>拆解</span><span>输出</span>
+      </div>
+      <p class="learn-topic">研究 Shannon——生产级多智能体编排：token 预算、沙箱执行、事件流</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num">02 /</span>
+    <h2 class="sec-title" data-ghost="作品集">作品集</h2>
+  </div>
+  <div class="works">
+    <div class="work-card" id="work1">
+      <span class="work-num">#01</span>
+      <h3 class="work-title">财经知识卡片</h3>
+      <p class="work-desc">4 周学习项目：每日一考 + 错题本 + 间隔复习，产出 day01-21 系列知识卡片。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work2">
+      <span class="work-num">#02</span>
+      <h3 class="work-title">书法练习打卡</h3>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+    <div class="work-card" id="work3">
+      <span class="work-num">#03</span>
+      <h3 class="work-title">Obsidian LLM-Wiki</h3>
+      <p class="work-desc">用 LLM 自动维护的个人知识库：476 来源 / 1057 页 / 321 概念。</p>
+      <div class="work-foot">
+        <span>OBSIDIAN / WIKI</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-note">DEMO O · ACID DESIGN —— 灵感：llm-wiki「15 种设计风格 Prompt 库」</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效（酸性：clipPath 刷出） -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const name = document.getElementById('heroName');
+name.innerHTML = [...name.textContent].map(c =>
+  c === '.' ? '<span class="accent char">.</span>' : `<span class="char">${c}</span>`).join('');
+if (!reduceMotion) {
+  gsap.from('.char', { clipPath: 'inset(100% 0 0 0)', duration: .5, ease: 'power3.out', stagger: .04, delay: .2 });
+  gsap.from('#heroTag', { opacity: 0, y: 26, duration: .6, ease: 'power3.out', delay: .55 });
+  gsap.to('.hero-hint .arrow', { y: 6, duration: .7, ease: 'sine.inOut', repeat: -1, yoyo: true });
+} else {
+  gsap.set('.char', { clipPath: 'inset(0)' });
+}
+
+const finFill = document.getElementById('finFill');
+const dayCount = document.getElementById('dayCount');
+ScrollTrigger.create({
+  trigger: '.learning', start: 'top 80%', once: true,
+  onEnter() {
+    if (reduceMotion) { finFill.style.width = '39%'; dayCount.textContent = '11'; return; }
+    gsap.to(finFill, { width: '39%', duration: 1, ease: 'power3.out' });
+    gsap.to({ v: 0 }, { v: 11, duration: 1.1, ease: 'power3.out',
+      onUpdate() { dayCount.textContent = Math.round(this.targets()[0].v); } });
+    gsap.from('.stage-dot.on', { scale: 0, duration: .4, ease: 'power2.out', delay: .25 });
+  }
+});
+
+if (!reduceMotion) {
+  gsap.from('.work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 26, opacity: 0, duration: .6, ease: 'power3.out', stagger: .07
+  });
+}
+</script>
+
+<!-- Three.js：铬环面结 + 霓虹边光 -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, 0, 5.6);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+// 铬质感：环境贴图（金属必须挂 envMap，否则全黑）
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+
+// 霓虹边光：粉 + 青绿
+const pinkLight = new THREE.PointLight(0xFF3CAC, 30);
+pinkLight.position.set(-4, 2, 3);
+scene.add(pinkLight);
+const greenLight = new THREE.PointLight(0x2BFF88, 20);
+greenLight.position.set(4, -2, 2);
+scene.add(greenLight);
+
+// 铬环面结
+const knot = new THREE.Mesh(
+  new THREE.TorusKnotGeometry(1.3, .42, isMobile ? 120 : 220, 32),
+  new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 1, roughness: .12 }));
+scene.add(knot);
+knot.scale.setScalar(isMobile ? .6 : .85);
+knot.position.y = isMobile ? -1.3 : -1.5;
+
+const controls = new OrbitControls(camera, renderer.domElement);
+renderer.domElement.style.touchAction = 'pan-y';
+controls.enableZoom = false; controls.enablePan = false;
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.autoRotate = !reduceMotion;
+controls.autoRotateSpeed = .6;
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  if (!reduceMotion) {
+    knot.rotation.x = t * .15;
+    knot.rotation.y = t * .22;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>

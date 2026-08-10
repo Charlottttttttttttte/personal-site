@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo E · 像素艺术</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gb0: #0f380f;  /* 最深 */
+  --gb1: #306230;  /* 深 */
+  --gb2: #8bac0f;  /* 亮 */
+  --gb3: #9bbc0f;  /* 最亮（底） */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--gb3);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(15,56,15,.05) 0 1px, transparent 1px 9px),
+    repeating-linear-gradient(90deg, rgba(15,56,15,.05) 0 1px, transparent 1px 9px);
+  color: var(--gb0);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px; line-height: 1.7;
+}
+.pix { font-family: 'Press Start 2P', monospace; font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; height: 100svh; overflow: hidden;
+  background-color: var(--gb3);
+}
+.hero::after {  /* 扫描线 */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(15,56,15,.07) 0 2px, transparent 2px 4px);
+}
+#gl { position: absolute; inset: 0; }
+#gl canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  pointer-events: none; z-index: 1;
+}
+.hero-kicker {
+  display: inline-block; background: var(--gb0); color: var(--gb3);
+  padding: 10px 16px; margin-bottom: 26px;
+  font-size: 10px; letter-spacing: 2px;
+  box-shadow: 4px 4px 0 var(--gb1);
+}
+.hero-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 54px; line-height: 1.2; letter-spacing: 4px;
+  color: var(--gb3);
+  text-shadow: 5px 5px 0 var(--gb0);
+}
+.hero-tag {
+  margin-top: 22px; font-size: 14px; font-weight: 700;
+  color: var(--gb3); background: var(--gb1);
+  border: 3px solid var(--gb0);
+  padding: 8px 14px; box-shadow: 3px 3px 0 var(--gb0);
+  text-wrap: pretty;
+}
+.hero-tag .cursor {
+  display: inline-block; margin-left: 4px; color: var(--gb0);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.hero-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  letter-spacing: 2px; color: var(--gb1);
+}
+.hero-hint .arrow { display: block; text-align: center; font-size: 14px; margin-top: 6px; }
+.hero-note {
+  position: absolute; top: 24px; right: 28px;
+  background: var(--gb1); color: var(--gb3);
+  border: 3px solid var(--gb0);
+  padding: 10px 14px;
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  box-shadow: 4px 4px 0 var(--gb0);
+}
+
+/* 像素切角 */
+.chip {
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+/* ---------- Sections ---------- */
+.section { max-width: 1080px; margin: 0 auto; padding: 88px 24px; }
+.sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+.sec-num {
+  font-family: 'Press Start 2P', monospace; font-size: 10px;
+  color: var(--gb3); background: var(--gb0);
+  padding: 8px 12px; box-shadow: 3px 3px 0 var(--gb1);
+}
+.sec-title { font-weight: 900; font-size: 30px; color: var(--gb0); }
+.sec-title::before { content: '▸ '; color: var(--gb1); }
+
+/* ---------- 正在学 ---------- */
+.learning { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; padding: 8px 0; }
+.learn-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.learn-label > span:first-child { font-size: 14px; font-weight: 700; color: var(--gb1); }
+.learn-count { font-family: 'Press Start 2P', monospace; font-size: 12px; color: var(--gb0); text-shadow: 2px 2px 0 var(--gb2); }
+/* XP 分段经验条 */
+.track {
+  position: relative; height: 22px;
+  border: 4px solid var(--gb0); background: var(--gb1);
+  box-shadow: inset 0 0 0 3px rgba(15,56,15,.35);
+}
+.fill {
+  position: absolute; left: 4px; top: 4px; bottom: 4px; width: 0;
+  background-color: var(--gb3);
+  background-image: repeating-linear-gradient(90deg, var(--gb3) 0 9px, var(--gb1) 9px 12px);
+}
+.learn-topic { margin-top: 12px; font-size: 14px; font-weight: 500; color: var(--gb1); }
+.stages { display: flex; align-items: center; margin: 16px 0 8px; }
+.stage-node { display: flex; align-items: center; flex: 1; }
+.stage-dot {
+  width: 13px; height: 13px; flex: none;
+  transform: rotate(45deg);
+  background: var(--gb1); border: 3px solid var(--gb0);
+}
+.stage-dot.on { background: var(--gb3); box-shadow: 0 0 0 3px var(--gb1); }
+.stage-seg { flex: 1; height: 6px; background: var(--gb0); opacity: .25; }
+.stage-names { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--gb1); opacity: .7; }
+.stage-names .on { color: var(--gb0); opacity: 1; }
+
+/* ---------- 作品卡（道具栏） ---------- */
+.works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.work-card {
+  position: relative; background: var(--gb2);
+  border: 4px solid var(--gb0);
+  padding: 24px 22px 20px; cursor: pointer;
+  box-shadow: 6px 6px 0 var(--gb0);
+  transition: transform .1s steps(2), box-shadow .1s steps(2);
+}
+.work-card:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--gb0); }
+.work-card::before {  /* 高光像素 */
+  content: ''; position: absolute; top: 6px; left: 6px; right: 6px; height: 4px;
+  background: rgba(15,56,15,.25);
+}
+.work-num {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace; font-size: 10px;
+  color: var(--gb3); background: var(--gb0);
+  padding: 6px 8px; box-shadow: 2px 2px 0 var(--gb1);
+}
+.work-title { font-size: 20px; font-weight: 900; margin: 16px 0 8px; color: var(--gb0); }
+.work-desc { font-size: 14px; font-weight: 500; color: var(--gb1); }
+.work-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 20px; padding-top: 12px;
+  border-top: 4px solid var(--gb0);
+  font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--gb0);
+}
+.work-arrow { font-size: 12px; transition: transform .1s steps(2); }
+.work-card:hover .work-arrow { transform: translateX(6px); }
+.work-card:focus-visible { outline: 3px solid var(--gb0); outline-offset: 3px; }
+
+.footer-note {
+  text-align: center; padding: 40px 24px;
+  background: var(--gb1); color: var(--gb3);
+  border-top: 4px solid var(--gb0);
+  font-family: 'Press Start 2P', monospace; font-size: 9px; line-height: 2;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 959px) {
+  .learning { grid-template-columns: 1fr; gap: 32px; }
+  .works { grid-template-columns: repeat(2, 1fr); }
+  .hero-name { font-size: 38px; }
+}
+@media (max-width: 639px) {
+  .works { grid-template-columns: 1fr; }
+  .hero-name { font-size: 26px; letter-spacing: 2px; text-shadow: 3px 3px 0 var(--gb1); }
+  .hero-tag { font-size: 13px; padding: 6px 10px; }
+  .section { padding: 64px 16px; }
+  .sec-title { font-size: 24px; }
+  .hero-note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 第一屏：3D 像素方块 ============ -->
+<section class="hero" id="top">
+  <div id="gl"></div>
+  <div class="hero-overlay">
+    <p class="hero-kicker pix">PORTFOLIO &amp; DIGITAL GARDEN</p>
+    <h1 class="hero-name" id="heroName">CHARLOTTE<span style="color:var(--gb1)">.</span></h1>
+    <p class="hero-tag" id="heroTag">AI 内容创作者 · 学习者 —— 在做的和在读的，都放在这里<span class="cursor">▮</span></p>
+  </div>
+  <p class="hero-note">← DRAG ME</p>
+  <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
+</section>
+
+<!-- ============ 正在学 ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num pix chip">01</span>
+    <h2 class="sec-title">正在学</h2>
+  </div>
+  <div class="learning">
+    <div>
+      <div class="learn-label">
+        <span>正在学 · 财经</span>
+        <span class="learn-count pix">D<span id="dayCount">0</span>/28</span>
+      </div>
+      <div class="track"><div class="fill" id="finFill" data-w="39"></div></div>
+      <p class="learn-topic">每天 5 分钟低功耗：财务报表入门，产出沉淀为概念卡片</p>
+    </div>
+    <div>
+      <div class="learn-label">
+        <span>正在学 · Agent 平台</span>
+        <span class="learn-count pix">LV 1/3</span>
+      </div>
+      <div class="stages">
+        <div class="stage-node" style="flex:none"><div class="stage-dot on"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+        <div class="stage-seg"></div>
+        <div class="stage-node" style="flex:none"><div class="stage-dot"></div></div>
+      </div>
+      <div class="stage-names">
+        <span class="on">调研</span><span>拆解</span><span>输出</span>
+      </div>
+      <p class="learn-topic">研究 Shannon——生产级多智能体编排：token 预算、沙箱执行、事件流</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 作品集（示例一张） ============ -->
+<section class="section">
+  <div class="sec-head">
+    <span class="sec-num pix chip">02</span>
+    <h2 class="sec-title">作品集</h2>
+  </div>
+  <div class="works">
+    <div class="work-card">
+      <span class="work-num pix">01</span>
+      <h3 class="work-title">财经知识卡片</h3>
+      <p class="work-desc">4 周学习项目：每日一考 + 错题本 + 间隔复习，产出 day01-21 系列知识卡片。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS</span>
+        <span class="work-arrow">▶</span>
+      </div>
+    </div>
+    <div class="work-card">
+      <span class="work-num pix">02</span>
+      <h3 class="work-title">书法练习打卡</h3>
+      <p class="work-desc">每日练习打卡 + AI 书法角度检测模型，临池录、网站自动化。</p>
+      <div class="work-foot">
+        <span>CALLIGRAPHY / AI TOOL</span>
+        <span class="work-arrow">▶</span>
+      </div>
+    </div>
+    <div class="work-card">
+      <span class="work-num pix">03</span>
+      <h3 class="work-title">Obsidian LLM-Wiki</h3>
+      <p class="work-desc">用 LLM 自动维护的个人知识库：476 来源 / 1057 页 / 321 概念。</p>
+      <div class="work-foot">
+        <span>OBSIDIAN / WIKI</span>
+        <span class="work-arrow">▶</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-note">DEMO E · PIXEL ART —— 灵感：llm-wiki「15 种设计风格 Prompt 库」</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<!-- GSAP 动效 -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const name = document.getElementById('heroName');
+name.innerHTML = [...name.textContent].map(c =>
+  c === '.' ? '<span style="color:var(--gb1)" class="char">.</span>' : `<span class="char">${c}</span>`).join('');
+if (!reduceMotion) {
+  gsap.from('.char', { y: 22, opacity: 0, duration: .4, ease: 'power2.out', stagger: .06, delay: .2 });
+  gsap.from('#heroTag', { opacity: 0, duration: .6, ease: 'power2.out', delay: .9 });
+  gsap.to('.hero-hint .arrow', { y: 6, duration: .6, ease: 'steps(2)', repeat: -1, yoyo: true });
+}
+
+const finFill = document.getElementById('finFill');
+const dayCount = document.getElementById('dayCount');
+ScrollTrigger.create({
+  trigger: '.learning', start: 'top 80%', once: true,
+  onEnter() {
+    if (reduceMotion) { finFill.style.width = '39%'; dayCount.textContent = '11'; return; }
+    gsap.to(finFill, { width: '39%', duration: 1, ease: 'steps(10)' });
+    gsap.to({ v: 0 }, { v: 11, duration: 1.2, ease: 'steps(11)',
+      onUpdate() { dayCount.textContent = Math.round(this.targets()[0].v); } });
+    gsap.from('.stage-dot.on', { scale: 0, duration: .3, ease: 'steps(2)', delay: .3 });
+  }
+});
+
+if (!reduceMotion) {
+  gsap.from('.work-card', {
+    scrollTrigger: { trigger: '.works', start: 'top 80%', once: true },
+    y: 30, opacity: 0, duration: .6, ease: 'power2.out', stagger: .1
+  });
+}
+</script>
+
+<!-- Three.js：低分辨率像素方块（草方块） -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const wrap = document.getElementById('gl');
+const isMobile = matchMedia('(max-width: 639px)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, .1, 100);
+camera.position.set(0, .4, 5.6);
+
+// 低分辨率渲染 → 像素感（关键）
+const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+renderer.setPixelRatio(.5);
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9bbc0f, 1.3));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+sun.position.set(3, 5, 4);
+scene.add(sun);
+
+const group = new THREE.Group();
+scene.add(group);
+
+// 草方块：顶面亮绿，侧面中绿，底面深绿
+const mats = [
+  new THREE.MeshLambertMaterial({ color: 0x8bac0f }),
+  new THREE.MeshLambertMaterial({ color: 0x8bac0f }),
+  new THREE.MeshLambertMaterial({ color: 0x9bbc0f }),
+  new THREE.MeshLambertMaterial({ color: 0x306230 }),
+  new THREE.MeshLambertMaterial({ color: 0x8bac0f }),
+  new THREE.MeshLambertMaterial({ color: 0x8bac0f }),
+];
+const box = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.9, 1.9), mats);
+group.add(box);
+group.add(new THREE.LineSegments(new THREE.EdgesGeometry(box.geometry),
+  new THREE.LineBasicMaterial({ color: 0x0f380f })));
+
+// 漂浮的小像素块
+const colors = [0x0f380f, 0x306230, 0x8bac0f, 0x9bbc0f];
+const pixs = [];
+const N = isMobile ? 10 : 18;
+for (let i = 0; i < N; i++) {
+  const s = .12 + Math.random() * .16;
+  const p = new THREE.Mesh(new THREE.BoxGeometry(s, s, s),
+    new THREE.MeshLambertMaterial({ color: colors[i % 4], flatShading: true }));
+  const r = 2.3 + Math.random() * 1.6;
+  const t = Math.random() * Math.PI * 2;
+  const ph = Math.acos(2 * Math.random() - 1);
+  p.position.set(r * Math.sin(ph) * Math.cos(t), r * Math.sin(ph) * Math.sin(t), r * Math.cos(ph));
+  p.rotation.set(Math.random() * 2, Math.random() * 2, 0);
+  group.add(p);
+  pixs.push(p);
+}
+
+const controls = new OrbitControls(camera, renderer.domElement);
+renderer.domElement.style.touchAction = 'pan-y';
+controls.enableZoom = false; controls.enablePan = false;
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.autoRotate = !reduceMotion;
+controls.autoRotateSpeed = 1;
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  pixs.forEach((p, i) => { p.rotation.y += .01 * (i % 2 === 0 ? 1 : -1); });
+  group.position.y = Math.abs(Math.sin(t * 1.2)) * .15;  // 方块上下弹
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+</script>
+</body>
+</html>
