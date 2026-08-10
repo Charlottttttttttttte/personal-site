@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFF9F0">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<title>Agent 学习卡 · Charlotte</title>
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;overscroll-behavior:none;}
+  .wrap{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 32px);}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .back{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;border:3px solid var(--ink);background:var(--card);border-radius:12px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);text-decoration:none;transform:rotate(-1deg);}
+  .stage-label{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;background:var(--blue);border:3px solid var(--ink);border-radius:12px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink);transform:rotate(1deg);}
+  h1{font-family:'Fredoka',sans-serif;font-size:28px;font-weight:700;margin-bottom:4px;}
+  h1 .dot{color:var(--pink);}
+  .sub{font-size:14px;color:var(--ink);opacity:.6;margin-bottom:16px;}
+  .card-frame{background:var(--card);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);padding:14px;margin-bottom:14px;}
+  .card-frame img{display:block;width:100%;height:auto;border-radius:10px;border:2px solid var(--ink);}
+  .tip{font-size:12px;color:var(--ink);opacity:.5;text-align:center;margin-bottom:16px;}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .act{flex:1;min-width:150px;text-align:center;border:3px solid var(--ink);border-radius:14px;padding:13px 10px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .15s ease,box-shadow .15s ease;}
+  .act:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .act--wiki{background:var(--yellow);}
+  .act--today{background:var(--card);}
+  .act small{display:block;font-size:11px;opacity:.6;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="today.html">← 今日</a>
+    <span class="stage-label" id="stageLabel">🤖 Agent · D1</span>
+  </header>
+  <h1>Agent 学习卡<span class="dot">.</span></h1>
+  <p class="sub" id="sub">看今天的知识卡 · 每阶段更新内容</p>
+
+  <div class="card-frame">
+    <img src="img/agent-card.png" alt="Agent 学习卡片" id="cardImg">
+  </div>
+  <p class="tip" id="tip">↕ 向上滑看完整卡片 · 想深入可去 Wiki 概念页</p>
+
+  <div class="actions">
+    <a class="act act--wiki" id="wikiLink" href="#">📖 Wiki 概念页<small>想深入时再看</small></a>
+    <a class="act act--today" href="today.html">🗓 今日学习<small>返回今天的课表</small></a>
+  </div>
+</div>
+
+<script>
+/* 课表：D1-D28 → 标题 + Wiki 概念页（与 today.html 保持一致） */
+const AGT = {
+  1:{t:'Agent 循环', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Loop'},
+  2:{t:'MCP', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FMCP'},
+  3:{t:'RAG', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FRAG'},
+  4:{t:'Agent 记忆', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Memory'},
+  5:{t:'Agent Skills', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Skills'},
+  6:{t:'复习日', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Loop'},
+  7:{t:'周复盘', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  8:{t:'Tool-Use 深入', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FTool-Use'},
+  9:{t:'上下文工程', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FContext-Engineering'},
+  10:{t:'Agent 编排', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Orchestration'},
+  11:{t:'子代理 Subagent', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Fsubagent'},
+  12:{t:'复习日', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  13:{t:'周复盘', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  14:{t:'长期记忆方案', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Long-Term-Memory'},
+  15:{t:'多 Agent 协作网络', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2F多Agent协作网络'},
+  16:{t:'Prompt 工程', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Fprompt-engineering'},
+  17:{t:'Meta-Prompt', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FMeta-Prompt'},
+  18:{t:'复习日', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  19:{t:'周复盘', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  20:{t:'Agent 部署', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Deployment'},
+  21:{t:'记忆分层', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FFour-Layer-Memory'},
+  22:{t:'Skill 系统', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FSkill-System'},
+  23:{t:'多 Agent 架构', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Architecture'},
+  24:{t:'复习日', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  25:{t:'周复盘', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  26:{t:'综合实战', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  27:{t:'答辩日', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  28:{t:'结营', w:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+};
+
+(function init(){
+  let day = 1;
+  const m = location.search.match(/[?&]day=(\d+)/);
+  if (m) day = Math.min(Math.max(+m[1],1),28);
+  const cur = AGT[day] || AGT[1];
+  document.getElementById('stageLabel').textContent = '🤖 Agent · D' + day;
+  document.getElementById('sub').textContent = 'D' + day + ' · ' + cur.t + ' —— 每阶段更新这张卡';
+  document.getElementById('tip').textContent = '↕ 向上滑看完整卡片 · D' + day + ' ' + cur.t + ' · 想深入可去 Wiki';
+  document.getElementById('wikiLink').href = cur.w;
+})();
+</script>
+</body>
+</html>
