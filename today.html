@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFF9F0">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<title>今日学习 · Charlotte</title>
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;overscroll-behavior:none;}
+  .wrap{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 28px) 20px calc(env(safe-area-inset-bottom) + 32px);}
+  header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
+  .date{font-size:14px;color:var(--ink);opacity:.6;font-weight:600;}
+  .brand{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
+  h1{font-family:'Fredoka',sans-serif;font-size:34px;font-weight:700;margin-bottom:4px;line-height:1.2;}
+  h1 .dot{color:var(--pink);}
+  .sub{font-size:14px;color:var(--ink);opacity:.6;margin-bottom:22px;}
+  .card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:20px 18px 16px;margin-bottom:18px;cursor:pointer;position:relative;overflow:hidden;display:block;text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease;}
+  .card:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .card::after{content:'';position:absolute;top:-18px;right:-18px;width:56px;height:56px;border-radius:50%;border:3px solid var(--ink);}
+  .card--fin::after{background:var(--yellow);}
+  .card--agent::after{background:var(--blue);}
+  .tag{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:10px;}
+  .card--fin .tag{background:var(--pink);}
+  .card--agent .tag{background:var(--blue);}
+  .ctitle{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px;}
+  .cdesc{font-size:14px;line-height:1.6;opacity:.7;}
+  .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:11px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;}
+  .carrow{font-size:18px;}
+  .done{opacity:.55;}
+  .done .tag{background:#D9D9D9;}
+  .done .ctitle{text-decoration:line-through;}
+  .hint{margin-top:6px;font-size:12px;color:var(--ink);opacity:.5;text-align:center;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="brand">CHARLOTTE<span style="color:var(--pink)">.</span></span><span class="date" id="date"></span></header>
+  <h1>今日学习<span class="dot">.</span></h1>
+  <p class="sub" id="sub">每天打开，学今天该学的两门课。</p>
+
+  <a class="card card--fin" id="finCard">
+    <span class="tag" id="finTag">📈 财经</span>
+    <div class="ctitle" id="finTitle">—</div>
+    <p class="cdesc" id="finDesc"></p>
+    <div class="cfoot"><span id="finFoot">FINANCE</span><span class="carrow">→</span></div>
+  </a>
+
+  <a class="card card--agent" id="agentCard">
+    <span class="tag" id="agentTag">🤖 Agent</span>
+    <div class="ctitle" id="agentTitle">—</div>
+    <p class="cdesc" id="agentDesc"></p>
+    <div class="cfoot"><span id="agentFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
+  </a>
+
+  <p class="hint">每天 +1 天自动推进 · 点卡片开始学习</p>
+</div>
+
+<script>
+/* ===== 进度锚点（实际进度，非课表日期）=====
+ * 财经：2026-08-10 学到 D15（当天），此后每天 +1
+ * Agent：2026-08-10 开始 D1，此后每天 +1
+ * 改进度只需改这两个锚点 */
+const FIN_ANCHOR_DATE = '2026-08-10';  // 锚点日期
+const FIN_ANCHOR_DAY  = 15;            // 锚点当天是财经 D15
+const AGT_ANCHOR_DATE = '2026-08-10';  // 锚点日期
+const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent D1
+const FIN_MAX = 28, AGT_MAX = 28;
+
+/* ===== 课程表（标题 + 一句话描述 + 目标链接）===== */
+const FIN = [
+  {t:'三大报表', d:'资产负债表 / 利润表 / 现金流量表，各回答什么问题', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=1'},
+  {t:'资产负债表', d:'资产 = 负债 + 所有者权益，恒等式怎么读', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=2'},
+  {t:'利润表', d:'从营业收入到净利润的漏斗，层层扣减', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=3'},
+  {t:'现金流量表', d:'经营 / 投资 / 筹资三股水流', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=4'},
+  {t:'三表成网', d:'利润如何流进另外两张表，三表勾稽', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=5'},
+  {t:'一周全景', d:'三大报表串起来看一家公司', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=6'},
+  {t:'周复盘', d:'本周错题重考 + 速查表沉淀', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=7'},
+  {t:'年报长什么样', d:'披露结构、巨潮下载、三节框架', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=8'},
+  {t:'毛利率与净利率', d:'赚钱能力两层温度计', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=9'},
+  {t:'杜邦三杠杆', d:'ROE 股东回报总开关', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=10'},
+  {t:'风险体温计', d:'资产负债率与流动比率', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=11'},
+  {t:'钱转多快', d:'周转率：存货与应收', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=12'},
+  {t:'指标仪表盘', d:'W2 错题重考 + 指标串讲', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=13'},
+  {t:'周复盘', d:'速查表沉淀 + W3 预告', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=14'},
+  {t:'货币与央行', d:'央行是干什么的', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=15'},
+  {t:'利率与 LPR', d:'降息加息如何传导到你我', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=16'},
+  {t:'通胀与 CPI', d:'钱为什么毛了', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=17'},
+  {t:'社融与 M2', d:'全社会的钱从哪来', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=18'},
+  {t:'央行工具箱', d:'降准、逆回购、MLF', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=19'},
+  {t:'宏观仪表盘', d:'W3 错题重考 + 用指标读一条新闻', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=20'},
+  {t:'周复盘', d:'速查表沉淀 + W4 预告', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=21'},
+  {t:'好公司三问', d:'生意模式 / 护城河 / 管理层', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=22'},
+  {t:'读茅台 MD&A', d:'管理层讨论与分析实战', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=23'},
+  {t:'算茅台五个指标', d:'财务指标体检下结论', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=24'},
+  {t:'估值入门', d:'PE / PB 是什么，贵贱怎么看', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=25'},
+  {t:'写 mini 公司分析', d:'模板填空完成你的分析', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=26'},
+  {t:'答辩日', d:'模拟路演 + 验收三项检查', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=27'},
+  {t:'结营', d:'总复盘 + 速查表定稿', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=28'},
+];
+const AGT = [
+  {t:'Agent 循环', d:'调用模型 → 执行工具 → 回传结果，所有 Agent 的共同内核', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Loop'},
+  {t:'MCP', d:'模型上下文协议——AI 与外部工具交互的标准接口', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FMCP'},
+  {t:'RAG', d:'检索增强生成——先查资料再回答，减少幻觉', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FRAG'},
+  {t:'Agent 记忆', d:'跨会话保留上下文与经验，越用越聪明', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Memory'},
+  {t:'Agent Skills', d:'把领域 know-how 打包成 SKILL.md 能力单元', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Skills'},
+  {t:'复习日', d:'W1 错题全部重考，只考不学新', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Loop'},
+  {t:'周复盘', d:'沉淀第一批速查表 + 排第 2 周', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'Tool-Use 深入', d:'工具使用与 Function Calling 底层', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FTool-Use'},
+  {t:'上下文工程', d:'Context Engineering：AGENTS.md 约束 AI 输出', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FContext-Engineering'},
+  {t:'Agent 编排', d:'多 Agent 分工、调度与协作（Shannon）', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAgent-Orchestration'},
+  {t:'子代理 Subagent', d:'并行分解：规划-执行-审查模式', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Fsubagent'},
+  {t:'复习日', d:'W2 错题重考', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'周复盘', d:'速查表沉淀 + 排第 3 周', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'长期记忆方案', d:'Thought-Memory / GBrain 跨模型记忆', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Long-Term-Memory'},
+  {t:'多 Agent 协作网络', d:'Avernet 等开源多 Agent 基础设施', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2F多Agent协作网络'},
+  {t:'Prompt 工程', d:'提示词的结构化技巧', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Fprompt-engineering'},
+  {t:'Meta-Prompt', d:'让 AI 自己写提示词', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FMeta-Prompt'},
+  {t:'复习日', d:'W3 错题重考', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'周复盘', d:'速查表沉淀 + 排第 4 周', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'Agent 部署', d:'AI-Agent-Deployment 上线与运维', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Deployment'},
+  {t:'记忆分层', d:'Four-Layer-Memory 四层记忆架构', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FFour-Layer-Memory'},
+  {t:'Skill 系统', d:'Skill-System / Skill-Vetter 生态', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FSkill-System'},
+  {t:'多 Agent 架构', d:'Anthropic Managed Agents 等生产架构', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2FAI-Agent-Architecture'},
+  {t:'复习日', d:'W4 错题重考', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'周复盘', d:'速查表定稿前检查', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'综合实战', d:'用学到的概念讲清"一个 Agent 怎么工作"', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'答辩日', d:'模拟讲给 12 岁孩子听（费曼）', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+  {t:'结营', d:'总复盘 + 速查表定稿', url:'obsidian://open?vault=Charlotte&file=LLM-Wiki%2Fwiki%2Fconcepts%2Findex'},
+];
+
+/* ===== 计算今天 ===== */
+function dayDiff(fromISO, toISO){
+  const a=new Date(fromISO+'T00:00:00'), b=new Date(toISO+'T00:00:00');
+  return Math.round((b-a)/86400000);
+}
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function cur(d){ return Math.min(d,28); }
+
+(function init(){
+  const t=todayISO();
+  const diff=dayDiff(FIN_ANCHOR_DATE,t);
+  const finDay=cur(FIN_ANCHOR_DAY+diff);
+  const agtDay=cur(AGT_ANCHOR_DAY+diff);
+
+  document.getElementById('date').textContent=t;
+  const f=FIN[finDay-1], a=AGT[agtDay-1];
+
+  const finCard=document.getElementById('finCard');
+  finCard.href=f.url;
+  document.getElementById('finTag').textContent='📈 财经 · D'+finDay;
+  document.getElementById('finTitle').textContent=f.t;
+  document.getElementById('finDesc').textContent=f.d;
+  document.getElementById('finFoot').textContent='FINANCE · '+finDay+'/28';
+
+  const agtCard=document.getElementById('agentCard');
+  agtCard.href=a.url;
+  document.getElementById('agentTag').textContent='🤖 Agent · D'+agtDay;
+  document.getElementById('agentTitle').textContent=a.t;
+  document.getElementById('agentDesc').textContent=a.d;
+  document.getElementById('agentFoot').textContent='LEARNING · '+agtDay+'/28';
+
+  document.getElementById('sub').textContent='8/10 起财经 D15、Agent D1，每天 +1 推进。';
+})();
+</script>
+</body>
+</html>
