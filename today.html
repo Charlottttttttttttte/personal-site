@@ -69,13 +69,13 @@
 <script>
 /* ===== 进度锚点（实际进度，非课表日期）=====
  * 财经：2026-08-10 学到 D15（当天），此后每天 +1
- * Agent：2026-08-10 开始 D1，此后每天 +1
+ * Agent：2026-08-10 开始第 1 期，此后每天 +1（18 期课程，来自 agent-knowledge-cards）
  * 改进度只需改这两个锚点 */
 const FIN_ANCHOR_DATE = '2026-08-10';  // 锚点日期
 const FIN_ANCHOR_DAY  = 15;            // 锚点当天是财经 D15
 const AGT_ANCHOR_DATE = '2026-08-10';  // 锚点日期
-const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent D1
-const FIN_MAX = 28, AGT_MAX = 28;
+const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent 第 1 期
+const FIN_MAX = 28, AGT_MAX = 18;
 
 /* ===== 课程表（标题 + 一句话描述 + 目标链接）===== */
 const FIN = [
@@ -109,34 +109,24 @@ const FIN = [
   {t:'结营', d:'总复盘 + 速查表定稿', url:'https://charlottttttttttttte.github.io/caijing-daily/?day=28'},
 ];
 const AGT = [
-  {t:'Agent 循环', d:'调用模型 → 执行工具 → 回传结果，所有 Agent 的共同内核', url:'agent-card-view.html?day=1'},
-  {t:'MCP', d:'模型上下文协议——AI 与外部工具交互的标准接口', url:'agent-card-view.html?day=2'},
-  {t:'RAG', d:'检索增强生成——先查资料再回答，减少幻觉', url:'agent-card-view.html?day=3'},
-  {t:'Agent 记忆', d:'跨会话保留上下文与经验，越用越聪明', url:'agent-card-view.html?day=4'},
-  {t:'Agent Skills', d:'把领域 know-how 打包成 SKILL.md 能力单元', url:'agent-card-view.html?day=5'},
-  {t:'复习日', d:'W1 错题全部重考，只考不学新', url:'agent-card-view.html?day=6'},
-  {t:'周复盘', d:'沉淀第一批速查表 + 排第 2 周', url:'agent-card-view.html?day=7'},
-  {t:'Tool-Use 深入', d:'工具使用与 Function Calling 底层', url:'agent-card-view.html?day=8'},
-  {t:'上下文工程', d:'Context Engineering：AGENTS.md 约束 AI 输出', url:'agent-card-view.html?day=9'},
-  {t:'Agent 编排', d:'多 Agent 分工、调度与协作（Shannon）', url:'agent-card-view.html?day=10'},
-  {t:'子代理 Subagent', d:'并行分解：规划-执行-审查模式', url:'agent-card-view.html?day=11'},
-  {t:'复习日', d:'W2 错题重考', url:'agent-card-view.html?day=12'},
-  {t:'周复盘', d:'速查表沉淀 + 排第 3 周', url:'agent-card-view.html?day=13'},
-  {t:'长期记忆方案', d:'Thought-Memory / GBrain 跨模型记忆', url:'agent-card-view.html?day=14'},
-  {t:'多 Agent 协作网络', d:'Avernet 等开源多 Agent 基础设施', url:'agent-card-view.html?day=15'},
-  {t:'Prompt 工程', d:'提示词的结构化技巧', url:'agent-card-view.html?day=16'},
-  {t:'Meta-Prompt', d:'让 AI 自己写提示词', url:'agent-card-view.html?day=17'},
-  {t:'复习日', d:'W3 错题重考', url:'agent-card-view.html?day=18'},
-  {t:'周复盘', d:'速查表沉淀 + 排第 4 周', url:'agent-card-view.html?day=19'},
-  {t:'Agent 部署', d:'AI-Agent-Deployment 上线与运维', url:'agent-card-view.html?day=20'},
-  {t:'记忆分层', d:'Four-Layer-Memory 四层记忆架构', url:'agent-card-view.html?day=21'},
-  {t:'Skill 系统', d:'Skill-System / Skill-Vetter 生态', url:'agent-card-view.html?day=22'},
-  {t:'多 Agent 架构', d:'Anthropic Managed Agents 等生产架构', url:'agent-card-view.html?day=23'},
-  {t:'复习日', d:'W4 错题重考', url:'agent-card-view.html?day=24'},
-  {t:'周复盘', d:'速查表定稿前检查', url:'agent-card-view.html?day=25'},
-  {t:'综合实战', d:'用学到的概念讲清"一个 Agent 怎么工作"', url:'agent-card-view.html?day=26'},
-  {t:'答辩日', d:'模拟讲给 12 岁孩子听（费曼）', url:'agent-card-view.html?day=27'},
-  {t:'结营', d:'总复盘 + 速查表定稿', url:'agent-card-view.html?day=28'},
+  {t:'什么是 AI Agent', d:'模型+工具+编排层+运行时，in a loop 转圈', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=1'},
+  {t:'Agent 四要素', d:'模型 / 工具 / 编排 / 部署，缺一不可', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=2'},
+  {t:'五步循环 Think–Act–Observe', d:'先想、再做、看了结果再想，直到达成目标', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=3'},
+  {t:'Agent 分级 Level 0-4', d:'从简单对话到自主多步，你处在哪一级', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=4'},
+  {t:'上下文工程', d:'模型太万能，窗口里放什么才是关键', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=5'},
+  {t:'模型选型与路由', d:'不同任务配不同模型，省成本又不掉链子', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=6'},
+  {t:'RAG：先查资料再回答', d:'开卷考试，减少幻觉、补上时效性', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=7'},
+  {t:'函数调用与 MCP', d:'OpenAPI 是说明书，MCP 是 USB-C 插座', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=8'},
+  {t:'短期记忆 vs 长期记忆', d:'草稿本与档案柜——转头就忘 vs 越用越懂你', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=9'},
+  {t:'多 Agent 四大设计模式', d:'分工、协作、编排——一个不够就组队', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=10'},
+  {t:'Agent Ops：怎么评测 Agent', d:'把「好不好」变成「多少分」', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=11'},
+  {t:'LM as Judge 大模型当考官', d:'让另一个模型打分，稳定又省人', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=12'},
+  {t:'A2A：Agent 与 Agent 互联', d:'Agent 之间握手协作，像人加入组织', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=13'},
+  {t:'提示注入与纵深防御', d:'模型会被骗，两层防护一起兜底', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=14'},
+  {t:'Agent 身份（SPIFFE）', d:'每个 Agent 一张身份证，谁能信谁', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=15'},
+  {t:'治理网关与 Agent 蔓延', d:'Agent 多了要管，别让它们失控', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=16'},
+  {t:'Agent 怎么学习进化', d:'自动实验循环，越用越强', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=17'},
+  {t:'实例：Co-Scientist / AlphaEvolve', d:'看看真正的 Agent 长什么样', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=18'},
 ];
 
 /* ===== 计算今天 ===== */
@@ -145,13 +135,13 @@ function dayDiff(fromISO, toISO){
   return Math.round((b-a)/86400000);
 }
 function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function cur(d){ return Math.min(d,28); }
+function cur(d,max){ return Math.min(d,max); }
 
 (function init(){
   const t=todayISO();
   const diff=dayDiff(FIN_ANCHOR_DATE,t);
-  const finDay=cur(FIN_ANCHOR_DAY+diff);
-  const agtDay=cur(AGT_ANCHOR_DAY+diff);
+  const finDay=cur(FIN_ANCHOR_DAY+diff,FIN_MAX);
+  const agtDay=cur(AGT_ANCHOR_DAY+diff,AGT_MAX);
 
   document.getElementById('date').textContent=t;
   const f=FIN[finDay-1], a=AGT[agtDay-1];
@@ -165,12 +155,12 @@ function cur(d){ return Math.min(d,28); }
 
   const agtCard=document.getElementById('agentCard');
   agtCard.href=a.url;
-  document.getElementById('agentTag').textContent='🤖 Agent · D'+agtDay;
+  document.getElementById('agentTag').textContent='🤖 Agent · 第'+agtDay+'期';
   document.getElementById('agentTitle').textContent=a.t;
   document.getElementById('agentDesc').textContent=a.d;
-  document.getElementById('agentFoot').textContent='LEARNING · '+agtDay+'/28';
+  document.getElementById('agentFoot').textContent='AGENT · '+agtDay+'/18';
 
-  document.getElementById('sub').textContent='8/10 起财经 D15、Agent D1，每天 +1 推进。';
+  document.getElementById('sub').textContent='8/10 起财经 D15、Agent 第 1 期，每天 +1 推进。';
 })();
 </script>
 </body>
