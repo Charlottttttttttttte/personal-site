@@ -75,7 +75,7 @@ const FIN_ANCHOR_DATE = '2026-08-10';  // 锚点日期
 const FIN_ANCHOR_DAY  = 15;            // 锚点当天是财经 D15
 const AGT_ANCHOR_DATE = '2026-08-10';  // 锚点日期
 const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent 第 1 期
-const FIN_MAX = 28, AGT_MAX = 18;
+const FIN_MAX = 28, AGT_MAX = 28;
 
 /* ===== 课程表（标题 + 一句话描述 + 目标链接）===== */
 const FIN = [
@@ -127,6 +127,16 @@ const AGT = [
   {t:'治理网关与 Agent 蔓延', d:'Agent 多了要管，别让它们失控', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=16'},
   {t:'Agent 怎么学习进化', d:'自动实验循环，越用越强', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=17'},
   {t:'实例：Co-Scientist / AlphaEvolve', d:'看看真正的 Agent 长什么样', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=18'},
+  {t:'Agent Skills', d:'把 know-how 打包成可复用能力单元', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=19'},
+  {t:'Tool-Use 深入', d:'模型怎么调用工具、从对话到行动', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=20'},
+  {t:'子代理 Subagent', d:'并行分解任务：10 人干 1 天 > 1 人干 10 天', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=21'},
+  {t:'长期记忆方案', d:'跨会话记住你：记录→压缩→回注', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=22'},
+  {t:'Prompt 工程', d:'Zero-Shot / Few-Shot / 思维链，让模型听懂人话', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=23'},
+  {t:'Meta-Prompt', d:'让 AI 自己写提示词，不懂术语也能用', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=24'},
+  {t:'Agent 部署', d:'从开发到生产：延迟/成本/安全/可观测', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=25'},
+  {t:'记忆分层', d:'core/memo/daily：按生命周期分层存', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=26'},
+  {t:'Skill 系统', d:'SKILL.md 结构、仓库管理与渐进式加载', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=27'},
+  {t:'多 Agent 架构', d:'生产级组队：规划/记忆/工具/执行模块化', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=28'},
 ];
 
 /* ===== 计算今天 ===== */
@@ -158,10 +168,11 @@ function cur(d,max){ return Math.min(d,max); }
   document.getElementById('agentTag').textContent='🤖 Agent · 第'+agtDay+'期';
   document.getElementById('agentTitle').textContent=a.t;
   document.getElementById('agentDesc').textContent=a.d;
-  document.getElementById('agentFoot').textContent='AGENT · '+agtDay+'/18';
+  document.getElementById('agentFoot').textContent='AGENT · '+agtDay+'/28';
 
   document.getElementById('sub').textContent='8/10 起财经 D15、Agent 第 1 期，每天 +1 推进。';
-})();
+})();/*DBG*/document.title=JSON.stringify({fin:document.getElementById('finTag').textContent,agt:document.getElementById('agentTag').textContent+'|'+document.getElementById('agentTitle').textContent+'|'+document.getElementById('agentFoot').textContent});
+
 </script>
 </body>
 </html>
