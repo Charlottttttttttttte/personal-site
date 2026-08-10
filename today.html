@@ -41,6 +41,16 @@
   .done .tag{background:#D9D9D9;}
   .done .ctitle{text-decoration:line-through;}
   .hint{margin-top:6px;font-size:12px;color:var(--ink);opacity:.5;text-align:center;line-height:1.7;}
+  /* 课程全屏查看器（iframe 嵌入，不跨站跳转） */
+  #viewer{position:fixed;inset:0;background:var(--paper);z-index:100;display:none;flex-direction:column;}
+  #viewer.open{display:flex;}
+  .viewer-bar{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 8px) 14px 8px;
+    background:var(--paper);border-bottom:2px solid var(--ink);}
+  .viewer-back{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;border:2px solid var(--ink);
+    background:var(--card);border-radius:10px;padding:6px 14px;box-shadow:2px 2px 0 var(--ink);color:var(--ink);cursor:pointer;}
+  .viewer-back:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+  .viewer-title{font-size:14px;font-weight:700;color:var(--ink);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #viewer iframe{flex:1;width:100%;border:0;background:#fff;}
 </style>
 </head>
 <body>
@@ -49,21 +59,30 @@
   <h1>今日学习<span class="dot">.</span></h1>
   <p class="sub" id="sub">每天打开，学今天该学的两门课。</p>
 
-  <a class="card card--fin" id="finCard">
+  <div class="card card--fin" id="finCard" role="button" tabindex="0">
     <span class="tag" id="finTag">📈 财经</span>
     <div class="ctitle" id="finTitle">—</div>
     <p class="cdesc" id="finDesc"></p>
     <div class="cfoot"><span id="finFoot">FINANCE</span><span class="carrow">→</span></div>
-  </a>
+  </div>
 
-  <a class="card card--agent" id="agentCard">
+  <div class="card card--agent" id="agentCard" role="button" tabindex="0">
     <span class="tag" id="agentTag">🤖 Agent</span>
     <div class="ctitle" id="agentTitle">—</div>
     <p class="cdesc" id="agentDesc"></p>
     <div class="cfoot"><span id="agentFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
-  </a>
+  </div>
 
   <p class="hint">每天 +1 天自动推进 · 点卡片开始学习</p>
+</div>
+
+<!-- 课程全屏查看器：iframe 嵌入课程，不跨站跳转 -->
+<div id="viewer">
+  <div class="viewer-bar">
+    <button class="viewer-back" id="viewerBack">← 返回</button>
+    <span class="viewer-title" id="viewerTitle"></span>
+  </div>
+  <iframe id="viewerFrame" src="about:blank"></iframe>
 </div>
 
 <script>
@@ -156,22 +175,45 @@ function cur(d,max){ return Math.min(d,max); }
   document.getElementById('date').textContent=t;
   const f=FIN[finDay-1], a=AGT[agtDay-1];
 
-  const finCard=document.getElementById('finCard');
-  finCard.href=f.url;
   document.getElementById('finTag').textContent='📈 财经 · D'+finDay;
   document.getElementById('finTitle').textContent=f.t;
   document.getElementById('finDesc').textContent=f.d;
   document.getElementById('finFoot').textContent='FINANCE · '+finDay+'/28';
 
-  const agtCard=document.getElementById('agentCard');
-  agtCard.href=a.url;
   document.getElementById('agentTag').textContent='🤖 Agent · 第'+agtDay+'期';
   document.getElementById('agentTitle').textContent=a.t;
   document.getElementById('agentDesc').textContent=a.d;
   document.getElementById('agentFoot').textContent='AGENT · '+agtDay+'/28';
 
   document.getElementById('sub').textContent='8/10 起财经 D15、Agent 第 1 期，每天 +1 推进。';
-})();/*DBG*/document.title=JSON.stringify({fin:document.getElementById('finTag').textContent,agt:document.getElementById('agentTag').textContent+'|'+document.getElementById('agentTitle').textContent+'|'+document.getElementById('agentFoot').textContent});
+
+  /* ===== 课程查看器：点击卡片在 iframe 内打开，不跨站跳转 ===== */
+  const viewer=document.getElementById('viewer');
+  const frame=document.getElementById('viewerFrame');
+  const vTitle=document.getElementById('viewerTitle');
+
+  function openViewer(url, title){
+    vTitle.textContent=title;
+    frame.src=url;
+    viewer.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeViewer(){
+    viewer.classList.remove('open');
+    frame.src='about:blank';
+    document.body.style.overflow='';
+  }
+  document.getElementById('viewerBack').addEventListener('click', closeViewer);
+
+  document.getElementById('finCard').addEventListener('click', function(e){
+    e.preventDefault();
+    openViewer(f.url, '📈 财经 · D'+finDay+' '+f.t);
+  });
+  document.getElementById('agentCard').addEventListener('click', function(e){
+    e.preventDefault();
+    openViewer(a.url, '🤖 Agent · 第'+agtDay+'期 '+a.t);
+  });
+})();
 
 </script>
 </body>
