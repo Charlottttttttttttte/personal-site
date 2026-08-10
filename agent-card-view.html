@@ -25,9 +25,18 @@
   h1{font-family:'Fredoka',sans-serif;font-size:28px;font-weight:700;margin-bottom:4px;}
   h1 .dot{color:var(--pink);}
   .sub{font-size:14px;color:var(--ink);opacity:.6;margin-bottom:16px;}
-  .card-frame{background:var(--card);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);padding:14px;margin-bottom:14px;}
-  .card-frame img{display:block;width:100%;height:auto;border-radius:10px;border:2px solid var(--ink);user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;touch-action:pan-y;}
+  .card-frame{background:var(--card);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);padding:14px;margin-bottom:14px;cursor:zoom-in;}
+  .card-frame img{display:block;width:auto;max-width:100%;height:auto;max-height:calc(100dvh - 250px);margin:0 auto;border-radius:10px;border:2px solid var(--ink);user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;touch-action:pan-y;}
   .tip{font-size:12px;color:var(--ink);opacity:.5;text-align:center;margin-bottom:16px;}
+  /* 全屏放大查看 */
+  #zoom{position:fixed;inset:0;background:rgba(18,18,20,.96);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;}
+  #zoom.open{display:flex;}
+  .zoom-head{width:100%;display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 16px 8px;}
+  .zoom-close{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;border:3px solid #fff;background:rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:6px 16px;box-shadow:3px 3px 0 rgba(0,0,0,.4);}
+  .zoom-close:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(0,0,0,.4);}
+  .zoom-stage{flex:1;width:100%;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-x pan-y;display:flex;}
+  .zoom-stage img{display:block;width:auto;height:auto;max-width:none;max-height:none;margin:auto;transform-origin:center;transition:transform .18s ease;user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;}
+  .zoom-hint{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 12px);left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.55);letter-spacing:1px;pointer-events:none;}
   .actions{display:flex;gap:12px;flex-wrap:wrap;}
   .act{flex:1;min-width:150px;text-align:center;border:3px solid var(--ink);border-radius:14px;padding:13px 10px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .15s ease,box-shadow .15s ease;}
   .act:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
@@ -45,15 +54,26 @@
   <h1>Agent 学习卡<span class="dot">.</span></h1>
   <p class="sub" id="sub">看今天的知识卡 · 每阶段更新内容</p>
 
-  <div class="card-frame">
+  <div class="card-frame" id="cardFrame">
     <img src="img/agent-card.png" alt="Agent 学习卡片" id="cardImg">
   </div>
-  <p class="tip" id="tip">↕ 向上滑看完整卡片 · 想深入可去 Wiki 概念页</p>
+  <p class="tip" id="tip">👆 点卡片放大看细节 · 每阶段更新这张卡</p>
 
   <div class="actions">
     <a class="act act--wiki" id="wikiLink" href="#">📖 Wiki 概念页<small>想深入时再看</small></a>
     <a class="act act--today" href="today.html">🗓 今日学习<small>返回今天的课表</small></a>
   </div>
+</div>
+
+<!-- 全屏放大查看 -->
+<div id="zoom" role="dialog" aria-label="卡片放大查看">
+  <div class="zoom-head">
+    <button class="zoom-close" id="zoomClose">✕ 关闭</button>
+  </div>
+  <div class="zoom-stage" id="zoomStage">
+    <img src="" alt="卡片放大" id="zoomImg">
+  </div>
+  <p class="zoom-hint" id="zoomHint">双指缩放 · 拖动查看 · 点 ✕ 关闭</p>
 </div>
 
 <script>
@@ -96,8 +116,79 @@ const AGT = {
   const cur = AGT[day] || AGT[1];
   document.getElementById('stageLabel').textContent = '🤖 Agent · D' + day;
   document.getElementById('sub').textContent = 'D' + day + ' · ' + cur.t + ' —— 每阶段更新这张卡';
-  document.getElementById('tip').textContent = '↕ 向上滑看完整卡片 · D' + day + ' ' + cur.t + ' · 想深入可去 Wiki';
+  document.getElementById('tip').textContent = '👆 点卡片放大看细节 · D' + day + ' ' + cur.t;
   document.getElementById('wikiLink').href = cur.w;
+
+  /* ===== 全屏放大查看 ===== */
+  const zoom = document.getElementById('zoom');
+  const stage = document.getElementById('zoomStage');
+  const zimg = document.getElementById('zoomImg');
+  const zClose = document.getElementById('zoomClose');
+  const hi = 'cards/agent-card_1800x2400.png';  // 高清大图（页面小图 900×1200 的 2 倍版）
+  let scale = 1, tx = 0, ty = 0;
+  let pinch = null, drag = null;
+
+  function apply(){
+    zimg.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+  }
+  function openZoom(){
+    zimg.src = hi;
+    zimg.onload = function(){ scale = 1; tx = 0; ty = 0; apply(); };
+    zoom.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeZoom(){
+    zoom.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('cardFrame').addEventListener('click', openZoom);
+  zClose.addEventListener('click', closeZoom);
+  zoom.addEventListener('click', function(e){ if(e.target === zoom) closeZoom(); });
+
+  // 双指缩放
+  stage.addEventListener('touchstart', function(e){
+    if(e.touches.length === 2){
+      pinch = { d: Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY), s: scale };
+      drag = null;
+    } else if(e.touches.length === 1){
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: tx, ty: ty };
+      pinch = null;
+    }
+  }, {passive:true});
+  stage.addEventListener('touchmove', function(e){
+    if(pinch && e.touches.length === 2){
+      const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      scale = Math.min(Math.max(pinch.s * d / pinch.d, 1), 4);
+      apply();
+      e.preventDefault();
+    } else if(drag && e.touches.length === 1){
+      tx = drag.tx + (e.touches[0].clientX - drag.x);
+      ty = drag.ty + (e.touches[0].clientY - drag.y);
+      apply();
+      e.preventDefault();
+    }
+  }, {passive:false});
+  stage.addEventListener('touchend', function(){ pinch = null; drag = null; }, {passive:true});
+
+  // 桌面鼠标拖动
+  stage.addEventListener('mousedown', function(e){
+    drag = { x: e.clientX, y: e.clientY, tx: tx, ty: ty };
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e){
+    if(drag && !pinch){ tx = drag.tx + (e.clientX - drag.x); ty = drag.ty + (e.clientY - drag.y); apply(); }
+  });
+  window.addEventListener('mouseup', function(){ drag = null; });
+
+  // 滚轮缩放（桌面）
+  stage.addEventListener('wheel', function(e){
+    scale = Math.min(Math.max(scale - e.deltaY * .0012, 1), 4);
+    apply();
+    e.preventDefault();
+  }, {passive:false});
+
+  // 键盘 Esc 关闭
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeZoom(); });
 })();
 </script>
 </body>
