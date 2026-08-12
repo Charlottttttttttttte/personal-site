@@ -100,6 +100,21 @@
     <div class="stat"><div class="num fun" id="stTotal">0</div><div class="lab">累计米数</div></div>
   </div>
 
+  <!-- 库存进度卡片 -->
+  <div class="cal-card" style="padding:14px 16px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:.95rem;">📦 库存进度</span>
+      <span style="font-size:.78rem;opacity:.6" id="invPct"></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-weight:700;">
+      <span style="color:#2E7D5B;">已完成 <span class="fun" id="invDone">—</span> 米</span>
+      <span>剩余 <span class="fun" id="invRemain">—</span> 米</span>
+    </div>
+    <div class="pbar" style="height:14px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;box-shadow:inset 1px 1px 0 rgba(23,23,26,.15);">
+      <div id="invFill" style="height:100%;width:0%;background:var(--teal);border-radius:999px;transition:width .5s;"></div>
+    </div>
+  </div>
+
   <div class="cal-card">
     <div class="cal-header">
       <button class="nav-btn" id="btnPrev">‹</button>
@@ -279,6 +294,28 @@
     renderRecent();
   }
 
+  // ---------- 库存进度 ----------
+  function renderInvProgress(items) {
+    if (!items || !items.length) {
+      $('invDone').textContent = '0';
+      $('invRemain').textContent = '0';
+      $('invPct').textContent = '';
+      $('invFill').style.width = '0%';
+      return;
+    }
+    const isLong = i => i.type === '长卷';
+    const metersOf = i => isLong(i) ? (i.meters ?? 0) : (i.qty ?? 0) * (i.perSheetMeters || 0);
+    const remainMetersOf = i => isLong(i) ? (i.remaining ?? 0) : (i.remaining ?? 0) * (i.perSheetMeters || 0);
+    const totalAll = items.reduce((s, i) => s + metersOf(i), 0);
+    const remainAll = items.reduce((s, i) => s + remainMetersOf(i), 0);
+    const doneAll = Math.max(0, totalAll - remainAll);
+    const pct = totalAll > 0 ? Math.round(doneAll / totalAll * 100) : 0;
+    $('invDone').textContent = doneAll.toFixed(1);
+    $('invRemain').textContent = remainAll.toFixed(1);
+    $('invPct').textContent = `已完成 ${pct}%`;
+    $('invFill').style.width = pct + '%';
+  }
+
   // ---------- 一键同步（记录 + 库存，统一逻辑） ----------
   async function syncAll() {
     const token = SHUFA_STORE.getToken();
@@ -324,10 +361,14 @@
   state.month = now.getMonth() + 1;
   (async () => {
     try {
-      const { data, fromDraft } = await SHUFA_STORE.load('records');
-      state.records = data.records || [];
-      setStatus(fromDraft ? '本机草稿' : '✓ 已加载');
+      const [recR, invR] = await Promise.all([
+        SHUFA_STORE.load('records'),
+        SHUFA_STORE.load('inventory')
+      ]);
+      state.records = recR.data.records || [];
+      setStatus(recR.fromDraft ? '本机草稿' : '✓ 已加载');
       renderAll();
+      renderInvProgress(invR.data.items || []);
     } catch (err) {
       setStatus('加载失败：' + err.message, 'err');
     }
