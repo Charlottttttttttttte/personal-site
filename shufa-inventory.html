@@ -297,7 +297,35 @@
     el.className = 'sync-status' + (kind ? ' ' + kind : '');
   }
 
-  // ---------- 数据加载：本地草稿 > 仓库 JSON ----------
+  // ---------- 数据加载：本地草稿 > 仓库 JSON（双通道+超时） ----------
+  // 通道1: 同站 JSON（github.io）；通道2: api.github.com contents（公开仓库匿名可读）
+  async function fetchWithTimeout(url, ms) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal });
+      return r;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async function loadFromSameSite() {
+    const r = await fetchWithTimeout(PATH, 8000);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  }
+
+  async function loadFromAPI() {
+    const r = await fetchWithTimeout(`https://api.github.com/repos/${REPO}/contents/${PATH}`, 10000);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const meta = await r.json();
+    const bin = atob(meta.content);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
   async function load() {
     try {
       const draft = localStorage.getItem(LS_DATA);
@@ -306,15 +334,23 @@
         setStatus('已加载本机草稿（未同步到网站）', 'ok');
         $('btnDiscard').style.display = '';
       } else {
-        const r = await fetch(PATH);
-        if (!r.ok) throw new Error(r.status);
-        const json = await r.json();
+        let json = null;
+        try {
+          json = await loadFromSameSite();
+        } catch (e1) {
+          try {
+            json = await loadFromAPI();
+            setStatus('已通过 GitHub API 加载（网站通道较慢）', 'ok');
+          } catch (e2) {
+            throw new Error('两种通道都失败：' + e1.message + ' / ' + e2.message);
+          }
+        }
         state.data = json.items || [];
         if (json.updatedAt) $('updateAt').textContent = `更新于 ${json.updatedAt}`;
-        setStatus('已加载网站最新数据');
       }
     } catch (err) {
-      setStatus('加载失败：' + err.message + '（请通过 HTTP 服务访问）', 'err');
+      setStatus('加载失败：' + err.message + '。请检查网络后刷新重试', 'err');
+      $('list').innerHTML = `<div class="inv-error">数据加载失败（${err.message}）。<br>请确认手机能访问 GitHub，或稍后刷新重试。</div>`;
     }
     render();
   }
