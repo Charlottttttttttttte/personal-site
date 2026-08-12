@@ -227,7 +227,6 @@
 <!-- 底部悬浮按钮组 -->
 <div class="fab-group">
   <div class="fab fab-sec" id="btnExport" title="导出">📤</div>
-  <div class="fab fab-sec" id="btnSync" title="一键同步">🔄</div>
   <div class="fab fab-ter" id="btnToken" title="令牌设置">🔑</div>
   <div class="fab fab-main" id="btnAdd" title="添加库存">+</div>
 </div>
@@ -516,25 +515,7 @@
     return btoa(bin);
   }
 
-  async function syncToGitHub() {
-    const token = getToken();
-    if (!token) { alert('请先点 🔑 输入 GitHub 令牌'); return; }
-    $('btnSync').style.opacity = '.5';
-    setStatus('同步中…');
-    try {
-      // 统一同步：库存（内存数据）+ 记录（本机草稿）
-      const result = await SHUFA_STORE.syncAll({
-        inventory: { updatedAt: new Date().toISOString().slice(0, 10), items: state.data }
-      });
-      const parts = result.synced.length ? result.synced.join(' + ') : '无本地改动';
-      localStorage.removeItem(LS_DATA);
-      setStatus('✓ 已同步（' + parts + '）· Obsidian 稍后自动更新', 'ok');
-    } catch (err) {
-      setStatus('✗ ' + err.message, 'err');
-    } finally {
-      $('btnSync').style.opacity = '1';
-    }
-  }
+  // 同步统一在首页「一键同步」完成（syncAll：记录+库存），此处不再单独同步
 
   // ---------- 导出 CSV ----------
   function exportCSV() {
@@ -561,7 +542,6 @@
   }
 
   // ---------- 事件 ----------
-  $('btnSync').addEventListener('click', syncToGitHub);
   $('btnToken').addEventListener('click', setToken);
   $('btnExport').addEventListener('click', exportCSV);
   $('btnAdd').addEventListener('click', showAddForm);

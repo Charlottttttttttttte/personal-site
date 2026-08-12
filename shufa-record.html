@@ -147,7 +147,7 @@
   </div>
 
   <div class="save-btn" id="btnSave">记录练习</div>
-  <div class="save-btn" id="btnSync" style="background:var(--teal);margin-top:12px;">🔄 保存并同步</div>
+  <div style="text-align:center;font-size:.76rem;opacity:.55;margin-top:10px;">已保存到本机 · 回首页点「🔄 一键同步」发布</div>
 </main>
 
 <nav class="tabbar">
@@ -410,25 +410,6 @@
     calcMeters();
   }
 
-  // ---------- 保存并同步（记录 + 库存，统一逻辑） ----------
-  async function saveAndSync() {
-    if (!saveLocal()) return;
-    const token = SHUFA_STORE.getToken();
-    if (!token) {
-      const t = prompt('请先输入 GitHub 令牌：');
-      if (!t) return;
-      SHUFA_STORE.setToken(t.trim());
-    }
-    setStatus('同步中…');
-    try {
-      await SHUFA_STORE.syncAll();
-      setStatus('✓ 已保存并同步！', 'ok');
-      setTimeout(() => location.href = 'shufa-calendar.html', 800);
-    } catch (err) {
-      setStatus('✗ 同步失败：' + err.message + '（已存本机，可稍后同步）', 'err');
-    }
-  }
-
   // ---------- 启动 ----------
   initOptions();
   setTypeUI('sheet');
@@ -436,7 +417,6 @@
 
   $('btnParse').addEventListener('click', parseAndFill);
   $('btnSave').addEventListener('click', save);
-  $('btnSync').addEventListener('click', saveAndSync);
   $('btnSheet').addEventListener('click', () => setTypeUI('sheet'));
   $('btnScroll').addEventListener('click', () => setTypeUI('scroll'));
   $('fPaper').addEventListener('change', calcMeters);

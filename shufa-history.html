@@ -111,7 +111,6 @@
     <div class="export-actions">
       <div class="exp-btn" id="btnAll">全选</div>
       <div class="exp-btn" id="btnExportCSV">导出 CSV</div>
-      <div class="exp-btn" id="btnSync" style="background:var(--yellow)">🔄 同步</div>
     </div>
   </div>
 
@@ -295,27 +294,6 @@
     renderFields();
   });
   $('btnExportCSV').addEventListener('click', exportCSV);
-  $('btnSync').addEventListener('click', async () => {
-    const token = SHUFA_STORE.getToken();
-    if (!token) {
-      const t = prompt('请先输入 GitHub 令牌：');
-      if (!t) return;
-      SHUFA_STORE.setToken(t.trim());
-    }
-    const btn = $('btnSync');
-    btn.textContent = '同步中…';
-    try {
-      // 记录用当前内存数据
-      await SHUFA_STORE.syncAll({
-        records: { updatedAt: new Date().toISOString().slice(0,10), records: state.records }
-      });
-      btn.textContent = '✓ 已同步';
-      setTimeout(() => btn.textContent = '🔄 同步', 2000);
-    } catch (err) {
-      btn.textContent = '✗ ' + err.message;
-      setTimeout(() => btn.textContent = '🔄 同步', 3000);
-    }
-  });
 
   function renderAll() {
     const list = filtered();
