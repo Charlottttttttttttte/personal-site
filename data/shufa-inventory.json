@@ -8,6 +8,7 @@
       "qty": 1,
       "meters": 10,
       "spec": "34×10m（10米长卷）",
+      "perSheetMeters": null,
       "total": 10,
       "remaining": 10
     },
@@ -18,6 +19,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -28,6 +30,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -38,6 +41,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -48,6 +52,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -58,6 +63,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -68,6 +74,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -78,6 +85,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -88,6 +96,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -98,6 +107,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -108,6 +118,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -118,6 +129,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -128,6 +140,7 @@
       "qty": 1,
       "meters": 15,
       "spec": "34×15m（15米长卷）",
+      "perSheetMeters": null,
       "total": 15,
       "remaining": 15
     },
@@ -138,6 +151,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -148,6 +162,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺四开（约34×69cm）",
+      "perSheetMeters": 0.69,
       "total": 50,
       "remaining": 50
     },
@@ -158,6 +173,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -168,6 +184,7 @@
       "qty": 1,
       "meters": 50,
       "spec": "34×50m（50米长卷）",
+      "perSheetMeters": null,
       "total": 50,
       "remaining": 50
     },
@@ -178,6 +195,7 @@
       "qty": 1,
       "meters": 50,
       "spec": "34×50m（50米长卷）",
+      "perSheetMeters": null,
       "total": 50,
       "remaining": 50
     },
@@ -188,6 +206,7 @@
       "qty": 1,
       "meters": 50,
       "spec": "34×50m（50米长卷）",
+      "perSheetMeters": null,
       "total": 50,
       "remaining": 50
     },
@@ -198,6 +217,7 @@
       "qty": 1,
       "meters": 50,
       "spec": "34×50m（50米长卷）",
+      "perSheetMeters": null,
       "total": 50,
       "remaining": 50
     },
@@ -208,6 +228,7 @@
       "qty": 1,
       "meters": 15,
       "spec": "34×15m",
+      "perSheetMeters": null,
       "total": 15,
       "remaining": 15
     },
@@ -218,6 +239,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺四开（约34×69cm）",
+      "perSheetMeters": 0.69,
       "total": 50,
       "remaining": 50
     },
@@ -228,6 +250,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -238,6 +261,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -248,6 +272,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -258,6 +283,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开条屏（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -268,6 +294,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -278,6 +305,7 @@
       "qty": 30,
       "meters": null,
       "spec": "四尺对开（约34×136cm）",
+      "perSheetMeters": 1.38,
       "total": 30,
       "remaining": 30
     },
@@ -288,6 +316,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -298,6 +327,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -308,6 +338,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -318,6 +349,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -328,6 +360,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34.5×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -338,6 +371,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -348,6 +382,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×158cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -358,6 +393,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开（约34×138cm）",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -368,6 +404,7 @@
       "qty": 25,
       "meters": null,
       "spec": "四尺四开（约34×69cm）",
+      "perSheetMeters": 0.69,
       "total": 25,
       "remaining": 25
     },
@@ -378,6 +415,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺四开（约34×69cm）",
+      "perSheetMeters": 0.69,
       "total": 50,
       "remaining": 50
     },
@@ -388,6 +426,7 @@
       "qty": 100,
       "meters": null,
       "spec": "四尺四开（约34.5×69cm）",
+      "perSheetMeters": 0.69,
       "total": 100,
       "remaining": 100
     },
@@ -398,6 +437,7 @@
       "qty": 15,
       "meters": null,
       "spec": "四尺四开（约34×69cm）",
+      "perSheetMeters": 0.69,
       "total": 15,
       "remaining": 15
     },
@@ -408,6 +448,7 @@
       "qty": 100,
       "meters": null,
       "spec": "四尺四开（约34.5×69cm）",
+      "perSheetMeters": 0.69,
       "total": 100,
       "remaining": 100
     },
@@ -418,6 +459,7 @@
       "qty": 1,
       "meters": 15,
       "spec": "34×15m（15米长卷）",
+      "perSheetMeters": null,
       "total": 15,
       "remaining": 15
     },
@@ -428,6 +470,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -438,6 +481,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -448,6 +492,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -458,6 +503,7 @@
       "qty": 50,
       "meters": null,
       "spec": "四尺对开",
+      "perSheetMeters": 1.38,
       "total": 50,
       "remaining": 50
     },
@@ -468,6 +514,7 @@
       "qty": 1,
       "meters": 20,
       "spec": "34×2000cm（20米长卷）",
+      "perSheetMeters": null,
       "total": 20,
       "remaining": 20
     },
@@ -478,6 +525,7 @@
       "qty": 1,
       "meters": 50,
       "spec": "20cm×50m（50米雅皮纸长卷）",
+      "perSheetMeters": null,
       "total": 50,
       "remaining": 50
     },
@@ -488,6 +536,7 @@
       "qty": 1,
       "meters": 30,
       "spec": "17cm×30m（30米蜡染砑光纸长卷）",
+      "perSheetMeters": null,
       "total": 30,
       "remaining": 30
     }

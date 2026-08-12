@@ -90,7 +90,27 @@ def main():
         spec = str(r[i_spec]).strip() if i_spec >= 0 and r[i_spec] else ""
         is_long = (typ == "长卷")
         m = parse_meters(spec, mi)
-        total = m if is_long else qty
+        # 每张米数换算（参考小程序 PAPER_TYPES.lengthPerSheet）
+        per_sheet = None
+        if not is_long:
+            if "四尺对开" in spec or "条屏" in spec:
+                per_sheet = 1.38
+            elif "四尺四开" in spec:
+                per_sheet = 0.69
+            elif "四尺整张" in spec:
+                per_sheet = 1.38
+            elif "四尺三开" in spec:
+                per_sheet = 0.69
+            elif "六尺对开" in spec:
+                per_sheet = 1.80
+            elif "六尺整张" in spec:
+                per_sheet = 1.80
+            elif "小楷" in spec:
+                per_sheet = 0.28
+        if is_long:
+            total = m
+        else:
+            total = qty
         items.append({
             "id": pid,
             "type": typ or "刀纸",
@@ -98,6 +118,7 @@ def main():
             "qty": qty,
             "meters": m,
             "spec": spec,
+            "perSheetMeters": per_sheet,
             "total": total,
             "remaining": total,
         })

@@ -330,13 +330,24 @@
     return list.slice().sort((a, b) => remainOf(a) - remainOf(b));
   }
 
+  // 每条折算米数：长卷=米数；刀纸/条屏=张数×每张米数
+  function metersOf(i) {
+    if (isLong(i)) return i.meters ?? i.total ?? 0;
+    const per = i.perSheetMeters || 0;
+    return (i.qty ?? i.total ?? 0) * per;
+  }
+  function remainMetersOf(i) {
+    if (isLong(i)) return i.remaining ?? i.meters ?? 0;
+    const per = i.perSheetMeters || 0;
+    return (i.remaining ?? i.qty ?? 0) * per;
+  }
+
   function renderStats() {
-    const lv = state.data.filter(isLong);
-    const totalMeters = lv.reduce((s, i) => s + totalOf(i), 0);
-    const remainMeters = lv.reduce((s, i) => s + remainOf(i), 0);
+    const totalMeters = state.data.reduce((s, i) => s + metersOf(i), 0);
+    const remainMeters = state.data.reduce((s, i) => s + remainMetersOf(i), 0);
     $('stTotal').textContent = state.data.length;
-    $('stMeters').textContent = totalMeters;
-    $('stRemain').textContent = remainMeters;
+    $('stMeters').textContent = Math.round(totalMeters * 100) / 100;
+    $('stRemain').textContent = Math.round(remainMeters * 100) / 100;
   }
 
   function renderFilters() {
