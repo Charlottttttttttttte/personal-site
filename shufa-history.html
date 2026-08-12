@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#FFF9F0" />
+<title>临池录 · 历史 · Charlotte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{
+    background:var(--paper);
+    background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);
+    background-size:34px 34px;
+    color:var(--ink);font-family:'Noto Sans SC',sans-serif;
+    overscroll-behavior:auto;-webkit-overflow-scrolling:touch;
+  }
+  body{min-height:100vh;padding-bottom:100px;}
+  .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
+
+  .page{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 30px) 5vw 30px;}
+  .page-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .page-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.6rem,5vw,2rem);}
+  .page-title .dot{color:var(--pink);}
+
+  .search-bar{display:flex;align-items:center;background:var(--card);border:3px solid var(--ink);border-radius:999px;box-shadow:4px 4px 0 var(--ink);padding:2px 6px 2px 14px;margin-bottom:12px;}
+  .search-bar input{flex:1;border:0;outline:0;background:transparent;font-size:.92rem;padding:10px 4px;color:var(--ink);font-family:inherit;}
+  .search-btn{border:2.5px solid var(--ink);border-radius:999px;background:var(--yellow);padding:6px 16px;font-weight:700;cursor:pointer;}
+
+  .filter-row{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+  .date-input{border:2.5px solid var(--ink);border-radius:10px;background:var(--card);padding:7px 10px;font-size:.85rem;font-family:inherit;box-shadow:2px 2px 0 var(--ink);color:var(--ink);}
+  .date-sep{font-weight:700;opacity:.6;}
+  .clear-btn{border:2px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:.78rem;cursor:pointer;background:var(--card);}
+
+  .summary{display:flex;gap:10px;margin-bottom:14px;}
+  .sum-item{flex:1;background:var(--card);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:10px;text-align:center;}
+  .sum-item:nth-child(1){background:var(--pink);}
+  .sum-item:nth-child(2){background:var(--teal);}
+  .sum-item:nth-child(3){background:var(--blue);}
+  .sum-item .v{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.2rem;}
+  .sum-item .l{font-size:.72rem;font-weight:700;opacity:.75;}
+
+  .record-card{background:var(--card);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:13px 15px;margin-bottom:12px;cursor:pointer;}
+  .record-card.deleted{opacity:.5;}
+  .rc-head{display:flex;justify-content:space-between;align-items:center;}
+  .rc-date{font-weight:800;font-size:.92rem;}
+  .rc-meters{font-family:'Fredoka',sans-serif;font-weight:700;color:#2E7D5B;}
+  .rc-body{font-size:.85rem;opacity:.75;margin-top:5px;}
+  .rc-note{font-size:.8rem;opacity:.6;margin-top:3px;}
+  .rc-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:2px dashed rgba(23,23,26,.15);}
+  .act-btn{border:2px solid var(--ink);border-radius:999px;padding:5px 14px;font-size:.8rem;font-weight:700;cursor:pointer;background:var(--card);}
+  .act-btn.edit{background:var(--yellow);}
+  .act-btn.del{background:#FFE3E3;}
+  .act-btn.restore{background:var(--teal);}
+  .act-btn.perm{background:#FF6B6B;color:#fff;}
+
+  .empty{text-align:center;opacity:.55;padding:40px 0;font-size:.9rem;}
+
+  /* 导出面板 */
+  .export-panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:16px;margin-bottom:16px;}
+  .export-panel h4{font-family:'Fredoka',sans-serif;margin-bottom:10px;}
+  .field-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .field-chip{border:2px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:.8rem;cursor:pointer;background:var(--paper);font-weight:600;}
+  .field-chip.checked{background:var(--yellow);}
+  .export-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .exp-btn{border:2.5px solid var(--ink);border-radius:10px;padding:8px 16px;font-weight:700;cursor:pointer;background:var(--blue);box-shadow:2px 2px 0 var(--ink);}
+  .exp-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:200;display:flex;background:var(--paper);border-top:3px solid var(--ink);padding-bottom:env(safe-area-inset-bottom);}
+  .tab{flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;}
+  .tab .ic{display:block;font-size:1.3rem;margin-bottom:2px;}
+  .tab.active{background:var(--yellow);}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title">历史记录<span class="dot">.</span></h1>
+  </div>
+
+  <div class="search-bar">
+    <input id="searchInput" placeholder="搜索字帖、纸型、备注…" autocomplete="off" />
+    <div class="search-btn" id="btnSearch">🔍</div>
+  </div>
+
+  <div class="filter-row">
+    <input class="date-input" type="date" id="dateStart" />
+    <span class="date-sep">至</span>
+    <input class="date-input" type="date" id="dateEnd" />
+    <div class="clear-btn" id="btnClear">清除</div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-item"><div class="v fun" id="sumCount">0</div><div class="l">条记录</div></div>
+    <div class="sum-item"><div class="v fun" id="sumMeters">0</div><div class="l">累计米数</div></div>
+    <div class="sum-item"><div class="v fun" id="sumDays">0</div><div class="l">练习天数</div></div>
+  </div>
+
+  <div class="export-panel">
+    <h4>📤 导出记录</h4>
+    <div class="field-row" id="fieldRow"></div>
+    <div class="export-actions">
+      <div class="exp-btn" id="btnAll">全选</div>
+      <div class="exp-btn" id="btnExportCSV">导出 CSV</div>
+    </div>
+  </div>
+
+  <div id="recordList"><div class="empty">加载中…</div></div>
+</main>
+
+<nav class="tabbar">
+  <a class="tab" href="shufa-calendar.html"><span class="ic">📅</span>首页</a>
+  <a class="tab" href="shufa-record.html"><span class="ic">✍️</span>记录</a>
+  <a class="tab" href="shufa-inventory.html"><span class="ic">📦</span>库存</a>
+  <a class="tab active" href="shufa-history.html"><span class="ic">🗂️</span>历史</a>
+</nav>
+
+<script src="js/shufa-store.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const state = { records: [], query: '', dateStart: '', dateEnd: '', expanded: null };
+
+  const FIELDS = [
+    { key: 'date', label: '日期' },
+    { key: 'type', label: '类型' },
+    { key: 'paper', label: '纸张' },
+    { key: 'qty', label: '数量' },
+    { key: 'meters', label: '米数' },
+    { key: 'font', label: '字体' },
+    { key: 'copybook', label: '字帖' },
+    { key: 'note', label: '备注' }
+  ];
+
+  function filtered() {
+    let list = state.records.filter(r => !r.deleted);
+    if (state.query) {
+      const q = state.query.toLowerCase();
+      list = list.filter(r =>
+        (r.copybookSnapshot && r.copybookSnapshot.copybookName && r.copybookSnapshot.copybookName.toLowerCase().includes(q)) ||
+        (r.paperSnapshot && r.paperSnapshot.name && r.paperSnapshot.name.toLowerCase().includes(q)) ||
+        (r.note || '').toLowerCase().includes(q)
+      );
+    }
+    if (state.dateStart) list = list.filter(r => r.date >= state.dateStart);
+    if (state.dateEnd) list = list.filter(r => r.date <= state.dateEnd);
+    return list.slice().sort((a, b) => b.date.localeCompare(a.date));
+  }
+
+  function renderSummary(list) {
+    $('sumCount').textContent = list.length;
+    $('sumMeters').textContent = list.reduce((s, r) => s + (r.meters || 0), 0).toFixed(1);
+    $('sumDays').textContent = new Set(list.map(r => r.date)).size;
+  }
+
+  function renderList() {
+    const list = filtered();
+    if (!list.length) {
+      $('recordList').innerHTML = '<div class="empty">没有匹配的记录</div>';
+      return;
+    }
+    $('recordList').innerHTML = list.map(r => {
+      const typeLabel = r.type === 'scroll' ? '📜 长卷' : '📄 单张';
+      const paper = r.paperSnapshot ? r.paperSnapshot.name : '?';
+      const cb = r.copybookSnapshot
+        ? (r.copybookSnapshot.fontName ? r.copybookSnapshot.fontName + ' · ' : '') + r.copybookSnapshot.copybookName
+        : '';
+      const actions = state.expanded === r.id ? `
+        <div class="rc-actions">
+          <div class="act-btn edit" data-id="${r.id}">编辑</div>
+          ${r.deleted
+            ? `<div class="act-btn restore" data-id="${r.id}">恢复</div><div class="act-btn perm" data-id="${r.id}">彻底删除</div>`
+            : `<div class="act-btn del" data-id="${r.id}">删除</div>`}
+        </div>` : '';
+      return `
+        <div class="record-card ${r.deleted ? 'deleted' : ''}" data-id="${r.id}">
+          <div class="rc-head">
+            <span class="rc-date">${r.date} · ${typeLabel}</span>
+            <span class="rc-meters">${(r.meters || 0).toFixed(1)}m</span>
+          </div>
+          <div class="rc-body">${paper}${r.quantity ? ' × ' + r.quantity.number + r.quantity.unit : ''}${cb ? ' · ' + cb : ''}</div>
+          ${r.note ? `<div class="rc-note">💬 ${r.note}</div>` : ''}
+          ${actions}
+        </div>`;
+    }).join('');
+    // 绑定事件
+    document.querySelectorAll('.record-card').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.act-btn')) return;
+        const id = el.dataset.id;
+        state.expanded = state.expanded === id ? null : id;
+        renderList();
+      });
+    });
+    document.querySelectorAll('.act-btn.edit').forEach(b => {
+      b.addEventListener('click', () => location.href = 'shufa-record.html?editId=' + b.dataset.id);
+    });
+    document.querySelectorAll('.act-btn.del').forEach(b => {
+      b.addEventListener('click', () => {
+        if (!confirm('删除这条记录？（可恢复）')) return;
+        const r = state.records.find(x => x.id === b.dataset.id);
+        if (r) { r.deleted = true; r.deletedAt = new Date().toISOString(); }
+        save(); renderList(); renderSummary(filtered());
+      });
+    });
+    document.querySelectorAll('.act-btn.restore').forEach(b => {
+      b.addEventListener('click', () => {
+        const r = state.records.find(x => x.id === b.dataset.id);
+        if (r) { r.deleted = false; delete r.deletedAt; }
+        save(); renderList(); renderSummary(filtered());
+      });
+    });
+    document.querySelectorAll('.act-btn.perm').forEach(b => {
+      b.addEventListener('click', () => {
+        if (!confirm('彻底删除，不可恢复！确认？')) return;
+        state.records = state.records.filter(x => x.id !== b.dataset.id);
+        save(); renderList(); renderSummary(filtered());
+      });
+    });
+  }
+
+  function renderFields() {
+    $('fieldRow').innerHTML = FIELDS.map(f =>
+      `<div class="field-chip ${f.checked === false ? '' : 'checked'}" data-key="${f.key}">${f.label}</div>`
+    ).join('');
+    document.querySelectorAll('.field-chip').forEach(el => {
+      el.addEventListener('click', () => {
+        const f = FIELDS.find(x => x.key === el.dataset.key);
+        f.checked = f.checked === false ? true : false;
+        renderFields();
+      });
+    });
+  }
+
+  function exportCSV() {
+    const list = filtered();
+    if (!list.length) { alert('没有可导出的记录'); return; }
+    const sel = FIELDS.filter(f => f.checked !== false);
+    const headers = sel.map(f => f.label);
+    const rows = list.map(r => sel.map(f => {
+      switch (f.key) {
+        case 'date': return r.date;
+        case 'type': return r.type === 'scroll' ? '长卷' : '单张';
+        case 'paper': return r.paperSnapshot ? r.paperSnapshot.name : '';
+        case 'qty': return r.quantity ? r.quantity.number + r.quantity.unit : '';
+        case 'meters': return r.meters || 0;
+        case 'font': return r.copybookSnapshot ? r.copybookSnapshot.fontName : '';
+        case 'copybook': return r.copybookSnapshot ? r.copybookSnapshot.copybookName : '';
+        case 'note': return r.note || '';
+      }
+    }));
+    const csv = '\uFEFF' + [headers, ...rows].map(row =>
+      row.map(v => String(v).replace(/"/g, '""')).map(v => /[",\n]/.test(v) ? '"' + v + '"' : v).join(',')
+    ).join('\n');
+    downloadFile('临池录_记录_' + new Date().toISOString().slice(0,10) + '.csv', csv);
+  }
+
+  function downloadFile(name, content) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  function save() {
+    SHUFA_STORE.saveDraft('records', { updatedAt: new Date().toISOString().slice(0,10), records: state.records });
+  }
+
+  // 事件
+  $('btnSearch').addEventListener('click', () => { state.query = $('searchInput').value.trim(); renderAll(); });
+  $('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') { state.query = $('searchInput').value.trim(); renderAll(); } });
+  $('dateStart').addEventListener('change', () => { state.dateStart = $('dateStart').value; renderAll(); });
+  $('dateEnd').addEventListener('change', () => { state.dateEnd = $('dateEnd').value; renderAll(); });
+  $('btnClear').addEventListener('click', () => {
+    state.query = ''; state.dateStart = ''; state.dateEnd = '';
+    $('searchInput').value = ''; $('dateStart').value = ''; $('dateEnd').value = '';
+    renderAll();
+  });
+  $('btnAll').addEventListener('click', () => {
+    const allChecked = FIELDS.every(f => f.checked !== false);
+    FIELDS.forEach(f => f.checked = allChecked ? false : true);
+    renderFields();
+  });
+  $('btnExportCSV').addEventListener('click', exportCSV);
+
+  function renderAll() {
+    const list = filtered();
+    renderSummary(list);
+    renderList();
+  }
+
+  renderFields();
+  (async () => {
+    try {
+      const { data } = await SHUFA_STORE.load('records');
+      state.records = data.records || [];
+      renderAll();
+    } catch (err) {
+      $('recordList').innerHTML = '<div class="empty">加载失败：' + err.message + '</div>';
+    }
+  })();
+})();
+</script>
+</body>
+</html>

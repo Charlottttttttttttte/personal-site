@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#FFF9F0" />
+<title>临池录 · 长卷 · Charlotte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{
+    background:var(--paper);
+    background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);
+    background-size:34px 34px;
+    color:var(--ink);font-family:'Noto Sans SC',sans-serif;
+  }
+  body{min-height:100vh;padding-bottom:40px;}
+  .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
+
+  .page{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 30px) 5vw 30px;}
+  .back{display:inline-block;margin-bottom:14px;color:var(--ink);text-decoration:none;font-weight:700;font-size:.9rem;opacity:.7;}
+  .title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.6rem;margin-bottom:4px;}
+  .sub{font-size:.88rem;opacity:.65;margin-bottom:16px;}
+
+  .card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink);padding:16px;margin-bottom:16px;}
+  .sec-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:12px;}
+
+  .progress-big{text-align:center;padding:6px 0 14px;}
+  .progress-big .cur{font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.6rem;line-height:1.1;}
+  .progress-big .cur small{font-size:1rem;color:#2E7D5B;}
+  .progress-big .total{font-size:.85rem;opacity:.6;margin-top:2px;}
+  .pbar{height:18px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;box-shadow:inset 1px 1px 0 rgba(23,23,26,.15);}
+  .pfill{height:100%;background:var(--teal);border-radius:999px;transition:width .4s;}
+
+  .add-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+  .num-input{border:2.5px solid var(--ink);border-radius:10px;background:var(--card);padding:9px 12px;font-size:1rem;width:110px;text-align:center;box-shadow:2px 2px 0 var(--ink);color:var(--ink);font-family:inherit;}
+  .note-input{flex:1;border:2.5px solid var(--ink);border-radius:10px;background:var(--card);padding:9px 12px;font-size:.9rem;box-shadow:2px 2px 0 var(--ink);color:var(--ink);font-family:inherit;min-width:0;}
+  .add-btn{border:3px solid var(--ink);border-radius:12px;background:var(--yellow);padding:10px 18px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--ink);}
+  .add-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+
+  .status-row{display:flex;gap:10px;}
+  .status-btn{flex:1;border:3px solid var(--ink);border-radius:12px;padding:12px;text-align:center;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--ink);}
+  .status-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  .status-btn.done{background:var(--teal);}
+  .status-btn.abandon{background:#FFE3E3;}
+
+  .log-item{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1.5px dashed rgba(23,23,26,.12);font-size:.88rem;}
+  .log-item:last-child{border-bottom:0;}
+  .log-meters{font-family:'Fredoka',sans-serif;font-weight:700;color:#2E7D5B;}
+  .log-meta{font-size:.75rem;opacity:.55;margin-top:2px;}
+  .empty{text-align:center;opacity:.55;padding:20px 0;font-size:.88rem;}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <a class="back" href="shufa-calendar.html">← 返回</a>
+  <div class="title" id="scrollTitle">长卷</div>
+  <div class="sub" id="scrollSub">—</div>
+
+  <div class="card">
+    <div class="sec-title">当前进度</div>
+    <div class="progress-big">
+      <div class="cur"><span id="curLength">0</span><small> 米</small></div>
+      <div class="total" id="totalInfo">—</div>
+    </div>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">记录进度</div>
+    <div class="add-row">
+      <input class="num-input" type="number" min="0" step="0.5" id="addLen" placeholder="米数" />
+      <input class="note-input" id="addNote" placeholder="备注（可选）" />
+      <div class="add-btn" id="btnAdd">＋ 添加</div>
+    </div>
+    <div id="logList"><div class="empty">暂无进度记录</div></div>
+  </div>
+
+  <div class="status-row">
+    <div class="status-btn done" id="btnComplete">✅ 完成长卷</div>
+    <div class="status-btn abandon" id="btnAbandon">🗑️ 放弃长卷</div>
+  </div>
+</main>
+
+<script src="js/shufa-store.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const state = { records: [], id: null, scroll: null };
+
+  function save() {
+    SHUFA_STORE.saveDraft('records', { updatedAt: new Date().toISOString().slice(0,10), records: state.records });
+  }
+
+  function render() {
+    const s = state.scroll;
+    if (!s) return;
+    $('scrollTitle').textContent = s.paperSnapshot ? s.paperSnapshot.name : '长卷';
+    const cb = s.copybookSnapshot ? s.copybookSnapshot.copybookName : '未选字帖';
+    const statusLabel = s.status === 'completed' ? '✅ 已完成' : s.status === 'abandoned' ? '🗑️ 已放弃' : '🔄 进行中';
+    $('scrollSub').textContent = `${cb} · ${statusLabel}`;
+
+    const cur = s.length || 0;
+    const total = (s.paperSnapshot && s.paperSnapshot.lengthPerSheet) || 0;
+    $('curLength').textContent = cur.toFixed(1);
+    $('totalInfo').textContent = total > 0 ? `总长 ${total} 米 · 完成 ${Math.round(cur/total*100)}%` : `已写 ${cur.toFixed(1)} 米`;
+    const pct = total > 0 ? Math.min(100, Math.round(cur/total*100)) : 0;
+    $('pfill').style.width = pct + '%';
+
+    const logs = s.progressLog || [];
+    if (!logs.length) {
+      $('logList').innerHTML = '<div class="empty">暂无进度记录</div>';
+      return;
+    }
+    $('logList').innerHTML = logs.slice().reverse().map(l => `
+      <div class="log-item">
+        <div>
+          <div class="log-meters">+${l.addedLength} 米（累计 ${l.totalLength} 米）</div>
+          ${l.note ? `<div class="log-meta">💬 ${l.note}</div>` : ''}
+        </div>
+        <div class="log-meta">${(l.addedAt || '').slice(0,10)}</div>
+      </div>`).join('');
+  }
+
+  function addProgress() {
+    const s = state.scroll;
+    if (!s) return;
+    const v = parseFloat($('addLen').value);
+    if (!v || v <= 0) { alert('请输入米数'); return; }
+    const cur = s.length || 0;
+    s.length = +(cur + v).toFixed(2);
+    s.meters = s.length;
+    s.progressLog = s.progressLog || [];
+    s.progressLog.push({
+      addedAt: new Date().toISOString(),
+      addedLength: v,
+      totalLength: s.length,
+      note: $('addNote').value.trim()
+    });
+    s.status = 'ongoing';
+    s.updatedAt = new Date().toISOString();
+    $('addLen').value = ''; $('addNote').value = '';
+    save(); render();
+    alert('已记录 +' + v + ' 米');
+  }
+
+  function setStatus(st, msg) {
+    const s = state.scroll;
+    if (!s) return;
+    s.status = st;
+    s.updatedAt = new Date().toISOString();
+    save(); render();
+    alert(msg);
+  }
+
+  $('btnAdd').addEventListener('click', addProgress);
+  $('btnComplete').addEventListener('click', () => {
+    if (confirm('确认完成这卷长卷？')) setStatus('completed', '已完成长卷 🎉');
+  });
+  $('btnAbandon').addEventListener('click', () => {
+    if (confirm('确认放弃这卷长卷？')) setStatus('abandoned', '已放弃长卷');
+  });
+
+  (async () => {
+    const qs = new URLSearchParams(location.search);
+    const id = qs.get('id');
+    if (!id) { $('scrollTitle').textContent = '未找到长卷'; return; }
+    state.id = id;
+    try {
+      const { data } = await SHUFA_STORE.load('records');
+      state.records = data.records || [];
+      state.scroll = state.records.find(r => r.id === id);
+      if (!state.scroll) { $('scrollTitle').textContent = '未找到长卷'; return; }
+      render();
+    } catch (err) {
+      alert('加载失败：' + err.message);
+    }
+  })();
+})();
+</script>
+</body>
+</html>

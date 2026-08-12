@@ -226,10 +226,19 @@
 
 <!-- 底部悬浮按钮组 -->
 <div class="fab-group">
+  <div class="fab fab-sec" id="btnExport" title="导出">📤</div>
   <div class="fab fab-sec" id="btnSync" title="一键同步">🔄</div>
   <div class="fab fab-ter" id="btnToken" title="令牌设置">🔑</div>
   <div class="fab fab-main" id="btnAdd" title="添加库存">+</div>
 </div>
+
+<!-- tabBar -->
+<nav class="tabbar" style="position:fixed;left:0;right:0;bottom:0;z-index:250;display:flex;background:var(--paper);border-top:3px solid var(--ink);padding-bottom:env(safe-area-inset-bottom);">
+  <a class="tab" href="shufa-calendar.html" style="flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;"><span class="ic" style="display:block;font-size:1.3rem;margin-bottom:2px;">📅</span>首页</a>
+  <a class="tab" href="shufa-record.html" style="flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;"><span class="ic" style="display:block;font-size:1.3rem;margin-bottom:2px;">✍️</span>记录</a>
+  <a class="tab active" href="shufa-inventory.html" style="flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;background:var(--yellow);"><span class="ic" style="display:block;font-size:1.3rem;margin-bottom:2px;">📦</span>库存</a>
+  <a class="tab" href="shufa-history.html" style="flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;"><span class="ic" style="display:block;font-size:1.3rem;margin-bottom:2px;">🗂️</span>历史</a>
+</nav>
 
 <!-- 点条目弹出的操作面板 -->
 <div class="sheet-mask" id="sheetMask"></div>
@@ -546,9 +555,34 @@
     }
   }
 
+  // ---------- 导出 CSV ----------
+  function exportCSV() {
+    if (!state.data.length) { alert('没有可导出的库存'); return; }
+    const headers = ['名称', '类型', '纸张ID', '总量', '单位', '剩余', '每张米数', '尺寸规格'];
+    const rows = state.data.map(i => {
+      const isLong = i.type === '长卷';
+      const total = isLong ? (i.meters ?? i.total ?? 0) : (i.qty ?? i.total ?? 0);
+      const remain = i.remaining ?? total;
+      const unit = isLong ? '米' : '张';
+      return [i.name, i.type, i.id, total, unit, remain, i.perSheetMeters || '', i.spec || ''];
+    });
+    const csv = '\uFEFF' + [headers, ...rows].map(row =>
+      row.map(v => String(v).replace(/"/g, '""')).map(v => /[",\n]/.test(v) ? '"' + v + '"' : v).join(',')
+    ).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '临池录_库存_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setStatus('已导出 CSV', 'ok');
+  }
+
   // ---------- 事件 ----------
   $('btnSync').addEventListener('click', syncToGitHub);
   $('btnToken').addEventListener('click', setToken);
+  $('btnExport').addEventListener('click', exportCSV);
   $('btnAdd').addEventListener('click', showAddForm);
   $('btnClearSearch').addEventListener('click', () => { $('searchInput').value = ''; state.query = ''; renderAll(); });
   $('searchInput').addEventListener('input', e => { state.query = e.target.value.trim(); renderList(); });

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#FFF9F0" />
+<title>临池录 · 导入 · Charlotte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{
+    background:var(--paper);
+    background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);
+    background-size:34px 34px;
+    color:var(--ink);font-family:'Noto Sans SC',sans-serif;
+  }
+  body{min-height:100vh;padding-bottom:40px;}
+  .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
+
+  .page{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 30px) 5vw 30px;}
+  .back{display:inline-block;margin-bottom:14px;color:var(--ink);text-decoration:none;font-weight:700;font-size:.9rem;opacity:.7;}
+  .title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.6rem;margin-bottom:4px;}
+  .sub{font-size:.88rem;opacity:.65;margin-bottom:16px;}
+
+  .card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink);padding:16px;margin-bottom:16px;}
+  .sec-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:10px;}
+  .hint{font-size:.8rem;opacity:.6;margin-bottom:10px;}
+  .template{background:var(--paper);border:2.5px dashed var(--ink);border-radius:10px;padding:12px;font-size:.78rem;white-space:pre-wrap;margin-bottom:12px;line-height:1.6;}
+  textarea{width:100%;border:2.5px solid var(--ink);border-radius:12px;background:var(--card);padding:12px;font-size:.85rem;font-family:ui-monospace,monospace;box-shadow:2px 2px 0 var(--ink);min-height:160px;resize:vertical;color:var(--ink);}
+
+  .mode-tabs{display:flex;gap:8px;margin-bottom:12px;}
+  .mode-btn{border:2.5px solid var(--ink);border-radius:999px;padding:7px 16px;font-weight:700;cursor:pointer;background:var(--card);font-size:.88rem;}
+  .mode-btn.active{background:var(--yellow);}
+
+  .import-btn{border:3px solid var(--ink);border-radius:12px;background:var(--pink);padding:13px;text-align:center;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:4px 4px 0 var(--ink);margin-top:10px;}
+  .import-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .status{font-size:.88rem;font-weight:700;margin-top:12px;text-align:center;min-height:1.4em;}
+  .status.ok{color:#2E7D5B;}
+  .status.err{color:#B33737;}
+  .preview{font-size:.85rem;margin-top:10px;max-height:200px;overflow:auto;border:2px solid var(--ink);border-radius:10px;padding:10px;background:var(--paper);}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <a class="back" href="shufa-history.html">← 返回历史</a>
+  <div class="title">导入记录<span class="dot" style="color:var(--pink)">.</span></div>
+  <div class="sub">从 JSON 导出文件或 CSV 表格恢复练习记录</div>
+
+  <div class="card">
+    <div class="mode-tabs">
+      <div class="mode-btn active" id="btnJSON">JSON 导入</div>
+      <div class="mode-btn" id="btnCSV">CSV 导入</div>
+    </div>
+
+    <div class="sec-title" id="modeTitle">粘贴 JSON 数据</div>
+    <div class="hint" id="modeHint">支持从历史页导出的完整 JSON，或小程序导出的 records 结构</div>
+
+    <div class="template" id="templateBox" style="display:none"></div>
+
+    <textarea id="inputText" placeholder="在此粘贴数据…"></textarea>
+
+    <div class="import-btn" id="btnImport">导入</div>
+    <div class="status" id="status"></div>
+    <div class="preview" id="preview" style="display:none"></div>
+  </div>
+</main>
+
+<script src="js/shufa-store.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const state = { mode: 'json', records: [] };
+
+  const CSV_TEMPLATE = `日期,类型,纸张,数量,单位,米数,字体,字帖,备注
+2026-08-01,单张,四尺对开,3,张,4.14,楷书,九成宫醴泉铭,第一天
+2026-08-02,长卷,20米长卷,,,2.5,行书,兰亭序,写了2.5米`;
+
+  function setMode(m) {
+    state.mode = m;
+    $('btnJSON').classList.toggle('active', m === 'json');
+    $('btnCSV').classList.toggle('active', m === 'csv');
+    $('modeTitle').textContent = m === 'json' ? '粘贴 JSON 数据' : '粘贴 CSV 表格';
+    $('modeHint').textContent = m === 'json'
+      ? '支持历史页导出的完整 JSON 或小程序 records 结构'
+      : '表头固定：日期,类型,纸张,数量,单位,米数,字体,字帖,备注';
+    $('templateBox').style.display = m === 'csv' ? '' : 'none';
+    $('templateBox').textContent = CSV_TEMPLATE;
+    $('status').textContent = ''; $('status').className = 'status';
+    $('preview').style.display = 'none';
+  }
+
+  function parseJSON(text) {
+    const data = JSON.parse(text);
+    let list = [];
+    if (Array.isArray(data)) list = data;
+    else if (data.records && Array.isArray(data.records)) list = data.records;
+    else if (data.items && Array.isArray(data.items)) list = data.items;
+    if (!list.length) throw new Error('未找到记录数组');
+    return list.map(r => normalizeRecord(r)).filter(Boolean);
+  }
+
+  function normalizeRecord(r) {
+    if (!r || !r.date) return null;
+    // 兼容多种结构
+    const qtyNum = r.quantity
+      ? (r.quantity.number ?? r.quantity['数量'] ?? (parseFloat(r.quantity) || 0))
+      : (parseFloat(r['数量']) || 0);
+    const qtyUnit = r.quantity ? (r.quantity.unit || '张') : (r.单位 || '张');
+    return {
+      id: r.id || ('rec_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)),
+      date: r.date,
+      type: (r.type === 'scroll' || r.type === '长卷') ? 'scroll' : 'sheet',
+      meters: parseFloat(r.meters ?? r.米数 ?? 0) || 0,
+      quantity: { number: qtyNum, unit: qtyUnit },
+      paperSnapshot: r.paperSnapshot || (r.纸张 ? { name: r.纸张 } : null),
+      copybookSnapshot: r.copybookSnapshot || (r.字帖 ? { copybookName: r.字帖, fontName: r.字体 || '' } : null),
+      note: r.note || r.备注 || '',
+      createdAt: r.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      deleted: !!r.deleted,
+      length: r.length, status: r.status, progressLog: r.progressLog
+    };
+  }
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (lines.length < 2) throw new Error('数据不足两行');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const idx = (name) => headers.indexOf(name);
+    const out = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cells = lines[i].split(',');
+      const get = (name) => {
+        const j = idx(name);
+        return j >= 0 ? (cells[j] || '').trim() : '';
+      };
+      const date = get('日期');
+      if (!date) continue;
+      const type = get('类型') === '长卷' ? 'scroll' : 'sheet';
+      const paper = get('纸张');
+      const qty = parseFloat(get('数量')) || 0;
+      const unit = get('单位') || '张';
+      const meters = parseFloat(get('米数')) || (type === 'scroll' ? qty : 0);
+      out.push({
+        id: 'rec_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        date, type, meters,
+        quantity: { number: qty, unit },
+        paperSnapshot: paper ? { name: paper } : null,
+        copybookSnapshot: get('字帖') ? { copybookName: get('字帖'), fontName: get('字体') || '' } : null,
+        note: get('备注') || '',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        deleted: false
+      });
+    }
+    if (!out.length) throw new Error('未解析到有效行');
+    return out;
+  }
+
+  function doImport() {
+    const text = $('inputText').value.trim();
+    if (!text) { setStatus('请先粘贴数据', 'err'); return; }
+    try {
+      const list = state.mode === 'json' ? parseJSON(text) : parseCSV(text);
+      const existingIds = new Set(state.records.map(r => r.id));
+      const fresh = list.filter(r => !existingIds.has(r.id));
+      state.records.unshift(...fresh);
+      SHUFA_STORE.saveDraft('records', { updatedAt: new Date().toISOString().slice(0,10), records: state.records });
+      $('preview').style.display = '';
+      $('preview').textContent = `解析 ${list.length} 条，新增 ${fresh.length} 条。第一条：${JSON.stringify(fresh[0] ? {date: fresh[0].date, paper: fresh[0].paperSnapshot && fresh[0].paperSnapshot.name, meters: fresh[0].meters} : {})}`;
+      setStatus(`✓ 已导入 ${fresh.length} 条到本机草稿，点 🔄 同步发布`, 'ok');
+      $('inputText').value = '';
+    } catch (err) {
+      setStatus('✗ ' + err.message, 'err');
+    }
+  }
+
+  function setStatus(m, kind) {
+    const el = $('status');
+    el.textContent = m;
+    el.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  $('btnJSON').addEventListener('click', () => setMode('json'));
+  $('btnCSV').addEventListener('click', () => setMode('csv'));
+  $('btnImport').addEventListener('click', doImport);
+
+  (async () => {
+    try {
+      const { data } = await SHUFA_STORE.load('records');
+      state.records = data.records || [];
+    } catch (e) { /* 静默 */ }
+    setMode('json');
+  })();
+})();
+</script>
+</body>
+</html>

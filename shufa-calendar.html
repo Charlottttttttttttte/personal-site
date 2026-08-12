@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#FFF9F0" />
+<title>临池录 · 首页 · Charlotte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{
+    background:var(--paper);
+    background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);
+    background-size:34px 34px;
+    color:var(--ink);font-family:'Noto Sans SC',sans-serif;
+    overscroll-behavior:auto;-webkit-overflow-scrolling:touch;
+  }
+  body{min-height:100vh;padding-bottom:90px;}
+  .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
+
+  .page{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 30px) 5vw 30px;}
+  .page-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .page-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.7rem,5vw,2.2rem);}
+  .page-title .dot{color:var(--pink);}
+  .sync-status{font-size:.78rem;font-weight:600;opacity:.75;}
+
+  /* 统计卡 */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+  .stat{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink);padding:14px 8px;text-align:center;}
+  .stat:nth-child(1){background:var(--pink);transform:rotate(-1deg);}
+  .stat:nth-child(2){background:var(--yellow);transform:rotate(1deg);}
+  .stat:nth-child(3){background:var(--teal);transform:rotate(-1deg);}
+  .stat .num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.5rem;line-height:1.15;}
+  .stat .lab{font-size:.74rem;font-weight:700;opacity:.75;margin-top:2px;}
+
+  /* 日历 */
+  .cal-card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:14px 12px 12px;margin-bottom:18px;}
+  .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .nav-btn{width:34px;height:34px;border:2.5px solid var(--ink);border-radius:10px;background:var(--yellow);font-size:1.2rem;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--ink);}
+  .nav-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  .month-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.15rem;}
+  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:.75rem;font-weight:700;opacity:.6;margin-bottom:4px;}
+  .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+  .day-cell{min-height:48px;border:2px solid transparent;border-radius:10px;text-align:center;padding:4px 2px;cursor:pointer;position:relative;}
+  .day-cell.other{opacity:.3;}
+  .day-cell.today{border-color:var(--ink);background:var(--yellow);}
+  .day-cell.has-record{background:#FFF1F6;}
+  .day-number{font-weight:700;font-size:.92rem;}
+  .day-meters{font-size:.62rem;font-weight:600;color:#2E7D5B;}
+  .day-dot{width:6px;height:6px;border-radius:50%;background:var(--leaf);margin:2px auto 0;}
+
+  /* 快速入口 */
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+  .quick-btn{border:3px solid var(--ink);border-radius:14px;padding:14px;text-align:center;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 var(--ink);}
+  .quick-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .quick-btn .ic{font-size:1.5rem;display:block;margin-bottom:4px;}
+  .quick-btn.sheet{background:var(--blue);}
+  .quick-btn.scroll{background:var(--teal);}
+
+  /* 区块 */
+  .sec-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:.95rem;margin:4px 2px 10px;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;}
+  .sec-title .more{font-size:.75rem;opacity:.6;font-family:'Noto Sans SC';}
+  .list-card{background:var(--card);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:12px 14px;margin-bottom:10px;cursor:pointer;}
+  .list-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  .lc-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.95rem;}
+  .lc-sub{font-size:.8rem;opacity:.6;margin-top:3px;}
+  .lc-meters{font-family:'Fredoka',sans-serif;font-weight:700;color:#2E7D5B;}
+  .empty-note{text-align:center;opacity:.5;padding:14px 0;font-size:.85rem;}
+
+  /* 底部 tabBar */
+  .tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:200;
+    display:flex;background:var(--paper);border-top:3px solid var(--ink);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tab{flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;}
+  .tab .ic{display:block;font-size:1.3rem;margin-bottom:2px;}
+  .tab.active{background:var(--yellow);}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title">临池录<span class="dot">.</span></h1>
+    <span class="sync-status" id="syncStatus">加载中…</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num fun" id="stToday">0</div><div class="lab">今日米数</div></div>
+    <div class="stat"><div class="num fun" id="stMonth">0</div><div class="lab">本月米数</div></div>
+    <div class="stat"><div class="num fun" id="stTotal">0</div><div class="lab">累计米数</div></div>
+  </div>
+
+  <div class="cal-card">
+    <div class="cal-header">
+      <button class="nav-btn" id="btnPrev">‹</button>
+      <div class="month-title fun" id="monthTitle">—</div>
+      <button class="nav-btn" id="btnNext">›</button>
+    </div>
+    <div class="weekdays">
+      <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+    </div>
+    <div class="days-grid" id="daysGrid"></div>
+  </div>
+
+  <div class="quick">
+    <div class="quick-btn sheet" id="btnSheet"><span class="ic">📄</span>写单张</div>
+    <div class="quick-btn scroll" id="btnScroll"><span class="ic">📜</span>写长卷</div>
+  </div>
+
+  <div class="sec-title">进行中长卷</div>
+  <div id="ongoingList"><div class="empty-note">暂无进行中的长卷</div></div>
+
+  <div class="sec-title">最近记录 <span class="more">点日期可补记</span></div>
+  <div id="recentList"><div class="empty-note">还没有练习记录，点上方按钮开始</div></div>
+</main>
+
+<!-- tabBar -->
+<nav class="tabbar">
+  <a class="tab active" href="shufa-calendar.html"><span class="ic">📅</span>首页</a>
+  <a class="tab" href="shufa-record.html"><span class="ic">✍️</span>记录</a>
+  <a class="tab" href="shufa-inventory.html"><span class="ic">📦</span>库存</a>
+  <a class="tab" href="shufa-history.html"><span class="ic">🗂️</span>历史</a>
+</nav>
+
+<script src="js/shufa-store.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const state = { records: [], year: 0, month: 0 };
+
+  function setStatus(msg, kind) {
+    const el = $('syncStatus');
+    el.textContent = msg;
+    el.className = 'sync-status' + (kind ? ' ' + kind : '');
+  }
+
+  function fmtDate(y, m, d) {
+    return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+  function todayStr() {
+    const n = new Date();
+    return fmtDate(n.getFullYear(), n.getMonth()+1, n.getDate());
+  }
+  function dayMeters(dateStr) {
+    return state.records.filter(r => r.date === dateStr && !r.deleted)
+      .reduce((s, r) => s + (r.meters || 0), 0);
+  }
+
+  // ---------- 统计 ----------
+  function renderStats() {
+    const today = todayStr();
+    const now = new Date();
+    const monthPrefix = today.slice(0, 7);
+    const valid = state.records.filter(r => !r.deleted);
+    const t = valid.filter(r => r.date === today).reduce((s, r) => s + (r.meters||0), 0);
+    const m = valid.filter(r => r.date.startsWith(monthPrefix)).reduce((s, r) => s + (r.meters||0), 0);
+    const all = valid.reduce((s, r) => s + (r.meters||0), 0);
+    $('stToday').textContent = t.toFixed(1);
+    $('stMonth').textContent = m.toFixed(1);
+    $('stTotal').textContent = all.toFixed(1);
+  }
+
+  // ---------- 日历 ----------
+  function renderCalendar() {
+    const { year, month } = state;
+    $('monthTitle').textContent = `${year}年${month}月`;
+    const first = new Date(year, month-1, 1);
+    const startWeekday = first.getDay();
+    const totalDays = new Date(year, month, 0).getDate();
+    const prevDays = new Date(year, month-1, 0).getDate();
+    const today = todayStr();
+    let html = '';
+    // 上月填充
+    for (let i = startWeekday-1; i >= 0; i--) {
+      const d = prevDays - i;
+      const ds = fmtDate(month === 1 ? year-1 : year, month === 1 ? 12 : month-1, d);
+      const mtr = dayMeters(ds);
+      html += cell(d, ds, mtr, false);
+    }
+    // 当月
+    for (let i = 1; i <= totalDays; i++) {
+      const ds = fmtDate(year, month, i);
+      const mtr = dayMeters(ds);
+      html += cell(i, ds, mtr, true, ds === today);
+    }
+    // 下月填充（补满42格）
+    let fill = 42 - (startWeekday + totalDays);
+    for (let i = 1; i <= fill; i++) {
+      const ds = fmtDate(month === 12 ? year+1 : year, month === 12 ? 1 : month+1, i);
+      html += cell(i, ds, 0, false);
+    }
+    $('daysGrid').innerHTML = html;
+    document.querySelectorAll('.day-cell').forEach(el => {
+      el.addEventListener('click', () => onDayTap(el.dataset.date));
+    });
+  }
+  function cell(day, ds, meters, isCur, isToday) {
+    const cls = [
+      'day-cell',
+      isCur ? '' : 'other',
+      isToday ? 'today' : '',
+      meters > 0 ? 'has-record' : ''
+    ].join(' ');
+    return `<div class="${cls}" data-date="${ds}">
+      <div class="day-number">${day}</div>
+      ${meters > 0 ? `<div class="day-dot"></div><div class="day-meters">${meters.toFixed(1)}m</div>` : ''}
+    </div>`;
+  }
+
+  function onDayTap(dateStr) {
+    const dayRecs = state.records.filter(r => r.date === dateStr && !r.deleted);
+    if (dayRecs.length > 0) {
+      // 有记录 → 编辑第一条
+      location.href = `shufa-record.html?editId=${dayRecs[0].id}`;
+    } else {
+      // 无记录 → 弹选择
+      const type = confirm('这一天还没有记录。点「确定」写单张，点「取消」写长卷？') ? 'sheet' : 'scroll';
+      location.href = `shufa-record.html?type=${type}&date=${dateStr}`;
+    }
+  }
+
+  // ---------- 进行中长卷 ----------
+  function renderOngoing() {
+    const ongoing = state.records.filter(r => r.type === 'scroll' && r.status === 'ongoing' && !r.deleted);
+    const el = $('ongoingList');
+    if (!ongoing.length) { el.innerHTML = '<div class="empty-note">暂无进行中的长卷</div>'; return; }
+    el.innerHTML = ongoing.map(r => `
+      <div class="list-card" data-id="${r.id}">
+        <div class="lc-head">
+          <span>${r.paperSnapshot ? r.paperSnapshot.name : '长卷'}</span>
+          <span class="lc-meters">${(r.length || 0).toFixed(1)}米</span>
+        </div>
+        <div class="lc-sub">${r.copybookSnapshot ? r.copybookSnapshot.copybookName : '未选字帖'} · 进行中</div>
+      </div>`).join('');
+    el.querySelectorAll('.list-card').forEach(c => {
+      c.addEventListener('click', () => location.href = `shufa-scroll.html?id=${c.dataset.id}`);
+    });
+  }
+
+  // ---------- 最近记录 ----------
+  function renderRecent() {
+    const recent = state.records.filter(r => !r.deleted).slice(0, 5);
+    const el = $('recentList');
+    if (!recent.length) { el.innerHTML = '<div class="empty-note">还没有练习记录，点上方按钮开始</div>'; return; }
+    el.innerHTML = recent.map(r => `
+      <div class="list-card" data-id="${r.id}">
+        <div class="lc-head">
+          <span>${r.date} · ${r.paperSnapshot ? r.paperSnapshot.name : '?'}</span>
+          <span class="lc-meters">${(r.meters||0).toFixed(1)}m</span>
+        </div>
+        <div class="lc-sub">${r.copybookSnapshot ? r.copybookSnapshot.fontName + '·' + r.copybookSnapshot.copybookName : ''}${r.note ? ' · ' + r.note : ''}</div>
+      </div>`).join('');
+    el.querySelectorAll('.list-card').forEach(c => {
+      c.addEventListener('click', () => location.href = `shufa-record.html?editId=${c.dataset.id}`);
+    });
+  }
+
+  function renderAll() {
+    renderStats();
+    renderCalendar();
+    renderOngoing();
+    renderRecent();
+  }
+
+  // ---------- 事件 ----------
+  $('btnPrev').addEventListener('click', () => {
+    state.month--;
+    if (state.month < 1) { state.month = 12; state.year--; }
+    renderCalendar();
+  });
+  $('btnNext').addEventListener('click', () => {
+    state.month++;
+    if (state.month > 12) { state.month = 1; state.year++; }
+    renderCalendar();
+  });
+  $('btnSheet').addEventListener('click', () => location.href = 'shufa-record.html?type=sheet');
+  $('btnScroll').addEventListener('click', () => location.href = 'shufa-record.html?type=scroll');
+
+  // ---------- 启动 ----------
+  const now = new Date();
+  state.year = now.getFullYear();
+  state.month = now.getMonth() + 1;
+  (async () => {
+    try {
+      const { data, fromDraft } = await SHUFA_STORE.load('records');
+      state.records = data.records || [];
+      setStatus(fromDraft ? '本机草稿' : '✓ 已加载');
+      renderAll();
+    } catch (err) {
+      setStatus('加载失败：' + err.message, 'err');
+    }
+  })();
+})();
+</script>
+</body>
+</html>
