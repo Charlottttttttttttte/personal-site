@@ -100,7 +100,48 @@
     return true;
   }
 
+  // 一键同步全部数据（记录 + 库存）。dataProvider: { records: data, inventory: data|null }
+  // 未提供的数据文件会读本机草稿；无草稿则跳过（不空写覆盖线上）
+  async function syncAll(dataProvider) {
+    const token = getToken();
+    if (!token) throw new Error('未设置令牌，请先点 🔑 设置');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const results = [];
+
+    // 1) 记录
+    let recData = null;
+    if (dataProvider && dataProvider.records) {
+      recData = dataProvider.records;
+    } else {
+      const d = localStorage.getItem(FILES.records.lsKey);
+      if (d) recData = JSON.parse(d);
+    }
+    if (recData) {
+      await syncToGitHub('records', recData, '记录同步 ' + dateStr);
+      results.push('记录');
+    }
+
+    // 2) 库存
+    let invData = null;
+    if (dataProvider && dataProvider.inventory) {
+      invData = dataProvider.inventory;
+    } else {
+      const d = localStorage.getItem(FILES.inventory.lsKey);
+      if (d) invData = JSON.parse(d);
+    }
+    if (invData) {
+      await syncToGitHub('inventory', invData, '库存同步 ' + dateStr);
+      results.push('库存');
+    }
+
+    if (!results.length) {
+      // 没有草稿：拉取线上再写回（确保 updatedAt 刷新），或提示无改动
+      return { synced: [], note: '无本地改动' };
+    }
+    return { synced: results };
+  }
+
   window.SHUFA_STORE = {
-    REPO, FILES, load, saveDraft, clearDraft, getToken, setToken, syncToGitHub
+    REPO, FILES, load, saveDraft, clearDraft, getToken, setToken, syncToGitHub, syncAll
   };
 })();

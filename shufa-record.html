@@ -410,7 +410,7 @@
     calcMeters();
   }
 
-  // ---------- 保存并同步 ----------
+  // ---------- 保存并同步（记录 + 库存，统一逻辑） ----------
   async function saveAndSync() {
     if (!saveLocal()) return;
     const token = SHUFA_STORE.getToken();
@@ -421,16 +421,7 @@
     }
     setStatus('同步中…');
     try {
-      await SHUFA_STORE.syncToGitHub('records',
-        { updatedAt: new Date().toISOString().slice(0,10), records: state.records },
-        '记录同步 ' + new Date().toISOString().slice(0,10));
-      // 库存草稿也同步
-      try {
-        const inv = await SHUFA_STORE.load('inventory');
-        if (inv.fromDraft) {
-          await SHUFA_STORE.syncToGitHub('inventory', inv.data, '库存同步 ' + new Date().toISOString().slice(0,10));
-        }
-      } catch (e) {}
+      await SHUFA_STORE.syncAll();
       setStatus('✓ 已保存并同步！', 'ok');
       setTimeout(() => location.href = 'shufa-calendar.html', 800);
     } catch (err) {

@@ -255,6 +255,7 @@
   </div>
 </div>
 
+<script src="js/shufa-store.js"></script>
 <script>
 (() => {
   const REPO = 'Charlottttttttttttte/personal-site';
@@ -521,33 +522,13 @@
     $('btnSync').style.opacity = '.5';
     setStatus('同步中…');
     try {
-      const api = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
-      const headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
-      let sha = null;
-      try {
-        const g = await fetch(api, { headers });
-        if (g.ok) { sha = (await g.json()).sha; }
-        else if (g.status !== 404) throw new Error('读取失败 HTTP ' + g.status);
-      } catch (e) { throw new Error('读取失败：' + e.message); }
-
-      const content = utf8ToBase64(JSON.stringify({
-        updatedAt: new Date().toISOString().slice(0, 10),
-        items: state.data
-      }, null, 2));
-      const body = { message: '库存同步 ' + new Date().toISOString().slice(0, 10), content };
-      if (sha) body.sha = sha;
-
-      const p = await fetch(api, {
-        method: 'PUT',
-        headers: { ...headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+      // 统一同步：库存（内存数据）+ 记录（本机草稿）
+      const result = await SHUFA_STORE.syncAll({
+        inventory: { updatedAt: new Date().toISOString().slice(0, 10), items: state.data }
       });
-      if (!p.ok) {
-        const err = await p.json().catch(() => ({}));
-        throw new Error('写入失败 HTTP ' + p.status + (err.message ? '：' + err.message : ''));
-      }
+      const parts = result.synced.length ? result.synced.join(' + ') : '无本地改动';
       localStorage.removeItem(LS_DATA);
-      setStatus('✓ 同步成功 · Obsidian 稍后自动更新', 'ok');
+      setStatus('✓ 已同步（' + parts + '）· Obsidian 稍后自动更新', 'ok');
     } catch (err) {
       setStatus('✗ ' + err.message, 'err');
     } finally {

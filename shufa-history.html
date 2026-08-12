@@ -305,9 +305,10 @@
     const btn = $('btnSync');
     btn.textContent = '同步中…';
     try {
-      await SHUFA_STORE.syncToGitHub('records',
-        { updatedAt: new Date().toISOString().slice(0,10), records: state.records },
-        '记录同步 ' + new Date().toISOString().slice(0,10));
+      // 记录用当前内存数据
+      await SHUFA_STORE.syncAll({
+        records: { updatedAt: new Date().toISOString().slice(0,10), records: state.records }
+      });
       btn.textContent = '✓ 已同步';
       setTimeout(() => btn.textContent = '🔄 同步', 2000);
     } catch (err) {
