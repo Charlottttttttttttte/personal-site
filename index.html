@@ -3,14 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFF9F0" />
   <title>Charlotte · 作品集与数字花园</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============ 摩天轮风格（源自 demo-i） ============ */
+    :root{
+      --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+      --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html{scroll-behavior:smooth;}
+    html,body{
+      background:var(--paper);
+      background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);
+      background-size:34px 34px;
+      color:var(--ink);
+      font-family:'Noto Sans SC',sans-serif;
+      line-height:1.7;
+      overflow-x:hidden;
+    }
+    .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
+
+    /* ---------- 导航 ---------- */
+    .site-header{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;justify-content:space-between;align-items:center;
+      padding:calc(env(safe-area-inset-top) + 12px) 6vw 12px;
+      background:rgba(255,249,240,.9);backdrop-filter:blur(6px);
+      border-bottom:3px solid var(--ink);
+    }
+    .brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;letter-spacing:.5px;}
+    .brand b{color:var(--pink);}
+    .site-nav{display:flex;gap:10px;}
+    .site-nav a{
+      font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;
+      border:2px solid var(--ink);border-radius:999px;padding:3px 14px;background:var(--card);
+      box-shadow:2px 2px 0 var(--ink);transition:transform .15s,box-shadow .15s;
+    }
+    .site-nav a:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+
+    /* ---------- 第一屏：3D + 文字 ---------- */
+    .hero{
+      position:relative;height:100svh;min-height:560px;
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      overflow:hidden;
+      background:linear-gradient(180deg,#FFF4DF 0%,var(--paper) 90%);
+    }
+    #hero-3d{position:absolute;inset:0;width:100%;height:100%;display:block;}
+    .hero-content{position:relative;z-index:2;padding:0 6vw;}
+    .hero-name{
+      font-family:'Fredoka',sans-serif;font-weight:700;
+      font-size:clamp(2.6rem,9vw,5rem);line-height:1.05;letter-spacing:.01em;
+      color:var(--ink);position:relative;
+    }
+    .hero-name .c1{color:var(--pink);}
+    .hero-name .c2{color:var(--blue);}
+    .hero-name .c3{color:var(--yellow);}
+    .hero-name .c4{color:var(--teal);}
+    .hero-name .c5{color:var(--pink);}
+    .hero-tagline{
+      margin-top:16px;font-size:clamp(1rem,3vw,1.35rem);color:var(--ink);opacity:.75;font-weight:500;
+    }
+    .scroll-hint{
+      position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+      font-family:'Fredoka',sans-serif;font-size:13px;letter-spacing:.3em;color:var(--ink);
+      background:var(--card);border:3px solid var(--ink);border-radius:12px;
+      padding:6px 16px;box-shadow:3px 3px 0 var(--ink);z-index:2;
+    }
+    .scroll-hint .arrow{display:block;text-align:center;font-size:22px;margin-top:2px;}
+
+    /* ---------- 正在学 ---------- */
+    .learning-bar{
+      max-width:1080px;margin:0 auto;padding:28px 6vw;
+      border-bottom:3px solid var(--ink);
+    }
+    .section-label{
+      font-family:'Fredoka',sans-serif;font-size:13px;letter-spacing:.3em;color:var(--ink);
+      margin-bottom:12px;font-weight:600;
+    }
+    .learning-items{display:flex;flex-wrap:wrap;gap:12px;}
+    .pill{
+      padding:8px 18px;border-radius:999px;background:var(--card);
+      border:3px solid var(--ink);font-size:.92rem;font-weight:600;
+      box-shadow:4px 4px 0 var(--ink);
+    }
+    .pill:nth-child(1){background:var(--pink);transform:rotate(-1deg);}
+    .pill:nth-child(2){background:var(--blue);transform:rotate(1deg);}
+
+    /* ---------- 通用区块 ---------- */
+    .section{max-width:1080px;margin:0 auto;padding:80px 6vw;}
+    .section-title{
+      font-family:'Fredoka',sans-serif;font-weight:700;
+      font-size:clamp(1.6rem,4vw,2.2rem);margin-bottom:8px;letter-spacing:.01em;
+      display:inline-block;background:var(--yellow);border:3px solid var(--ink);
+      border-radius:14px;padding:6px 22px;box-shadow:5px 5px 0 var(--ink);transform:rotate(-1deg);
+    }
+    .section-desc{color:var(--ink);opacity:.7;margin-bottom:28px;}
+
+    /* ---------- 作品集 ---------- */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+    .card{
+      background:var(--card);border:3px solid var(--ink);border-radius:16px;
+      box-shadow:7px 7px 0 var(--ink);overflow:hidden;
+      display:block;text-decoration:none;color:inherit;
+      transition:transform .15s,box-shadow .15s;
+    }
+    .card:hover{transform:translateY(-3px);}
+    .card:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
+    .card-cover{
+      height:150px;display:flex;align-items:center;justify-content:center;
+      font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;
+      border-bottom:3px solid var(--ink);letter-spacing:.15em;
+    }
+    .cover-finance{background:var(--pink);}
+    .cover-calligraphy{background:var(--teal);}
+    .cover-wiki{background:var(--blue);}
+    .card-body{padding:16px 20px 20px;}
+    .card-body h3{font-size:1.05rem;margin-bottom:6px;font-weight:800;}
+    .card-body p{font-size:.88rem;opacity:.65;}
+
+    /* ---------- 数字花园 / 关于 ---------- */
+    .garden-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+    .garden-list li{
+      padding:14px 18px;background:var(--card);border:3px solid var(--ink);
+      border-radius:12px;box-shadow:4px 4px 0 var(--ink);font-weight:600;
+    }
+    .garden-list li:nth-child(1){background:var(--teal);transform:rotate(-.5deg);}
+    .garden-list li:nth-child(2){background:var(--yellow);transform:rotate(.5deg);}
+    .about .section-desc{max-width:640px;}
+
+    /* ---------- Footer ---------- */
+    .site-footer{
+      text-align:center;padding:30px 6vw 36px;
+      border-top:3px solid var(--ink);opacity:.6;font-size:.88rem;
+    }
+    .site-footer a{color:var(--ink);}
+
+    @media (max-width:768px){
+      .site-header{padding:calc(env(safe-area-inset-top) + 10px) 5vw 10px;}
+      .site-nav{gap:7px;}
+      .section{padding:56px 5vw;}
+      .card-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
 <body>
 
   <!-- 导航 -->
   <header class="site-header">
-    <a class="brand" href="#hero">Charlotte</a>
+    <a class="brand" href="#hero">Charlotte<b>.</b></a>
     <nav class="site-nav">
       <a href="#works">作品集</a>
       <a href="#garden">数字花园</a>
@@ -22,10 +166,12 @@
   <section id="hero" class="hero">
     <canvas id="hero-3d" aria-hidden="true"></canvas>
     <div class="hero-content">
-      <h1 class="hero-name">Charlotte</h1>
+      <h1 class="hero-name">
+        <span class="c1">C</span><span class="c2">h</span><span class="c3">a</span><span class="c4">r</span><span class="c5">l</span>otte
+      </h1>
       <p class="hero-tagline">用 AI 做视频和网站的创作者</p>
     </div>
-    <div class="scroll-hint">向下滚动 ↓</div>
+    <div class="scroll-hint">向下滚动<span class="arrow">↓</span></div>
   </section>
 
   <!-- 正在学状态条 -->

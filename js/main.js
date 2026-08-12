@@ -18,22 +18,27 @@
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.z = 6;
 
-  // 占位物体：旋转线框二十面体 + 环绕粒子
+  // 占位物体：旋转线框二十面体 + 环绕粒子（摩天轮配色：墨黑线框 + 四色粒子）
   const geo = new THREE.IcosahedronGeometry(1.6, 1);
-  const mat = new THREE.MeshBasicMaterial({ color: 0x7c6cff, wireframe: true });
+  const mat = new THREE.MeshBasicMaterial({ color: 0x17171a, wireframe: true });
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
 
   const particleCount = 400;
   const pGeo = new THREE.BufferGeometry();
   const positions = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount * 3; i += 3) {
-    positions[i]     = (Math.random() - 0.5) * 20;
-    positions[i + 1] = (Math.random() - 0.5) * 20;
-    positions[i + 2] = (Math.random() - 0.5) * 20;
+  const colors = new Float32Array(particleCount * 3);
+  const palette = [0xff87ab, 0xffd23f, 0x6fb1ff, 0x4ecdc4];
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3]     = (Math.random() - 0.5) * 20;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+    const c = new THREE.Color(palette[i % 4]);
+    colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
   }
   pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const pMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.04, transparent: true, opacity: 0.6 });
+  pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const pMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.9, vertexColors: true });
   const particles = new THREE.Points(pGeo, pMat);
   scene.add(particles);
 
