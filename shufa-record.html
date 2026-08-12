@@ -147,6 +147,7 @@
   </div>
 
   <div class="save-btn" id="btnSave">记录练习</div>
+  <div class="save-btn" id="btnSync" style="background:var(--teal);margin-top:12px;">🔄 保存并同步</div>
 </main>
 
 <nav class="tabbar">
@@ -299,9 +300,14 @@
 
   // ---------- 保存 ----------
   function save() {
+    const ok = saveLocal();
+    if (ok) setTimeout(() => location.href = 'shufa-calendar.html', 500);
+  }
+
+  function saveLocal() {
     const date = $('dateInput').value || todayStr();
     const qtyNum = parseFloat($('fQty').value) || 0;
-    if (qtyNum <= 0) { alert('请填写数量'); return; }
+    if (qtyNum <= 0) { alert('请填写数量'); return false; }
     const meters = calcMeters();
 
     // 纸型 snapshot
@@ -376,8 +382,8 @@
     // 保存草稿
     const recData = { updatedAt: new Date().toISOString().slice(0,10), records: state.records };
     SHUFA_STORE.saveDraft('records', recData);
-    setStatus('已保存草稿 · 点底部可同步');
-    setTimeout(() => location.href = 'shufa-calendar.html', 500);
+    setStatus('已保存草稿 · 点 🔄 同步发布');
+    return true;
   }
 
   // ---------- 编辑加载 ----------
@@ -404,6 +410,34 @@
     calcMeters();
   }
 
+  // ---------- 保存并同步 ----------
+  async function saveAndSync() {
+    if (!saveLocal()) return;
+    const token = SHUFA_STORE.getToken();
+    if (!token) {
+      const t = prompt('请先输入 GitHub 令牌：');
+      if (!t) return;
+      SHUFA_STORE.setToken(t.trim());
+    }
+    setStatus('同步中…');
+    try {
+      await SHUFA_STORE.syncToGitHub('records',
+        { updatedAt: new Date().toISOString().slice(0,10), records: state.records },
+        '记录同步 ' + new Date().toISOString().slice(0,10));
+      // 库存草稿也同步
+      try {
+        const inv = await SHUFA_STORE.load('inventory');
+        if (inv.fromDraft) {
+          await SHUFA_STORE.syncToGitHub('inventory', inv.data, '库存同步 ' + new Date().toISOString().slice(0,10));
+        }
+      } catch (e) {}
+      setStatus('✓ 已保存并同步！', 'ok');
+      setTimeout(() => location.href = 'shufa-calendar.html', 800);
+    } catch (err) {
+      setStatus('✗ 同步失败：' + err.message + '（已存本机，可稍后同步）', 'err');
+    }
+  }
+
   // ---------- 启动 ----------
   initOptions();
   setTypeUI('sheet');
@@ -411,6 +445,7 @@
 
   $('btnParse').addEventListener('click', parseAndFill);
   $('btnSave').addEventListener('click', save);
+  $('btnSync').addEventListener('click', saveAndSync);
   $('btnSheet').addEventListener('click', () => setTypeUI('sheet'));
   $('btnScroll').addEventListener('click', () => setTypeUI('scroll'));
   $('fPaper').addEventListener('change', calcMeters);

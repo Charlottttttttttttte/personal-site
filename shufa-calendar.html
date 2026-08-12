@@ -122,6 +122,13 @@
 
   <div class="sec-title">最近记录 <span class="more">点日期可补记</span></div>
   <div id="recentList"><div class="empty-note">还没有练习记录，点上方按钮开始</div></div>
+
+  <!-- 一键同步（改完数据后点这里，发布到 GitHub + Obsidian 自动更新） -->
+  <div style="margin-top:20px;display:flex;gap:10px;">
+    <div class="quick-btn scroll" id="btnSync" style="flex:1;background:var(--yellow);margin:0;">🔄 一键同步</div>
+    <div class="quick-btn sheet" id="btnToken" style="flex:0 0 auto;background:var(--card);margin:0;padding:14px 16px;">🔑</div>
+  </div>
+  <div style="text-align:center;font-size:.72rem;opacity:.55;margin-top:8px;">本地修改会在本机保存，点同步后发布到网站并同步 Obsidian</div>
 </main>
 
 <!-- tabBar -->
@@ -272,7 +279,37 @@
     renderRecent();
   }
 
+  // ---------- 一键同步（records + inventory） ----------
+  async function syncAll() {
+    const token = SHUFA_STORE.getToken();
+    if (!token) {
+      const t = prompt('请先输入 GitHub 令牌（令牌设置）：');
+      if (!t) return;
+      SHUFA_STORE.setToken(t.trim());
+    }
+    setStatus('同步中…');
+    try {
+      const recData = { updatedAt: new Date().toISOString().slice(0, 10), records: state.records };
+      await SHUFA_STORE.syncToGitHub('records', recData, '记录同步 ' + new Date().toISOString().slice(0, 10));
+      // 库存也一起同步（如果本机有草稿）
+      try {
+        const inv = await SHUFA_STORE.load('inventory');
+        if (inv.fromDraft) {
+          await SHUFA_STORE.syncToGitHub('inventory', inv.data, '库存同步 ' + new Date().toISOString().slice(0, 10));
+        }
+      } catch (e) { /* 库存同步失败不阻塞 */ }
+      setStatus('✓ 同步成功！Obsidian 稍后自动更新', 'ok');
+    } catch (err) {
+      setStatus('✗ ' + err.message, 'err');
+    }
+  }
+
   // ---------- 事件 ----------
+  $('btnSync').addEventListener('click', syncAll);
+  $('btnToken').addEventListener('click', () => {
+    const t = prompt('输入 GitHub 令牌（留空取消）：', '');
+    if (t) { SHUFA_STORE.setToken(t.trim()); setStatus('令牌已保存', 'ok'); }
+  });
   $('btnPrev').addEventListener('click', () => {
     state.month--;
     if (state.month < 1) { state.month = 12; state.year--; }
