@@ -27,11 +27,27 @@ OUT_REC = os.path.join(OBS_DIR, "练习记录.md")
 
 TYPE_LABEL = {"长卷": "长卷", "刀纸": "刀纸", "条屏": "条屏"}
 
+REPO_API = "https://api.github.com/repos/Charlottttttttttttte/personal-site/contents"
+
 
 def fetch_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "shufa-sync"})
     with urllib.request.urlopen(req, timeout=15) as resp:
         return json.loads(resp.read().decode("utf-8"))
+
+
+def fetch_file_dual(raw_url, api_path):
+    """双通道拉取：raw 优先，失败/超时切 api.github.com（base64 解码）"""
+    import base64
+    # 通道1: raw
+    try:
+        return fetch_json(raw_url)
+    except Exception as e1:
+        print(f"  raw 通道失败({e1})，切换 api 通道")
+    # 通道2: api
+    data = fetch_json(f"{REPO_API}/{api_path}")
+    content = base64.b64decode(data["content"]).decode("utf-8")
+    return json.loads(content)
 
 
 def inventory_md(items):
@@ -113,7 +129,7 @@ def main():
         os.makedirs(OBS_DIR, exist_ok=True)
         # 库存
         try:
-            inv = fetch_json(REPO_RAW_INV)
+            inv = fetch_file_dual(REPO_RAW_INV, "data/shufa-inventory.json")
             items = inv.get("items", [])
             if items:
                 with open(OUT_INV, "w", encoding="utf-8") as f:
@@ -123,7 +139,7 @@ def main():
             print(f"⚠ 库存拉取失败：{e}")
         # 记录
         try:
-            rec = fetch_json(REPO_RAW_REC)
+            rec = fetch_file_dual(REPO_RAW_REC, "data/shufa-records.json")
             records = rec.get("records", [])
             with open(OUT_REC, "w", encoding="utf-8") as f:
                 f.write(records_md(records))
