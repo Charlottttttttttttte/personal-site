@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#0b0e14" />
+<title>临池录 · 纸张库存 · Charlotte</title>
+<link rel="manifest" href="manifest-shufa.json" />
+<link rel="apple-touch-icon" href="img/icon-192.png" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* 库存页专属样式：暗色系与首页一致 */
+  .inv-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: calc(env(safe-area-inset-top) + 100px) 6vw 60px;
+  }
+  .inv-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .inv-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .inv-sub { color: var(--fg-dim); font-size: .9rem; }
+  .inv-desc { color: var(--fg-dim); margin-bottom: 26px; font-size: .95rem; }
+
+  /* 操作栏 */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: var(--bg-soft);
+    color: var(--fg);
+    font-size: .92rem;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .btn:hover { border-color: rgba(124,108,255,.6); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+  .btn.danger { border-color: rgba(255,92,92,.5); color: #ff8f8f; }
+  .btn.danger:hover { border-color: #ff5c5c; background: rgba(255,92,92,.12); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.small { padding: 5px 12px; font-size: .82rem; border-radius: 8px; }
+
+  .sync-status {
+    font-size: .85rem;
+    color: var(--fg-dim);
+    margin-bottom: 4px;
+    min-height: 1.4em;
+  }
+  .sync-status.ok { color: #7fd6a0; }
+  .sync-status.err { color: #ff8f8f; }
+
+  /* 统计条 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+  .stat {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .stat .num { font-size: 1.5rem; font-weight: 800; }
+  .stat .lab { font-size: .8rem; color: var(--fg-dim); margin-top: 2px; }
+  .stat .num.lv { color: #7fd6a0; }
+  .stat .num.dz { color: #7c9cff; }
+  .stat .num.tp { color: #ff9c7c; }
+
+  /* 筛选 tab */
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    border: 1px solid rgba(255,255,255,.12);
+    color: var(--fg-dim);
+    font-size: .9rem;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .tab:hover { color: var(--fg); border-color: rgba(124,108,255,.5); }
+  .tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* 库存列表 */
+  .inv-list { display: flex; flex-direction: column; gap: 12px; }
+  .inv-item {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+  .inv-item:hover { border-color: rgba(124,108,255,.5); }
+  .inv-left { min-width: 0; flex: 1; }
+  .inv-name { font-weight: 700; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .inv-id { font-size: .75rem; color: var(--fg-dim); background: var(--bg-soft); padding: 1px 8px; border-radius: 6px; font-family: ui-monospace, monospace; }
+  .inv-spec { font-size: .85rem; color: var(--fg-dim); margin-top: 4px; }
+  .inv-right { text-align: right; flex: 0 0 auto; }
+  .inv-qty { font-weight: 800; font-size: 1.05rem; }
+  .inv-qty small { font-size: .8rem; color: var(--fg-dim); font-weight: 400; }
+
+  .tag {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 1px 9px;
+    border-radius: 999px;
+    margin-left: 2px;
+    vertical-align: 1px;
+  }
+  .tag-lv { background: rgba(127,214,160,.15); color: #7fd6a0; border: 1px solid rgba(127,214,160,.35); }
+  .tag-dz { background: rgba(124,156,255,.15); color: #7c9cff; border: 1px solid rgba(124,156,255,.35); }
+  .tag-tp { background: rgba(255,156,124,.15); color: #ff9c7c; border: 1px solid rgba(255,156,124,.35); }
+
+  .inv-empty, .inv-error {
+    text-align: center;
+    color: var(--fg-dim);
+    padding: 50px 0;
+    font-size: .95rem;
+  }
+  .inv-error a { color: var(--accent); }
+
+  /* 编辑模式 */
+  .edit-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .edit-qty {
+    width: 72px;
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,.2);
+    color: var(--fg);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-family: inherit;
+  }
+  .edit-note { font-size: .75rem; color: var(--fg-dim); }
+  .item-del { margin-left: 4px; }
+
+  .add-form {
+    margin-top: 20px;
+    background: var(--card-bg);
+    border: 1px dashed rgba(255,255,255,.25);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .add-form h4 { margin-bottom: 12px; font-size: .95rem; color: var(--fg-dim); }
+  .add-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .add-row input, .add-row select {
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,.2);
+    color: var(--fg);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: .9rem;
+    font-family: inherit;
+  }
+  .add-row input.name { flex: 1; min-width: 140px; }
+  .add-row input.num { width: 80px; }
+
+  .back-home { display: inline-block; margin-top: 30px; color: var(--fg-dim); font-size: .9rem; text-decoration: none; }
+  .back-home:hover { color: var(--fg); }
+
+  @media (max-width: 520px) {
+    .inv-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .inv-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">Charlotte</a>
+  <nav class="site-nav">
+    <a href="index.html#works">作品集</a>
+    <a href="index.html#garden">数字花园</a>
+    <a href="index.html#about">关于</a>
+  </nav>
+</header>
+
+<main class="inv-page">
+  <div class="inv-head">
+    <h1 class="inv-title">临池录 · 纸张库存</h1>
+    <span class="inv-sub" id="updateAt"></span>
+  </div>
+  <p class="inv-desc">书法练习纸张清点 · 手机可直接编辑并一键同步</p>
+
+  <div class="sync-status" id="syncStatus">数据加载中…</div>
+
+  <div class="toolbar">
+    <button class="btn primary" id="btnEdit">✏️ 编辑库存</button>
+    <button class="btn" id="btnSync">🔄 一键同步</button>
+    <button class="btn" id="btnToken">🔑 令牌设置</button>
+    <button class="btn danger" id="btnDiscard" style="display:none">放弃修改</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="inv-list" id="list">
+    <div class="inv-empty">加载中…</div>
+  </div>
+
+  <!-- 编辑模式下的新增表单 -->
+  <div class="add-form" id="addForm" style="display:none">
+    <h4>＋ 新增库存</h4>
+    <div class="add-row">
+      <select id="addType">
+        <option value="长卷">长卷</option>
+        <option value="刀纸">刀纸</option>
+        <option value="条屏">条屏</option>
+      </select>
+      <input class="name" id="addName" placeholder="纸张名称（如：新购宣纸）" />
+    </div>
+    <div class="add-row">
+      <input class="num" id="addQty" type="number" min="1" placeholder="数量" />
+      <input class="num" id="addMeters" type="number" step="0.5" placeholder="米数(长卷)" />
+      <input class="name" id="addSpec" placeholder="尺寸规格（如：四尺对开）" />
+      <button class="btn primary small" id="btnAdd">添加</button>
+    </div>
+  </div>
+
+  <a class="back-home" href="index.html">← 返回首页</a>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Charlotte · 临池录纸张库存 · <a href="#" id="resetLocal">重置本机缓存</a></p>
+</footer>
+
+<script>
+(() => {
+  const REPO = 'Charlottttttttttttte/personal-site';
+  const PATH = 'data/shufa-inventory.json';
+  const LS_DATA = 'shufa_inv_local';     // 本机编辑的草稿数据
+  const LS_TOKEN = 'shufa_gh_token';     // GitHub 令牌
+  const TYPE_CLS = { '长卷': 'lv', '刀纸': 'dz', '条屏': 'tp' };
+
+  const $ = (id) => document.getElementById(id);
+  const state = { data: [], filter: '全部', editing: false };
+
+  // ---------- 工具函数 ----------
+  function qtyText(item) {
+    if (item.type === '长卷') {
+      if (item.meters) return `${item.meters} 米`;
+      return item.qty ? `${item.qty} 卷` : '—';
+    }
+    return item.qty ? `${item.qty} 张` : '—';
+  }
+
+  function setStatus(msg, kind) {
+    const el = $('syncStatus');
+    el.textContent = msg;
+    el.className = 'sync-status' + (kind ? ' ' + kind : '');
+  }
+
+  // ---------- 数据加载：本地草稿 > 仓库 JSON ----------
+  async function load() {
+    try {
+      const draft = localStorage.getItem(LS_DATA);
+      if (draft) {
+        state.data = JSON.parse(draft).items || [];
+        setStatus('已加载本机草稿（未同步到网站）', 'ok');
+        $('btnDiscard').style.display = '';
+      } else {
+        const r = await fetch(PATH);
+        if (!r.ok) throw new Error(r.status);
+        const json = await r.json();
+        state.data = json.items || [];
+        if (json.updatedAt) $('updateAt').textContent = `更新于 ${json.updatedAt}`;
+        setStatus('已加载网站最新数据');
+      }
+    } catch (err) {
+      setStatus('加载失败：' + err.message + '（请通过 HTTP 服务访问）', 'err');
+    }
+    render();
+  }
+
+  function saveDraft() {
+    localStorage.setItem(LS_DATA, JSON.stringify({ updatedAt: new Date().toISOString().slice(0, 10), items: state.data }));
+  }
+
+  // ---------- 渲染 ----------
+  function renderStats() {
+    const lv = state.data.filter(i => i.type === '长卷');
+    const dz = state.data.filter(i => i.type === '刀纸');
+    const tp = state.data.filter(i => i.type === '条屏');
+    const totalMeters = lv.reduce((s, i) => s + (i.meters || 0), 0);
+    const totalSheets = [...dz, ...tp].reduce((s, i) => s + (i.qty || 0), 0);
+    $('stats').innerHTML = `
+      <div class="stat"><div class="num">${state.data.length}</div><div class="lab">库存件数</div></div>
+      <div class="stat"><div class="num lv">${lv.length}</div><div class="lab">长卷</div></div>
+      <div class="stat"><div class="num dz">${dz.length}</div><div class="lab">刀纸</div></div>
+      <div class="stat"><div class="num tp">${tp.length}</div><div class="lab">条屏</div></div>
+      <div class="stat"><div class="num lv">${totalMeters}</div><div class="lab">长卷总米数</div></div>
+      <div class="stat"><div class="num dz">${totalSheets}</div><div class="lab">纸品总张数</div></div>
+    `;
+  }
+
+  function renderTabs() {
+    const counts = { '全部': state.data.length };
+    for (const t of ['长卷', '刀纸', '条屏']) counts[t] = state.data.filter(i => i.type === t).length;
+    $('tabs').innerHTML = Object.entries(counts).map(([t, n]) =>
+      `<button class="tab ${state.filter === t ? 'active' : ''}" data-t="${t}">${t} ${n}</button>`
+    ).join('');
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => { state.filter = btn.dataset.t; renderTabs(); renderList(); });
+    });
+  }
+
+  function renderList() {
+    const items = state.filter === '全部' ? state.data : state.data.filter(i => i.type === state.filter);
+    if (!items.length) {
+      $('list').innerHTML = '<div class="inv-empty">没有匹配的库存。</div>';
+      return;
+    }
+    $('list').innerHTML = items.map((i, idx) => {
+      const cls = TYPE_CLS[i.type] || 'dz';
+      const isLong = i.type === '长卷';
+      const editHtml = state.editing ? `
+        <div class="edit-controls">
+          <input class="edit-qty" type="number" min="0" step="${isLong ? '0.5' : '1'}"
+                 value="${isLong ? (i.meters ?? '') : (i.qty ?? '')}"
+                 data-idx="${idx}" placeholder="${isLong ? '米数' : '张数'}" />
+          <span class="edit-note">${isLong ? '米' : '张'}</span>
+          <button class="btn danger small item-del" data-idx="${idx}">删除</button>
+        </div>` : '';
+      return `
+        <div class="inv-item">
+          <div class="inv-left">
+            <div class="inv-name">${i.name}
+              <span class="tag tag-${cls}">${i.type}</span>
+              <span class="inv-id">${i.id}</span>
+            </div>
+            <div class="inv-spec">${i.spec || '—'}</div>
+            ${editHtml}
+          </div>
+          <div class="inv-right"><div class="inv-qty">${qtyText(i)}</div></div>
+        </div>`;
+    }).join('');
+    if (state.editing) bindEditControls();
+  }
+
+  function bindEditControls() {
+    document.querySelectorAll('.edit-qty').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const idx = parseInt(inp.dataset.idx);
+        const item = filteredItem(idx);
+        if (!item) return;
+        const isLong = item.type === '长卷';
+        const val = parseFloat(inp.value);
+        if (isLong) item.meters = isNaN(val) ? null : val;
+        else item.qty = isNaN(val) ? null : Math.round(val);
+        saveDraft();
+        render();
+      });
+    });
+    document.querySelectorAll('.item-del').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx);
+        const item = filteredItem(idx);
+        if (!item) return;
+        if (!confirm(`删除「${item.name}」？`)) return;
+        state.data = state.data.filter(x => x !== item);
+        saveDraft();
+        render();
+      });
+    });
+  }
+
+  // 编辑控件里 data-idx 是"当前筛选视图"的索引，需要映射回原始数据
+  function filteredItem(idx) {
+    const items = state.filter === '全部' ? state.data : state.data.filter(i => i.type === state.filter);
+    const item = items[idx];
+    return item;
+  }
+
+  // ---------- 编辑模式开关 ----------
+  function toggleEdit() {
+    state.editing = !state.editing;
+    $('btnEdit').textContent = state.editing ? '✅ 完成编辑' : '✏️ 编辑库存';
+    $('addForm').style.display = state.editing ? '' : 'none';
+    render();
+  }
+
+  function addItem() {
+    const type = $('addType').value;
+    const name = $('addName').value.trim();
+    if (!name) { alert('请填写纸张名称'); return; }
+    const qtyRaw = $('addQty').value;
+    const metersRaw = $('addMeters').value;
+    const qty = qtyRaw ? parseInt(qtyRaw) : null;
+    const meters = metersRaw ? parseFloat(metersRaw) : null;
+    const spec = $('addSpec').value.trim();
+    const maxNum = state.data.reduce((m, i) => {
+      const m2 = /库存-(\d+)/.exec(i.id || '');
+      const n = m2 ? parseInt(m2[1]) : 0;
+      return Math.max(m, isNaN(n) ? 0 : n);
+    }, 0);
+    const item = {
+      id: '库存-' + (maxNum + 1),
+      type, name, qty: type === '长卷' ? (qty || 1) : qty,
+      meters: type === '长卷' ? meters : null,
+      spec
+    };
+    state.data.unshift(item);
+    $('addName').value = ''; $('addQty').value = ''; $('addMeters').value = ''; $('addSpec').value = '';
+    saveDraft();
+    render();
+    setStatus('已添加到本机草稿，点击「一键同步」发布到网站', 'ok');
+  }
+
+  // ---------- 一键同步到 GitHub ----------
+  function getToken() {
+    return localStorage.getItem(LS_TOKEN) || '';
+  }
+
+  function setToken() {
+    const cur = getToken();
+    const val = prompt(cur ? '当前令牌已设置，输入新令牌可替换（留空不修改）：' : '请输入 GitHub 令牌（Fine-grained PAT）：', cur ? '' : '');
+    if (val === null) return;
+    const t = val.trim();
+    if (!t) return;
+    localStorage.setItem(LS_TOKEN, t);
+    setStatus('令牌已保存（仅存于本浏览器）', 'ok');
+  }
+
+  function utf8ToBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin);
+  }
+
+  async function syncToGitHub() {
+    const token = getToken();
+    if (!token) {
+      alert('请先点击「令牌设置」输入 GitHub 令牌，再执行同步。');
+      return;
+    }
+    $('btnSync').disabled = true;
+    setStatus('正在同步…');
+    try {
+      const api = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+      const headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
+      // 1) 获取当前文件 sha
+      let sha = null;
+      try {
+        const g = await fetch(api, { headers });
+        if (g.ok) { const meta = await g.json(); sha = meta.sha; }
+        else if (g.status !== 404) throw new Error('读取失败 HTTP ' + g.status);
+      } catch (e) { throw new Error('读取文件失败：' + e.message); }
+
+      // 2) 写入新内容
+      const content = utf8ToBase64(JSON.stringify({
+        updatedAt: new Date().toISOString().slice(0, 10),
+        items: state.data
+      }, null, 2));
+      const body = { message: '库存同步 ' + new Date().toISOString().slice(0, 10), content };
+      if (sha) body.sha = sha;
+
+      const p = await fetch(api, {
+        method: 'PUT',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!p.ok) {
+        const err = await p.json().catch(() => ({}));
+        throw new Error('写入失败 HTTP ' + p.status + (err.message ? '：' + err.message : ''));
+      }
+      // 成功：清草稿、刷新
+      localStorage.removeItem(LS_DATA);
+      $('btnDiscard').style.display = 'none';
+      $('updateAt').textContent = '更新于 ' + new Date().toISOString().slice(0, 10);
+      setStatus('✓ 同步成功！数据已发布到网站，Obsidian 稍后自动更新', 'ok');
+    } catch (err) {
+      setStatus('✗ ' + err.message, 'err');
+    } finally {
+      $('btnSync').disabled = false;
+    }
+  }
+
+  function discardLocal() {
+    if (!confirm('放弃本机修改，重新加载网站数据？')) return;
+    localStorage.removeItem(LS_DATA);
+    location.reload();
+  }
+
+  // ---------- 事件绑定 ----------
+  $('btnEdit').addEventListener('click', toggleEdit);
+  $('btnSync').addEventListener('click', syncToGitHub);
+  $('btnToken').addEventListener('click', setToken);
+  $('btnAdd').addEventListener('click', addItem);
+  $('btnDiscard').addEventListener('click', discardLocal);
+  $('resetLocal').addEventListener('click', (e) => { e.preventDefault(); discardLocal(); });
+
+  // 启动
+  load();
+})();
+</script>
+</body>
+</html>

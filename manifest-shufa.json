@@ -1,0 +1,23 @@
+{
+  "name": "临池录 · 纸张库存",
+  "short_name": "临池录库存",
+  "description": "书法纸张库存管理：查看、编辑、一键同步到 Obsidian",
+  "start_url": "./shufa-inventory.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0e14",
+  "theme_color": "#0b0e14",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
