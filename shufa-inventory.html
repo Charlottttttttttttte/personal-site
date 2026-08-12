@@ -12,9 +12,9 @@
 <link rel="apple-touch-icon" href="img/icon-192.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  /* ============ 摩天轮风格（源自 demo-i） ============ */
+  /* ============ 摩天轮风格 + 小程序同款库存交互 ============ */
   :root{
     --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
     --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
@@ -28,163 +28,159 @@
     font-family:'Noto Sans SC',sans-serif;
     overscroll-behavior:auto;-webkit-overflow-scrolling:touch;
   }
-  body{min-height:100vh;position:relative;}
+  body{min-height:100vh;position:relative;padding-bottom:110px;}
   .fun{font-family:'Fredoka',sans-serif;font-variant-numeric:tabular-nums;}
 
-  /* ---------- 顶部导航：纸白胶囊 ---------- */
   .site-header{
     position:fixed;top:0;left:0;right:0;z-index:100;
     display:flex;justify-content:space-between;align-items:center;
     padding:calc(env(safe-area-inset-top) + 12px) 6vw 12px;
-    background:rgba(255,249,240,.9);backdrop-filter:blur(6px);
+    background:rgba(255,249,240,.92);backdrop-filter:blur(6px);
     border-bottom:3px solid var(--ink);
   }
-  .brand{
-    font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;
-    color:var(--ink);text-decoration:none;letter-spacing:.5px;
-  }
+  .brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;}
   .brand b{color:var(--pink);}
-  .site-nav{display:flex;gap:10px;}
+  .site-nav{display:flex;gap:8px;}
   .site-nav a{
-    font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;
-    color:var(--ink);text-decoration:none;
-    border:2px solid var(--ink);border-radius:999px;
-    padding:3px 14px;background:var(--card);
-    box-shadow:2px 2px 0 var(--ink);transition:transform .15s,box-shadow .15s;
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:12.5px;color:var(--ink);text-decoration:none;
+    border:2px solid var(--ink);border-radius:999px;padding:2px 13px;background:var(--card);
+    box-shadow:2px 2px 0 var(--ink);
   }
-  .site-nav a:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
 
-  /* ---------- 主内容 ---------- */
-  .inv-page{
-    max-width:900px;margin:0 auto;
-    padding:calc(env(safe-area-inset-top) + 92px) 6vw 60px;
+  .page{
+    max-width:640px;margin:0 auto;
+    padding:calc(env(safe-area-inset-top) + 86px) 5vw 40px;
   }
-  .inv-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
-  .inv-title{
-    font-family:'Fredoka',sans-serif;font-weight:700;
-    font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.1;
-    letter-spacing:.01em;transform:rotate(-1deg);
-  }
-  .inv-title .dot{color:var(--pink);}
-  .inv-sub{font-size:.85rem;font-weight:600;opacity:.6;border:2px solid var(--ink);border-radius:999px;padding:2px 12px;background:var(--card);box-shadow:2px 2px 0 var(--ink);transform:rotate(1deg);}
-  .inv-desc{font-size:.92rem;opacity:.65;margin-bottom:24px;}
-
-  /* ---------- 操作栏 ---------- */
-  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-  .btn{
-    font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;
-    color:var(--ink);cursor:pointer;border:3px solid var(--ink);
-    border-radius:12px;padding:8px 18px;background:var(--card);
-    box-shadow:4px 4px 0 var(--ink);
-    transition:transform .15s,box-shadow .15s;
-  }
-  .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
-  .btn.primary{background:var(--pink);transform:rotate(-1deg);}
-  .btn.primary:active{transform:translate(3px,3px) rotate(-1deg);box-shadow:1px 1px 0 var(--ink);}
-  .btn.blue{background:var(--blue);}
-  .btn.yellow{background:var(--yellow);}
-  .btn.danger{background:#FFE3E3;border-color:var(--ink);color:#B33737;}
-  .btn:disabled{opacity:.5;cursor:not-allowed;}
-  .btn.small{padding:4px 12px;font-size:13px;border-radius:10px;box-shadow:3px 3px 0 var(--ink);}
-
-  .sync-status{font-size:.88rem;font-weight:600;margin-bottom:6px;min-height:1.5em;opacity:.85;}
+  .page-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:6px;}
+  .page-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.6rem,5vw,2.2rem);line-height:1.1;}
+  .page-title .dot{color:var(--pink);}
+  .sync-status{font-size:.8rem;font-weight:600;min-height:1.3em;margin-bottom:4px;opacity:.8;}
   .sync-status.ok{color:#2E7D5B;}
   .sync-status.err{color:#B33737;}
 
-  /* ---------- 统计卡 ---------- */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;margin-bottom:26px;}
+  /* ---------- 统计卡（小程序同款：3 项） ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
   .stat{
     background:var(--card);border:3px solid var(--ink);border-radius:16px;
-    box-shadow:6px 6px 0 var(--ink);padding:14px 16px;
-    transition:transform .15s,box-shadow .15s;
+    box-shadow:5px 5px 0 var(--ink);padding:14px 10px;text-align:center;
   }
-  .stat:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
   .stat:nth-child(1){background:var(--yellow);transform:rotate(-1deg);}
   .stat:nth-child(2){background:var(--pink);transform:rotate(1deg);}
-  .stat:nth-child(3){background:var(--blue);transform:rotate(-1deg);}
-  .stat:nth-child(4){background:var(--teal);transform:rotate(1deg);}
-  .stat:nth-child(5){background:var(--card);transform:rotate(-1deg);}
-  .stat:nth-child(6){background:var(--card);transform:rotate(1deg);}
-  .stat .num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.6rem;line-height:1.1;}
-  .stat .num.lv{color:#2E7D5B;}
-  .stat .num.dz{color:#2A5BA8;}
-  .stat .num.tp{color:#C2543C;}
-  .stat .lab{font-size:.78rem;font-weight:700;opacity:.7;margin-top:2px;}
+  .stat:nth-child(3){background:var(--teal);transform:rotate(-1deg);}
+  .stat .num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.45rem;line-height:1.15;}
+  .stat .lab{font-size:.74rem;font-weight:700;opacity:.75;margin-top:2px;}
 
-  /* ---------- 筛选 tab ---------- */
-  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-  .tab{
-    font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;
-    color:var(--ink);cursor:pointer;border:2.5px solid var(--ink);
-    border-radius:999px;padding:6px 18px;background:var(--card);
-    box-shadow:3px 3px 0 var(--ink);transition:transform .15s,box-shadow .15s;
+  /* ---------- 搜索栏 ---------- */
+  .search-bar{
+    position:relative;display:flex;align-items:center;margin-bottom:12px;
+    background:var(--card);border:3px solid var(--ink);border-radius:999px;
+    box-shadow:4px 4px 0 var(--ink);overflow:hidden;
   }
-  .tab:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
-  .tab.active{background:var(--yellow);}
+  .search-bar .si{font-size:1rem;padding:2px 10px;opacity:.5;}
+  .search-input{
+    flex:1;border:0;outline:0;background:transparent;font-size:.95rem;padding:11px 4px;color:var(--ink);font-family:inherit;
+  }
+  .search-clear{border:0;background:transparent;font-size:1.05rem;padding:0 14px;color:var(--ink);opacity:.5;cursor:pointer;}
 
-  /* ---------- 库存列表 ---------- */
-  .inv-list{display:flex;flex-direction:column;gap:14px;}
+  /* ---------- 筛选 ---------- */
+  .filter-bar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px;}
+  .filter-item{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:13.5px;color:var(--ink);cursor:pointer;
+    border:2.5px solid var(--ink);border-radius:999px;padding:6px 17px;background:var(--card);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .filter-item.active{background:var(--yellow);}
+
+  /* ---------- 库存列表（小程序同款：进度条卡片） ---------- */
+  .inv-list{display:flex;flex-direction:column;gap:13px;}
   .inv-item{
     background:var(--card);border:3px solid var(--ink);border-radius:16px;
-    box-shadow:6px 6px 0 var(--ink);padding:16px 18px;
-    display:flex;justify-content:space-between;align-items:center;gap:14px;
-    transition:transform .15s,box-shadow .15s;
+    box-shadow:5px 5px 0 var(--ink);padding:14px 16px 13px;cursor:pointer;
+    transition:transform .12s,box-shadow .12s;
   }
-  .inv-item:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
-  .inv-left{min-width:0;flex:1;}
-  .inv-name{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  .inv-id{font-size:.72rem;font-weight:600;opacity:.55;background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:0 7px;font-family:ui-monospace,monospace;}
-  .inv-spec{font-size:.85rem;opacity:.6;margin-top:4px;}
-  .inv-right{text-align:right;flex:0 0 auto;}
-  .inv-qty{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.15rem;}
-  .inv-qty small{font-size:.8rem;font-weight:400;opacity:.6;}
-
-  .tag{display:inline-block;font-family:'Fredoka',sans-serif;font-size:.74rem;font-weight:700;
-    padding:1px 10px;border-radius:999px;border:2px solid var(--ink);margin-left:2px;vertical-align:1px;}
-  .tag-lv{background:var(--teal);}
-  .tag-dz{background:var(--blue);}
-  .tag-tp{background:var(--pink);}
-
-  .inv-empty,.inv-error{text-align:center;opacity:.65;padding:50px 0;font-size:.95rem;}
-  .inv-error a{color:var(--blue);font-weight:700;}
-
-  /* ---------- 编辑控件 ---------- */
-  .edit-controls{display:flex;gap:8px;align-items:center;margin-top:10px;}
-  .edit-qty{
-    width:76px;background:var(--card);border:2.5px solid var(--ink);color:var(--ink);
-    border-radius:10px;padding:6px 10px;font-size:1rem;text-align:center;font-family:inherit;
-    box-shadow:2px 2px 0 var(--ink);
+  .inv-item:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .item-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .item-type{
+    font-family:'Fredoka',sans-serif;font-size:.74rem;font-weight:700;color:var(--ink);
+    border:2px solid var(--ink);border-radius:999px;padding:1px 10px;flex:0 0 auto;
   }
-  .edit-note{font-size:.78rem;font-weight:600;opacity:.6;}
-  .item-del{margin-left:4px;}
+  .type-scroll{background:var(--teal);}
+  .type-knife{background:var(--blue);}
+  .type-tp{background:var(--pink);}
+  .item-name{font-weight:800;font-size:1rem;flex:1;min-width:0;}
+  .item-id{font-size:.7rem;font-weight:600;opacity:.5;border:1.5px solid var(--ink);border-radius:6px;padding:0 6px;font-family:ui-monospace,monospace;}
+  .item-spec{font-size:.82rem;opacity:.6;margin-top:4px;}
+  .item-progress{margin-top:10px;}
+  .progress-bar{height:14px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;box-shadow:inset 1px 1px 0 rgba(23,23,26,.15);}
+  .progress-fill{height:100%;background:var(--pink);border-radius:999px;transition:width .4s ease;}
+  .progress-fill.warn{background:var(--yellow);}
+  .progress-fill.low{background:#FF6B6B;}
+  .progress-text{display:flex;justify-content:space-between;margin-top:4px;font-size:.8rem;font-weight:700;}
+  .progress-text .tt{opacity:.5;}
 
+  .empty-state{text-align:center;padding:60px 0;opacity:.6;}
+  .empty-state .ei{font-size:2.4rem;display:block;margin-bottom:8px;}
+  .empty-state .et{font-weight:800;font-size:1.05rem;}
+  .empty-state .ed{font-size:.85rem;margin-top:4px;}
+
+  /* ---------- 底部悬浮操作组（小程序同款 FAB） ---------- */
+  .fab-group{
+    position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom) + 24px);
+    display:flex;flex-direction:column;gap:12px;z-index:200;align-items:flex-end;
+  }
+  .fab{
+    width:58px;height:58px;border-radius:50%;border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.6rem;color:var(--ink);
+    box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s;
+  }
+  .fab:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .fab-main{width:64px;height:64px;background:var(--pink);font-size:2rem;}
+  .fab-sec{width:50px;height:50px;background:var(--yellow);font-size:1.25rem;}
+  .fab-ter{width:50px;height:50px;background:var(--blue);font-size:1.1rem;}
+
+  /* ---------- 底部操作面板（点条目弹出） ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:300;
+    background:var(--paper);border-top:4px solid var(--ink);
+    border-radius:20px 20px 0 0;box-shadow:0 -6px 0 rgba(23,23,26,.12);
+    padding:18px 20px calc(env(safe-area-inset-bottom) + 20px);
+    transform:translateY(105%);transition:transform .25s ease;
+  }
+  .sheet.open{transform:translateY(0);}
+  .sheet-mask{position:fixed;inset:0;background:rgba(23,23,26,.4);z-index:290;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .sheet-mask.open{opacity:1;pointer-events:auto;}
+  .sheet-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+  .sheet-close{border:2px solid var(--ink);background:var(--card);border-radius:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;}
+  .sheet-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .sheet-actions{display:flex;flex-direction:column;gap:10px;}
+  .sheet-btn{
+    border:3px solid var(--ink);border-radius:14px;background:var(--card);
+    box-shadow:4px 4px 0 var(--ink);padding:13px 16px;font-size:1rem;font-weight:700;
+    display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--ink);
+  }
+  .sheet-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+  .sheet-btn .ic{font-size:1.2rem;}
+  .sheet-btn.consume{background:var(--yellow);}
+  .sheet-btn.del{background:#FFE3E3;}
+  .num-input{
+    flex:1;min-width:90px;border:2.5px solid var(--ink);border-radius:10px;background:var(--card);
+    padding:9px 12px;font-size:1.05rem;text-align:center;color:var(--ink);font-family:inherit;box-shadow:2px 2px 0 var(--ink);
+  }
   .add-form{
-    margin-top:22px;background:var(--yellow);
-    border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);
-    padding:18px;transform:rotate(-.5deg);
+    background:var(--yellow);border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink);
+    padding:16px;margin-bottom:6px;
   }
-  .add-form h4{font-family:'Fredoka',sans-serif;font-size:1rem;margin-bottom:12px;}
-  .add-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .add-form h4{font-family:'Fredoka',sans-serif;font-size:.98rem;margin-bottom:10px;}
+  .add-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px;}
   .add-row input,.add-row select{
-    background:var(--card);border:2.5px solid var(--ink);color:var(--ink);
-    border-radius:10px;padding:8px 10px;font-size:.9rem;font-family:inherit;
-    box-shadow:2px 2px 0 var(--ink);
+    background:var(--card);border:2.5px solid var(--ink);color:var(--ink);border-radius:10px;
+    padding:8px 10px;font-size:.9rem;font-family:inherit;box-shadow:2px 2px 0 var(--ink);
   }
-  .add-row input.name{flex:1;min-width:140px;}
-  .add-row input.num{width:84px;}
+  .add-row input.name{flex:1;min-width:130px;}
+  .add-row input.num{width:78px;}
 
-  .back-home{display:inline-block;margin-top:34px;font-family:'Fredoka',sans-serif;font-weight:600;
-    color:var(--ink);font-size:.92rem;text-decoration:none;opacity:.7;}
-  .back-home:hover{opacity:1;}
-
-  /* ---------- Footer ---------- */
-  .site-footer{text-align:center;padding:30px 6vw 34px;opacity:.55;font-size:.85rem;}
-  .site-footer a{color:var(--ink);}
-
-  @media (max-width:520px){
-    .inv-item{flex-direction:column;align-items:flex-start;gap:8px;}
-    .inv-right{text-align:left;}
-  }
+  .foot-note{text-align:center;margin-top:26px;font-size:.78rem;opacity:.55;}
 </style>
 </head>
 <body>
@@ -192,107 +188,99 @@
 <header class="site-header">
   <a class="brand" href="index.html">Charlotte<b>.</b></a>
   <nav class="site-nav">
-    <a href="index.html#works">作品集</a>
-    <a href="index.html#garden">数字花园</a>
-    <a href="index.html#about">关于</a>
+    <a href="index.html">首页</a>
+    <a href="today.html">今日</a>
   </nav>
 </header>
 
-<main class="inv-page">
-  <div class="inv-head">
-    <h1 class="inv-title">临池录 · 纸张库存</h1>
-    <span class="inv-sub" id="updateAt"></span>
-  </div>
-  <p class="inv-desc">书法练习纸张清点 · 手机可直接编辑并一键同步</p>
-
-  <div class="sync-status" id="syncStatus">数据加载中…</div>
-
-  <div class="toolbar">
-    <button class="btn primary" id="btnEdit">✏️ 编辑库存</button>
-    <button class="btn" id="btnSync">🔄 一键同步</button>
-    <button class="btn" id="btnToken">🔑 令牌设置</button>
-    <button class="btn danger" id="btnDiscard" style="display:none">放弃修改</button>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title">临池录<span class="dot">.</span></h1>
+    <span class="sync-status" id="syncStatus">加载中…</span>
   </div>
 
-  <div class="stats" id="stats"></div>
+  <!-- 统计卡 -->
+  <div class="stats">
+    <div class="stat"><div class="num" id="stTotal">0</div><div class="lab">库存种类</div></div>
+    <div class="stat"><div class="num" id="stMeters">0</div><div class="lab">总米数</div></div>
+    <div class="stat"><div class="num" id="stRemain">0</div><div class="lab">剩余米数</div></div>
+  </div>
 
-  <div class="tabs" id="tabs"></div>
+  <!-- 搜索栏 -->
+  <div class="search-bar">
+    <span class="si">🔍</span>
+    <input class="search-input" id="searchInput" placeholder="搜索库存名称..." autocomplete="off" />
+    <button class="search-clear" id="btnClearSearch">✕</button>
+  </div>
 
+  <!-- 筛选 -->
+  <div class="filter-bar" id="filterBar"></div>
+
+  <!-- 库存列表 -->
   <div class="inv-list" id="list">
-    <div class="inv-empty">加载中…</div>
+    <div class="empty-state"><span class="ei">📦</span><span class="et">加载中…</span></div>
   </div>
 
-  <!-- 编辑模式下的新增表单 -->
-  <div class="add-form" id="addForm" style="display:none">
-    <h4>＋ 新增库存</h4>
-    <div class="add-row">
-      <select id="addType">
-        <option value="长卷">长卷</option>
-        <option value="刀纸">刀纸</option>
-        <option value="条屏">条屏</option>
-      </select>
-      <input class="name" id="addName" placeholder="纸张名称（如：新购宣纸）" />
-    </div>
-    <div class="add-row">
-      <input class="num" id="addQty" type="number" min="1" placeholder="数量" />
-      <input class="num" id="addMeters" type="number" step="0.5" placeholder="米数(长卷)" />
-      <input class="name" id="addSpec" placeholder="尺寸规格（如：四尺对开）" />
-      <button class="btn primary small" id="btnAdd">添加</button>
-    </div>
-  </div>
-
-  <a class="back-home" href="index.html">← 返回首页</a>
+  <p class="foot-note">点击任意库存可扣减 · 右下角添加新纸张</p>
 </main>
 
-<footer class="site-footer">
-  <p>© 2026 Charlotte · 临池录纸张库存 · <a href="#" id="resetLocal">重置本机缓存</a></p>
-</footer>
+<!-- 底部悬浮按钮组 -->
+<div class="fab-group">
+  <div class="fab fab-sec" id="btnSync" title="一键同步">🔄</div>
+  <div class="fab fab-ter" id="btnToken" title="令牌设置">🔑</div>
+  <div class="fab fab-main" id="btnAdd" title="添加库存">+</div>
+</div>
+
+<!-- 点条目弹出的操作面板 -->
+<div class="sheet-mask" id="sheetMask"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-title"><span id="sheetName">—</span><button class="sheet-close" id="sheetClose">✕</button></div>
+  <div class="sheet-row">
+    <input class="num-input" id="editNum" type="number" min="0" step="0.5" />
+    <span style="align-self:center;font-weight:700" id="editUnit">米</span>
+  </div>
+  <div class="sheet-actions">
+    <button class="sheet-btn consume" id="btnConsume"><span class="ic">✍️</span><span id="btnConsumeText">写一张（扣减 1）</span></button>
+    <button class="sheet-btn" id="btnSaveEdit"><span class="ic">💾</span>保存修改</button>
+    <button class="sheet-btn del" id="btnDelete"><span class="ic">🗑️</span>删除此库存</button>
+  </div>
+</div>
 
 <script>
 (() => {
   const REPO = 'Charlottttttttttttte/personal-site';
   const PATH = 'data/shufa-inventory.json';
-  const LS_DATA = 'shufa_inv_local';     // 本机编辑的草稿数据
-  const LS_TOKEN = 'shufa_gh_token';     // GitHub 令牌
-  const TYPE_CLS = { '长卷': 'lv', '刀纸': 'dz', '条屏': 'tp' };
+  const LS_DATA = 'shufa_inv_local';
+  const LS_TOKEN = 'shufa_gh_token';
+  const TYPE_LABEL = { '长卷': '长卷', '刀纸': '刀纸', '条屏': '条屏' };
+  const TYPE_CLS = { '长卷': 'scroll', '刀纸': 'knife', '条屏': 'tp' };
 
   const $ = (id) => document.getElementById(id);
-  const state = { data: [], filter: '全部', editing: false };
+  const state = { data: [], filter: '全部', query: '', editing: null };
 
-  // ---------- 工具函数 ----------
-  function qtyText(item) {
-    if (item.type === '长卷') {
-      if (item.meters) return `${item.meters} 米`;
-      return item.qty ? `${item.qty} 卷` : '—';
-    }
-    return item.qty ? `${item.qty} 张` : '—';
-  }
-
+  // ---------- 工具 ----------
   function setStatus(msg, kind) {
     const el = $('syncStatus');
     el.textContent = msg;
     el.className = 'sync-status' + (kind ? ' ' + kind : '');
   }
+  function isLong(i) { return i.type === '长卷'; }
+  function totalOf(i) { return isLong(i) ? (i.meters ?? i.total ?? 0) : (i.qty ?? i.total ?? 0); }
+  function remainOf(i) { return i.remaining ?? totalOf(i); }
+  function unitOf(i) { return isLong(i) ? '米' : '张'; }
 
-  // ---------- 数据加载：本地草稿 > 仓库 JSON（双通道+超时） ----------
-  // 通道1: 同站 JSON（github.io）；通道2: api.github.com contents（公开仓库匿名可读）
+  // ---------- 数据加载（双通道+超时） ----------
   async function fetchWithTimeout(url, ms) {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    try {
-      const r = await fetch(url, { signal: ctrl.signal });
-      return r;
-    } finally {
-      clearTimeout(timer);
-    }
+    const t = setTimeout(() => ctrl.abort(), ms);
+    try { return await fetch(url, { signal: ctrl.signal }); }
+    finally { clearTimeout(t); }
   }
-
   async function loadFromSameSite() {
     const r = await fetchWithTimeout(PATH, 8000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
   }
-
   async function loadFromAPI() {
     const r = await fetchWithTimeout(`https://api.github.com/repos/${REPO}/contents/${PATH}`, 10000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -308,28 +296,22 @@
       const draft = localStorage.getItem(LS_DATA);
       if (draft) {
         state.data = JSON.parse(draft).items || [];
-        setStatus('已加载本机草稿（未同步到网站）', 'ok');
-        $('btnDiscard').style.display = '';
+        setStatus('本机草稿 · 未同步', 'ok');
       } else {
         let json = null;
-        try {
-          json = await loadFromSameSite();
-        } catch (e1) {
-          try {
-            json = await loadFromAPI();
-            setStatus('已通过 GitHub API 加载（网站通道较慢）', 'ok');
-          } catch (e2) {
-            throw new Error('两种通道都失败：' + e1.message + ' / ' + e2.message);
-          }
+        try { json = await loadFromSameSite(); }
+        catch (e1) {
+          try { json = await loadFromAPI(); setStatus('已通过 API 加载'); }
+          catch (e2) { throw new Error(e1.message + ' / ' + e2.message); }
         }
         state.data = json.items || [];
-        if (json.updatedAt) $('updateAt').textContent = `更新于 ${json.updatedAt}`;
+        setStatus('✓ 已加载');
       }
     } catch (err) {
-      setStatus('加载失败：' + err.message + '。请检查网络后刷新重试', 'err');
-      $('list').innerHTML = `<div class="inv-error">数据加载失败（${err.message}）。<br>请确认手机能访问 GitHub，或稍后刷新重试。</div>`;
+      setStatus('加载失败：' + err.message, 'err');
+      $('list').innerHTML = `<div class="empty-state"><span class="ei">⚠️</span><span class="et">数据加载失败</span><span class="ed">请检查网络后刷新</span></div>`;
     }
-    render();
+    renderAll();
   }
 
   function saveDraft() {
@@ -337,150 +319,175 @@
   }
 
   // ---------- 渲染 ----------
-  function renderStats() {
-    const lv = state.data.filter(i => i.type === '长卷');
-    const dz = state.data.filter(i => i.type === '刀纸');
-    const tp = state.data.filter(i => i.type === '条屏');
-    const totalMeters = lv.reduce((s, i) => s + (i.meters || 0), 0);
-    const totalSheets = [...dz, ...tp].reduce((s, i) => s + (i.qty || 0), 0);
-    $('stats').innerHTML = `
-      <div class="stat"><div class="num">${state.data.length}</div><div class="lab">库存件数</div></div>
-      <div class="stat"><div class="num lv">${lv.length}</div><div class="lab">长卷</div></div>
-      <div class="stat"><div class="num dz">${dz.length}</div><div class="lab">刀纸</div></div>
-      <div class="stat"><div class="num tp">${tp.length}</div><div class="lab">条屏</div></div>
-      <div class="stat"><div class="num lv">${totalMeters}</div><div class="lab">长卷总米数</div></div>
-      <div class="stat"><div class="num dz">${totalSheets}</div><div class="lab">纸品总张数</div></div>
-    `;
+  function filtered() {
+    let list = state.data;
+    if (state.filter !== '全部') list = list.filter(i => i.type === state.filter);
+    if (state.query) {
+      const q = state.query.toLowerCase();
+      list = list.filter(i => (i.name || '').toLowerCase().includes(q) || (i.id || '').toLowerCase().includes(q));
+    }
+    // 剩余量从低到高（快用完的排上面，同小程序）
+    return list.slice().sort((a, b) => remainOf(a) - remainOf(b));
   }
 
-  function renderTabs() {
+  function renderStats() {
+    const lv = state.data.filter(isLong);
+    const totalMeters = lv.reduce((s, i) => s + totalOf(i), 0);
+    const remainMeters = lv.reduce((s, i) => s + remainOf(i), 0);
+    $('stTotal').textContent = state.data.length;
+    $('stMeters').textContent = totalMeters;
+    $('stRemain').textContent = remainMeters;
+  }
+
+  function renderFilters() {
     const counts = { '全部': state.data.length };
     for (const t of ['长卷', '刀纸', '条屏']) counts[t] = state.data.filter(i => i.type === t).length;
-    $('tabs').innerHTML = Object.entries(counts).map(([t, n]) =>
-      `<button class="tab ${state.filter === t ? 'active' : ''}" data-t="${t}">${t} ${n}</button>`
+    $('filterBar').innerHTML = Object.entries(counts).map(([t, n]) =>
+      `<div class="filter-item ${state.filter === t ? 'active' : ''}" data-t="${t}">${t} ${n}</div>`
     ).join('');
-    document.querySelectorAll('.tab').forEach(btn => {
-      btn.addEventListener('click', () => { state.filter = btn.dataset.t; renderTabs(); renderList(); });
+    document.querySelectorAll('.filter-item').forEach(el => {
+      el.addEventListener('click', () => { state.filter = el.dataset.t; renderAll(); });
     });
   }
 
   function renderList() {
-    const items = state.filter === '全部' ? state.data : state.data.filter(i => i.type === state.filter);
-    if (!items.length) {
-      $('list').innerHTML = '<div class="inv-empty">没有匹配的库存。</div>';
+    const list = filtered();
+    if (!list.length) {
+      $('list').innerHTML = '<div class="empty-state"><span class="ei">📦</span><span class="et">暂无库存</span><span class="ed">点击右下角 + 添加纸张</span></div>';
       return;
     }
-    $('list').innerHTML = items.map((i, idx) => {
-      const cls = TYPE_CLS[i.type] || 'dz';
-      const isLong = i.type === '长卷';
-      const editHtml = state.editing ? `
-        <div class="edit-controls">
-          <input class="edit-qty" type="number" min="0" step="${isLong ? '0.5' : '1'}"
-                 value="${isLong ? (i.meters ?? '') : (i.qty ?? '')}"
-                 data-idx="${idx}" placeholder="${isLong ? '米数' : '张数'}" />
-          <span class="edit-note">${isLong ? '米' : '张'}</span>
-          <button class="btn danger small item-del" data-idx="${idx}">删除</button>
-        </div>` : '';
+    $('list').innerHTML = list.map((i, idx) => {
+      const total = totalOf(i), remain = remainOf(i);
+      const pct = total > 0 ? Math.max(0, Math.round((remain / total) * 100)) : 0;
+      const cls = TYPE_CLS[i.type] || 'knife';
+      const barCls = pct <= 20 ? 'low' : (pct <= 50 ? 'warn' : '');
+      const spec = i.spec || (isLong(i) ? `${i.meters || '?'}米` : '刀纸');
       return `
-        <div class="inv-item">
-          <div class="inv-left">
-            <div class="inv-name">${i.name}
-              <span class="tag tag-${cls}">${i.type}</span>
-              <span class="inv-id">${i.id}</span>
-            </div>
-            <div class="inv-spec">${i.spec || '—'}</div>
-            ${editHtml}
+        <div class="inv-item" data-idx="${idx}">
+          <div class="item-header">
+            <span class="item-type type-${cls}">${i.type}</span>
+            <span class="item-name">${i.name}</span>
+            <span class="item-id">${i.id}</span>
           </div>
-          <div class="inv-right"><div class="inv-qty">${qtyText(i)}</div></div>
+          <div class="item-spec">尺寸：${spec}</div>
+          <div class="item-progress">
+            <div class="progress-bar"><div class="progress-fill ${barCls}" style="width:${pct}%"></div></div>
+            <div class="progress-text">
+              <span>剩余 ${remain}${unitOf(i)}</span>
+              <span class="tt">/ 共 ${total}${unitOf(i)} · ${pct}%</span>
+            </div>
+          </div>
         </div>`;
     }).join('');
-    if (state.editing) bindEditControls();
-  }
-
-  function bindEditControls() {
-    document.querySelectorAll('.edit-qty').forEach(inp => {
-      inp.addEventListener('change', () => {
-        const idx = parseInt(inp.dataset.idx);
-        const item = filteredItem(idx);
-        if (!item) return;
-        const isLong = item.type === '长卷';
-        const val = parseFloat(inp.value);
-        if (isLong) item.meters = isNaN(val) ? null : val;
-        else item.qty = isNaN(val) ? null : Math.round(val);
-        saveDraft();
-        render();
-      });
-    });
-    document.querySelectorAll('.item-del').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = parseInt(btn.dataset.idx);
-        const item = filteredItem(idx);
-        if (!item) return;
-        if (!confirm(`删除「${item.name}」？`)) return;
-        state.data = state.data.filter(x => x !== item);
-        saveDraft();
-        render();
-      });
+    document.querySelectorAll('.inv-item').forEach(el => {
+      el.addEventListener('click', () => openSheet(parseInt(el.dataset.idx)));
     });
   }
 
-  // 编辑控件里 data-idx 是"当前筛选视图"的索引，需要映射回原始数据
-  function filteredItem(idx) {
-    const items = state.filter === '全部' ? state.data : state.data.filter(i => i.type === state.filter);
-    const item = items[idx];
-    return item;
+  function renderAll() {
+    renderStats();
+    renderFilters();
+    renderList();
   }
 
-  // ---------- 编辑模式开关 ----------
-  function toggleEdit() {
-    state.editing = !state.editing;
-    $('btnEdit').textContent = state.editing ? '✅ 完成编辑' : '✏️ 编辑库存';
-    $('addForm').style.display = state.editing ? '' : 'none';
-    render();
+  // ---------- 底部操作面板 ----------
+  function openSheet(idx) {
+    const item = filtered()[idx];
+    if (!item) return;
+    state.editing = item;
+    $('sheetName').textContent = item.name + '（' + item.type + '）';
+    $('editNum').value = remainOf(item);
+    $('editUnit').textContent = unitOf(item);
+    $('btnConsumeText').textContent = `✍️ 写${isLong(item) ? '一米（扣减 1 米）' : '一张（扣减 1 张）'}`;
+    $('sheet').classList.add('open');
+    $('sheetMask').classList.add('open');
+  }
+  function closeSheet() {
+    $('sheet').classList.remove('open');
+    $('sheetMask').classList.remove('open');
+    state.editing = null;
   }
 
-  function addItem() {
-    const type = $('addType').value;
-    const name = $('addName').value.trim();
-    if (!name) { alert('请填写纸张名称'); return; }
-    const qtyRaw = $('addQty').value;
-    const metersRaw = $('addMeters').value;
-    const qty = qtyRaw ? parseInt(qtyRaw) : null;
-    const meters = metersRaw ? parseFloat(metersRaw) : null;
-    const spec = $('addSpec').value.trim();
+  function consumeOne() {
+    const item = state.editing;
+    if (!item) return;
+    if (isLong(item)) {
+      item.remaining = Math.max(0, remainOf(item) - 1);
+    } else {
+      item.remaining = Math.max(0, remainOf(item) - 1);
+    }
+    saveDraft();
+    closeSheet();
+    renderAll();
+    setStatus('已扣减 1' + unitOf(item) + '（草稿）· 点 🔄 同步', 'ok');
+  }
+
+  function saveEdit() {
+    const item = state.editing;
+    if (!item) return;
+    const v = parseFloat($('editNum').value);
+    const max = totalOf(item);
+    const n = isNaN(v) ? 0 : Math.max(0, Math.min(v, max));
+    item.remaining = Math.round(n * (isLong(item) ? 1 : 1));
+    if (isLong(item)) item.remaining = n;
+    saveDraft();
+    closeSheet();
+    renderAll();
+    setStatus('已保存（草稿）· 点 🔄 同步', 'ok');
+  }
+
+  function deleteItem() {
+    const item = state.editing;
+    if (!item) return;
+    if (!confirm(`删除「${item.name}」？`)) return;
+    state.data = state.data.filter(x => x !== item);
+    saveDraft();
+    closeSheet();
+    renderAll();
+    setStatus('已删除（草稿）· 点 🔄 同步', 'ok');
+  }
+
+  // ---------- 新增 ----------
+  function showAddForm() {
+    const name = prompt('纸张名称（如：新购宣纸）：');
+    if (!name) return;
+    const type = prompt('类型（长卷 / 刀纸 / 条屏）：', '刀纸');
+    const t = (type || '').trim();
+    if (!['长卷', '刀纸', '条屏'].includes(t)) { alert('类型无效'); return; }
     const maxNum = state.data.reduce((m, i) => {
       const m2 = /库存-(\d+)/.exec(i.id || '');
       const n = m2 ? parseInt(m2[1]) : 0;
       return Math.max(m, isNaN(n) ? 0 : n);
     }, 0);
+    const isL = t === '长卷';
+    const qRaw = prompt(isL ? '米数：' : '张数：', isL ? '' : '50');
+    const q = qRaw ? parseFloat(qRaw) : null;
+    const spec = prompt('尺寸规格（如：四尺对开）：', '');
     const item = {
       id: '库存-' + (maxNum + 1),
-      type, name, qty: type === '长卷' ? (qty || 1) : qty,
-      meters: type === '长卷' ? meters : null,
-      spec
+      type: t,
+      name,
+      qty: isL ? 1 : (q || 0),
+      meters: isL ? q : null,
+      spec: spec || '',
+      total: q || 0,
+      remaining: q || 0,
     };
     state.data.unshift(item);
-    $('addName').value = ''; $('addQty').value = ''; $('addMeters').value = ''; $('addSpec').value = '';
     saveDraft();
-    render();
-    setStatus('已添加到本机草稿，点击「一键同步」发布到网站', 'ok');
+    renderAll();
+    setStatus('已添加（草稿）· 点 🔄 同步', 'ok');
   }
 
-  // ---------- 一键同步到 GitHub ----------
-  function getToken() {
-    return localStorage.getItem(LS_TOKEN) || '';
-  }
-
+  // ---------- 同步 ----------
+  function getToken() { return localStorage.getItem(LS_TOKEN) || ''; }
   function setToken() {
     const cur = getToken();
-    const val = prompt(cur ? '当前令牌已设置，输入新令牌可替换（留空不修改）：' : '请输入 GitHub 令牌（Fine-grained PAT）：', cur ? '' : '');
+    const val = prompt(cur ? '当前令牌已设置，输入新令牌替换（留空取消）：' : '请输入 GitHub 令牌：', '');
     if (val === null) return;
     const t = val.trim();
-    if (!t) return;
-    localStorage.setItem(LS_TOKEN, t);
-    setStatus('令牌已保存（仅存于本浏览器）', 'ok');
+    if (t) { localStorage.setItem(LS_TOKEN, t); setStatus('令牌已保存', 'ok'); }
   }
-
   function utf8ToBase64(str) {
     const bytes = new TextEncoder().encode(str);
     let bin = '';
@@ -490,24 +497,19 @@
 
   async function syncToGitHub() {
     const token = getToken();
-    if (!token) {
-      alert('请先点击「令牌设置」输入 GitHub 令牌，再执行同步。');
-      return;
-    }
-    $('btnSync').disabled = true;
-    setStatus('正在同步…');
+    if (!token) { alert('请先点 🔑 输入 GitHub 令牌'); return; }
+    $('btnSync').style.opacity = '.5';
+    setStatus('同步中…');
     try {
       const api = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
       const headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
-      // 1) 获取当前文件 sha
       let sha = null;
       try {
         const g = await fetch(api, { headers });
-        if (g.ok) { const meta = await g.json(); sha = meta.sha; }
+        if (g.ok) { sha = (await g.json()).sha; }
         else if (g.status !== 404) throw new Error('读取失败 HTTP ' + g.status);
-      } catch (e) { throw new Error('读取文件失败：' + e.message); }
+      } catch (e) { throw new Error('读取失败：' + e.message); }
 
-      // 2) 写入新内容
       const content = utf8ToBase64(JSON.stringify({
         updatedAt: new Date().toISOString().slice(0, 10),
         items: state.data
@@ -524,33 +526,27 @@
         const err = await p.json().catch(() => ({}));
         throw new Error('写入失败 HTTP ' + p.status + (err.message ? '：' + err.message : ''));
       }
-      // 成功：清草稿、刷新
       localStorage.removeItem(LS_DATA);
-      $('btnDiscard').style.display = 'none';
-      $('updateAt').textContent = '更新于 ' + new Date().toISOString().slice(0, 10);
-      setStatus('✓ 同步成功！数据已发布到网站，Obsidian 稍后自动更新', 'ok');
+      setStatus('✓ 同步成功 · Obsidian 稍后自动更新', 'ok');
     } catch (err) {
       setStatus('✗ ' + err.message, 'err');
     } finally {
-      $('btnSync').disabled = false;
+      $('btnSync').style.opacity = '1';
     }
   }
 
-  function discardLocal() {
-    if (!confirm('放弃本机修改，重新加载网站数据？')) return;
-    localStorage.removeItem(LS_DATA);
-    location.reload();
-  }
-
-  // ---------- 事件绑定 ----------
-  $('btnEdit').addEventListener('click', toggleEdit);
+  // ---------- 事件 ----------
   $('btnSync').addEventListener('click', syncToGitHub);
   $('btnToken').addEventListener('click', setToken);
-  $('btnAdd').addEventListener('click', addItem);
-  $('btnDiscard').addEventListener('click', discardLocal);
-  $('resetLocal').addEventListener('click', (e) => { e.preventDefault(); discardLocal(); });
+  $('btnAdd').addEventListener('click', showAddForm);
+  $('btnClearSearch').addEventListener('click', () => { $('searchInput').value = ''; state.query = ''; renderAll(); });
+  $('searchInput').addEventListener('input', e => { state.query = e.target.value.trim(); renderList(); });
+  $('sheetClose').addEventListener('click', closeSheet);
+  $('sheetMask').addEventListener('click', closeSheet);
+  $('btnConsume').addEventListener('click', consumeOne);
+  $('btnSaveEdit').addEventListener('click', saveEdit);
+  $('btnDelete').addEventListener('click', deleteItem);
 
-  // 启动
   load();
 })();
 </script>

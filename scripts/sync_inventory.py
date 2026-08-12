@@ -88,13 +88,18 @@ def main():
         qty = to_int(r[i_qty]) if i_qty >= 0 else None
         mi = to_int(r[i_mi]) if i_mi >= 0 else None
         spec = str(r[i_spec]).strip() if i_spec >= 0 and r[i_spec] else ""
+        is_long = (typ == "长卷")
+        m = parse_meters(spec, mi)
+        total = m if is_long else qty
         items.append({
             "id": pid,
             "type": typ or "刀纸",
             "name": name,
             "qty": qty,
-            "meters": parse_meters(spec, mi),
+            "meters": m,
             "spec": spec,
+            "total": total,
+            "remaining": total,
         })
 
     data = {"updatedAt": date.today().isoformat(), "items": items}
