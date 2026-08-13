@@ -30,6 +30,7 @@
   .card::after{content:'';position:absolute;top:-18px;right:-18px;width:56px;height:56px;border-radius:50%;border:3px solid var(--ink);}
   .card--fin::after{background:var(--yellow);}
   .card--agent::after{background:var(--blue);}
+  .card--shufa::after{background:var(--teal);}
   .tag{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:10px;}
   .card--fin .tag{background:var(--pink);}
   .card--agent .tag{background:var(--blue);}
@@ -72,6 +73,13 @@
     <p class="cdesc" id="agentDesc"></p>
     <div class="cfoot"><span id="agentFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
   </div>
+
+  <a class="card card--shufa" href="shufa-calendar.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
+    <span class="tag" style="background:var(--teal);">🖌️ 书法</span>
+    <div class="ctitle">临池录 · 书法打卡</div>
+    <p class="cdesc">每日练习打卡 · 日历记录 · 纸张库存 · 长卷进度</p>
+    <div class="cfoot"><span>CALLIGRAPHY</span><span class="carrow">→</span></div>
+  </a>
 
   <p class="hint">每天 +1 天自动推进 · 点卡片开始学习</p>
 </div>
@@ -214,7 +222,6 @@ function cur(d,max){ return Math.min(d,max); }
     openViewer(a.url, '🤖 Agent · 第'+agtDay+'期 '+a.t);
   });
 })();
-
 </script>
 </body>
 </html>

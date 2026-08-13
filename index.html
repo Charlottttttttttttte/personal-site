@@ -77,6 +77,13 @@ body {
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .today-btn:hover { transform: translate(3px,3px) rotate(-1deg); box-shadow: 2px 2px 0 var(--ink); }
+.today-top {
+  position: absolute; top: 24px; left: 28px; z-index: 5;
+}
+@media (max-width: 639px) {
+  .today-top { top: 16px; left: 16px; }
+  .today-top .today-btn { padding: 7px 16px; font-size: 14px; }
+}
 /* 轿厢内容招牌（CSS2D）：车厢上方悬浮白胶囊 */
 .cabin-tag-wrap { pointer-events: none; }
 .cabin-tag {
@@ -229,8 +236,8 @@ body {
     <h1 class="hero-name fun" id="heroName">Charlotte<span class="accent">.</span></h1>
   </div>
   <p class="hero-note">↻ 拖拽 · 点轿厢跳转</p>
-  <div style="text-align:center;position:relative;z-index:5;margin-top:6px;">
-    <a href="today.html" class="today-btn fun">今日学习 →</a>
+  <div class="today-top">
+    <a href="today.html" class="today-btn fun">今日事，今日毕 →</a>
   </div>
   <div class="hero-hint">SCROLL<span class="arrow">↓</span></div>
 </section>
