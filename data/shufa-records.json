@@ -1,4 +1,26 @@
 {
-  "updatedAt": "2026-08-12",
-  "records": []
+  "updatedAt": "2026-08-13",
+  "records": [
+    {
+      "id": "rec_1786589987459",
+      "date": "2026-08-13",
+      "type": "sheet",
+      "meters": 11.04,
+      "quantity": {
+        "number": 8,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-68",
+        "name": "清韵龙章",
+        "inventoryId": "库存-68",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": null,
+      "note": "",
+      "createdAt": "2026-08-13T02:59:47.459Z",
+      "updatedAt": "2026-08-13T02:59:47.459Z",
+      "deleted": false
+    }
+  ]
 }
