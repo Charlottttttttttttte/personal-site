@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Header 布局 Demo 对比</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#333;font-family:"PingFang SC",sans-serif;padding:20px;}
+  h1{color:#fff;font-size:18px;margin-bottom:6px;}
+  .desc{color:#bbb;font-size:12px;margin-bottom:18px;}
+  .phone{width:360px;height:640px;background:#fff;border-radius:24px;overflow:hidden;margin-bottom:28px;box-shadow:0 8px 30px rgba(0,0,0,.5);position:relative;}
+  .phone-label{color:#fff;font-size:14px;font-weight:700;margin:4px 0 8px;}
+  /* 页面底色 */
+  .page-bg{position:absolute;inset:0;background:#FAF7F2;display:flex;align-items:center;justify-content:center;}
+  .page-bg span{color:#C9CFEC;font-size:16px;}
+  /* ===== Demo 1：单行精简（标题短 + 下拉框放第二行） ===== */
+  .d1 header{position:relative;display:flex;align-items:center;gap:8px;padding:14px 14px 10px;background:linear-gradient(#FAF7F2,transparent);z-index:2;}
+  .d1 .t{font-size:15px;font-weight:700;color:#2D3A8C;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .d1 .stats{font-size:13px;color:#8B8B8B;background:#fff;border:1px solid #ddd;border-radius:6px;padding:4px 10px;flex:0 0 auto;}
+  .d1 select{font-size:13px;color:#2D3A8C;background:#fff;border:1px solid #C9CFEC;border-radius:8px;padding:6px 8px;width:100%;}
+  .d1 .row2{position:relative;padding:0 14px 6px;z-index:2;}
+  /* ===== Demo 2：两行头（标题行 + 工具行） ===== */
+  .d2 header{position:relative;padding:14px 14px 8px;z-index:2;}
+  .d2 .top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;}
+  .d2 .brand{font-size:13px;color:#8B8B8B;letter-spacing:2px;font-weight:600;}
+  .d2 .t{font-size:18px;font-weight:700;color:#2D3A8C;}
+  .d2 .tools{display:flex;gap:8px;}
+  .d2 .stats{font-size:13px;color:#8B8B8B;background:#fff;border:1px solid #ddd;border-radius:6px;padding:4px 12px;}
+  .d2 select{font-size:13px;color:#2D3A8C;background:#fff;border:1px solid #C9CFEC;border-radius:8px;padding:6px 8px;width:100%;}
+  /* ===== Demo 3：胶囊标签式（标题右移，工具左移） ===== */
+  .d3 header{position:relative;display:flex;align-items:center;gap:10px;padding:14px 14px 10px;z-index:2;}
+  .d3 .t{flex:1;font-size:14px;font-weight:700;color:#2D3A8C;background:#fff;border:2px solid #2D3A8C;border-radius:999px;padding:6px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .d3 .tools{display:flex;gap:6px;flex:0 0 auto;}
+  .d3 .stats{font-size:13px;color:#fff;background:#2D3A8C;border:none;border-radius:999px;padding:6px 14px;font-weight:700;}
+  .d3 select{display:none;}
+</style>
+</head>
+<body>
+<h1>财经课 Header 布局 · 3 个方案</h1>
+<p class="desc">模拟 360px 手机宽度，Day 15 · 央行的角色。绿色虚线框 = 页面内容（原来会被 header 遮住）</p>
+
+<!-- ============ Demo 1 ============ -->
+<div class="phone-label">方案 1 · 单行精简 + 下拉框独立一行</div>
+<div class="phone d1">
+  <header>
+    <span class="t">Day 15 · 央行的角色</span>
+    <span class="stats">成绩</span>
+  </header>
+  <div class="row2"><select><option>Day 15 · 央行的角色</option><option>Day 16 · 钱的价格</option></select></div>
+  <div class="page-bg"><span>← 课程内容（不再被遮挡）</span></div>
+</div>
+
+<!-- ============ Demo 2 ============ -->
+<div class="phone-label">方案 2 · 两行头（品牌 + 大标题 / 工具行）</div>
+<div class="phone d2">
+  <header>
+    <div class="top">
+      <span class="brand">零基础读懂财报</span>
+      <span class="tools"><button class="stats">成绩</button></span>
+    </div>
+    <div class="t">Day 15 · 央行的角色</div>
+    <select style="margin-top:8px;"><option>Day 15 · 央行的角色</option><option>Day 16 · 钱的价格</option></select>
+  </header>
+  <div class="page-bg"><span>← 课程内容（不再被遮挡）</span></div>
+</div>
+
+<!-- ============ Demo 3 ============ -->
+<div class="phone-label">方案 3 · 胶囊标题 + 按钮（下拉隐藏/简洁）</div>
+<div class="phone d3">
+  <header>
+    <span class="t">Day 15 · 央行的角色</span>
+    <span class="tools"><button class="stats">成绩</button></span>
+  </header>
+  <select style="margin:0 14px 8px;width:calc(100% - 28px);display:block;font-size:13px;color:#2D3A8C;background:#fff;border:1px solid #C9CFEC;border-radius:8px;padding:6px 8px;"><option>Day 15 · 央行的角色</option><option>Day 16 · 钱的价格</option></select>
+  <div class="page-bg"><span>← 课程内容（不再被遮挡）</span></div>
+</div>
+
+</body>
+</html>

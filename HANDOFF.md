@@ -32,3 +32,28 @@
 - 所有 demo 均含：3 张作品卡（财经 / 书法 / LLM-Wiki）、`:focus-visible`、`prefers-reduced-motion`、移动端隐藏右上便签
 - 自检截图在 `/tmp/desk-*.png` 与 `/tmp/mob-*.png`（重启可能清空，不重要）
 - 仓库仍未做任何 git 提交，文件均在工作区
+
+---
+
+## 课程切换约定（2026-08-11 由 Charlotte 确认）
+
+### 规则
+- 当前学习项目 = **财经**（D1–D28）。personal site 只在财经学习期间更新财经卡片；**炒股**（D29–D56）的卡片已全部生成完毕（牌组/讲义/单卡在本地与 Obsidian 炒股库），**等财经结课后**再显示在网站上。
+- 触发点：**财经 D28 结营**（进度表 2026-08-21，预计 8/22 起生效）。
+- 切换效果：
+  1. 作品集「财经知识卡片」从占位改为**完成态**（放真实卡片封面图 + 浏览页链接）
+  2. 「正在学」状态条：`财经 · Dxx/28` → `炒股 · Day 29（8/22 开始）`（保留 Agent 平台）
+- 已设一次性定时任务（2026-08-22 08:07）自动执行；**若定时任务丢失或未触发，任何会话看到财经 README「当前：Day 28」完成、且 personal site 未切换时，按下方步骤执行**。
+
+### 执行步骤（到 2026-08-22 或财经 D28 完成后执行）
+1. 确认信号：`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Charlotte/LLM-Wiki/raw/learning/财经/README.md` 的「当前：Day 28 / 28」或 D28 行完成。
+2. 拷贝卡片：`mkdir -p img/finance && cp "<Obsidian 财经 assets>"/day*-*.png img/finance/`（28 张单卡 900 版，命名保持 dayNN-主题.png）。
+3. 浏览页：仿 `cards/agent-card-view.html` 做 `cards/finance-card-view.html`，展示 28 张 3:4 卡片（点击全屏查看）。
+4. 更新 `index.html`：
+   - 作品集「财经知识卡片」卡：封面图指向 `img/finance/day28-结营.png`（或代表作），链接到 `cards/finance-card-view.html`，文案改为已完成态（4 周 · 三大报表/宏观/估值）。
+   - 「正在学」：`财经 · Dxx/28` → `炒股 · Day 29（8/22 开始）`。
+5. 提交推送：`git add -A && git commit -m "财经结课：作品集放财经卡片，正在学切换至炒股" && git push`（仓库 github.com/Charlottttttttttttte/personal-site）。
+6. 向用户汇报：放了几张卡、改了什么、已推送。
+
+### 状态
+- 未执行（2026-08-11 记录）。执行完成后把本节「状态」改为「已执行（日期）」。
