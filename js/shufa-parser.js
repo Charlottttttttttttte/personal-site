@@ -127,7 +127,10 @@
       if (!text) return null;
       let best = null;
       let bestScore = 0;
-      for (const book of COPYBOOK_LIST) {
+      // 内置字帖 + 本机自定义字帖（用户新增后可被智能识别）
+      const customList = (window.SHUFA_STORE && SHUFA_STORE.getCustomCopybooks) ? SHUFA_STORE.getCustomCopybooks() : [];
+      const candidates = COPYBOOK_LIST.concat(customList);
+      for (const book of candidates) {
         const bookName = book.name || book.copybookName || '';
         const score = fuzzyMatchScore(text, bookName);
         if (score > bestScore) {

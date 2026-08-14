@@ -280,7 +280,7 @@
           <span>${r.date} · ${r.paperSnapshot ? r.paperSnapshot.name : '?'}</span>
           <span class="lc-meters">${(r.meters||0).toFixed(1)}m</span>
         </div>
-        <div class="lc-sub">${r.copybookSnapshot ? r.copybookSnapshot.fontName + '·' + r.copybookSnapshot.copybookName : ''}${r.note ? ' · ' + r.note : ''}</div>
+        <div class="lc-sub">${r.copybookSnapshot ? (r.copybookSnapshot.fontName ? r.copybookSnapshot.fontName + '·' : '') + r.copybookSnapshot.copybookName : ''}${r.note ? ' · ' + r.note : ''}</div>
       </div>`).join('');
     el.querySelectorAll('.list-card').forEach(c => {
       c.addEventListener('click', () => location.href = `shufa-record.html?editId=${c.dataset.id}`);
@@ -316,7 +316,7 @@
     $('invFill').style.width = pct + '%';
   }
 
-  // ---------- 一键同步（记录 + 库存，统一逻辑） ----------
+  // ---------- 一键同步（记录 + 库存 + 自定义字帖，统一逻辑） ----------
   async function syncAll() {
     const token = SHUFA_STORE.getToken();
     if (!token) {

@@ -1,9 +1,10 @@
-// 临池录共享存储层：练习记录 + 库存 的读写/草稿/同步（供各页面复用）
+// 临池录共享存储层：练习记录 + 库存 + 自定义字帖 的读写/草稿/同步（供各页面复用）
 (function () {
   const REPO = 'Charlottttttttttttte/personal-site';
   const FILES = {
     records: { path: 'data/shufa-records.json', lsKey: 'shufa_records_local' },
-    inventory: { path: 'data/shufa-inventory.json', lsKey: 'shufa_inv_local' }
+    inventory: { path: 'data/shufa-inventory.json', lsKey: 'shufa_inv_local' },
+    customCopybooks: { path: 'data/shufa-custom-copybooks.json', lsKey: 'shufa_custom_copybooks' }
   };
   const LS_TOKEN = 'shufa_gh_token';
 
@@ -58,6 +59,87 @@
     localStorage.removeItem(FILES[kind].lsKey);
   }
 
+  // ---------- 自定义字帖（本机持久化 + GitHub 同步） ----------
+  const LS_CUSTOM_COPYBOOKS = FILES.customCopybooks.lsKey;
+
+  function getCustomCopybooks() {
+    try {
+      const list = JSON.parse(localStorage.getItem(LS_CUSTOM_COPYBOOKS));
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+
+  // 按名称去重；fontId/fontName 可空（未选字体时）
+  function addCustomCopybook(name, fontId, fontName) {
+    const trimmed = String(name || '').trim();
+    if (!trimmed) return null;
+    const list = getCustomCopybooks();
+    const existing = list.find(b => b.copybookName === trimmed);
+    if (existing) {
+      if (fontId && !existing.fontId) { existing.fontId = fontId; existing.fontName = fontName; }
+      localStorage.setItem(LS_CUSTOM_COPYBOOKS, JSON.stringify(list));
+      return existing;
+    }
+    const entry = {
+      copybookId: 'custom:' + trimmed,
+      copybookName: trimmed,
+      fontId: fontId || '',
+      fontName: fontName || '',
+      authorId: 'custom',
+      authorName: '自定义'
+    };
+    list.push(entry);
+    localStorage.setItem(LS_CUSTOM_COPYBOOKS, JSON.stringify(list));
+    return entry;
+  }
+
+  // 合并两份字帖列表（本机优先），按名称去重并规范化 id
+  function mergeCustomLists(local, remote) {
+    const merged = [];
+    const seen = new Set();
+    for (const list of [local, remote]) {
+      for (const b of list) {
+        if (!b || !b.copybookName || seen.has(b.copybookName)) continue;
+        seen.add(b.copybookName);
+        merged.push({ ...b, copybookId: 'custom:' + b.copybookName });
+      }
+    }
+    return merged;
+  }
+
+  // 同步自定义字帖：拉取线上 → 与本机合并去重 → 写回本机 + GitHub
+  // 双向合并，多设备各加各的互不覆盖
+  async function syncCustomCopybooks() {
+    let remote = [];
+    try {
+      const r = await loadFromGitHub('customCopybooks');
+      if (r && Array.isArray(r.items)) remote = r.items;
+    } catch (e) {
+      // 线上文件不存在（404）视为空；其它拉取失败不覆盖线上，直接中断
+      if (!String(e.message).includes('404')) throw e;
+    }
+    const merged = mergeCustomLists(getCustomCopybooks(), remote);
+    localStorage.setItem(LS_CUSTOM_COPYBOOKS, JSON.stringify(merged));
+    await syncToGitHub('customCopybooks',
+      { updatedAt: new Date().toISOString().slice(0, 10), items: merged },
+      '字帖同步 ' + new Date().toISOString().slice(0, 10),
+      true /* 本机为配置存储，不清草稿 */);
+    return merged;
+  }
+
+  // 仅拉取线上字帖合并到本机（静默，供记录页启动时调用；失败忽略）
+  async function pullCustomCopybooks() {
+    let remote = [];
+    try {
+      const r = await loadFromGitHub('customCopybooks');
+      if (r && Array.isArray(r.items)) remote = r.items;
+    } catch (e) { return; }
+    if (!remote.length) return;
+    const merged = mergeCustomLists(getCustomCopybooks(), remote);
+    localStorage.setItem(LS_CUSTOM_COPYBOOKS, JSON.stringify(merged));
+    return merged;
+  }
+
   function getToken() { return localStorage.getItem(LS_TOKEN) || ''; }
   function setToken(t) { localStorage.setItem(LS_TOKEN, t); }
 
@@ -68,8 +150,8 @@
     return btoa(bin);
   }
 
-  // 一键同步单个数据文件到 GitHub
-  async function syncToGitHub(kind, data, message) {
+  // 一键同步单个数据文件到 GitHub；keepDraft=true 时不清理本地（用于自定义字帖等"配置型"数据）
+  async function syncToGitHub(kind, data, message, keepDraft) {
     const token = getToken();
     if (!token) throw new Error('未设置令牌，请先点 🔑 设置');
     const f = FILES[kind];
@@ -96,12 +178,12 @@
       const err = await resp.json().catch(() => ({}));
       throw new Error('写入失败 HTTP ' + resp.status + (err.message ? '：' + err.message : ''));
     }
-    clearDraft(kind);
+    if (!keepDraft) clearDraft(kind);
     return true;
   }
 
-  // 一键同步全部数据（记录 + 库存）。dataProvider: { records: data, inventory: data|null }
-  // 未提供的数据文件会读本机草稿；无草稿则跳过（不空写覆盖线上）
+  // 一键同步全部数据（记录 + 库存 + 自定义字帖）。dataProvider: { records: data, inventory: data|null }
+  // 未提供的数据文件会读本机草稿；无草稿则跳过（不空写覆盖线上）；自定义字帖总是双向合并同步
   async function syncAll(dataProvider) {
     const token = getToken();
     if (!token) throw new Error('未设置令牌，请先点 🔑 设置');
@@ -134,6 +216,14 @@
       results.push('库存');
     }
 
+    // 3) 自定义字帖：总是合并同步（多设备双向，新增/拉取互不覆盖）
+    try {
+      await syncCustomCopybooks();
+      results.push('字帖');
+    } catch (e) {
+      throw new Error('字帖同步失败：' + e.message);
+    }
+
     if (!results.length) {
       // 没有草稿：拉取线上再写回（确保 updatedAt 刷新），或提示无改动
       return { synced: [], note: '无本地改动' };
@@ -142,6 +232,7 @@
   }
 
   window.SHUFA_STORE = {
-    REPO, FILES, load, saveDraft, clearDraft, getToken, setToken, syncToGitHub, syncAll
+    REPO, FILES, load, saveDraft, clearDraft, getToken, setToken, syncToGitHub, syncAll,
+    getCustomCopybooks, addCustomCopybook, syncCustomCopybooks, pullCustomCopybooks
   };
 })();
