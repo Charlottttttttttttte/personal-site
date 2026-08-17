@@ -153,6 +153,7 @@
   .sheet-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
   .sheet-close{border:2px solid var(--ink);background:var(--card);border-radius:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;}
   .sheet-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .sheet-label{flex:0 0 auto;align-self:center;font-size:.85rem;font-weight:700;opacity:.7;}
   .sheet-actions{display:flex;flex-direction:column;gap:10px;}
   .sheet-btn{
     border:3px solid var(--ink);border-radius:14px;background:var(--card);
@@ -246,6 +247,11 @@
   <div class="sheet-row">
     <input class="num-input" id="editNum" type="number" min="0" step="0.5" />
     <span style="align-self:center;font-weight:700" id="editUnit">米</span>
+  </div>
+  <div class="sheet-row" id="perRow" style="display:none">
+    <span class="sheet-label">每张米数</span>
+    <input class="num-input" id="editPer" type="number" min="0" step="0.01" placeholder="如 1.38" />
+    <span style="align-self:center;font-weight:700">米/张</span>
   </div>
   <div class="sheet-actions">
     <button class="sheet-btn consume" id="btnConsume"><span class="ic">✍️</span><span id="btnConsumeText">写一张（扣减 1）</span></button>
@@ -389,7 +395,7 @@
             <span class="item-name">${i.name}</span>
             <span class="item-id">${i.id}</span>
           </div>
-          <div class="item-spec">尺寸：${spec}</div>
+          <div class="item-spec">尺寸：${spec}${!isLong(i) && i.perSheetMeters ? ` · ${i.perSheetMeters}米/张` : ''}</div>
           <div class="item-progress">
             <div class="progress-bar"><div class="progress-fill ${barCls}" style="width:${pct}%"></div></div>
             <div class="progress-text">
@@ -418,6 +424,9 @@
     $('sheetName').textContent = item.name + '（' + item.type + '）';
     $('editNum').value = remainOf(item);
     $('editUnit').textContent = unitOf(item);
+    // 非长卷显示"每张米数"编辑
+    $('perRow').style.display = isLong(item) ? 'none' : 'flex';
+    $('editPer').value = item.perSheetMeters ? String(item.perSheetMeters) : '';
     $('btnConsumeText').textContent = `✍️ 写${isLong(item) ? '一米（扣减 1 米）' : '一张（扣减 1 张）'}`;
     $('sheet').classList.add('open');
     $('sheetMask').classList.add('open');
@@ -451,6 +460,11 @@
     const n = isNaN(v) ? 0 : Math.max(0, Math.min(v, max));
     item.remaining = Math.round(n * (isLong(item) ? 1 : 1));
     if (isLong(item)) item.remaining = n;
+    // 非长卷可同步维护每张米数
+    if (!isLong(item)) {
+      const per = parseFloat($('editPer').value);
+      item.perSheetMeters = isNaN(per) || per < 0 ? 0 : per;
+    }
     saveDraft();
     closeSheet();
     renderAll();
@@ -484,6 +498,12 @@
     const qRaw = prompt(isL ? '米数：' : '张数：', isL ? '' : '50');
     const q = qRaw ? parseFloat(qRaw) : null;
     const spec = prompt('尺寸规格（如：四尺对开）：', '');
+    let perSheet = 0;
+    if (!isL) {
+      const perRaw = prompt('每张米数（如四尺对开约 1.38 米；留空为 0）：', '1.38');
+      const pv = perRaw ? parseFloat(perRaw) : NaN;
+      perSheet = isNaN(pv) || pv < 0 ? 0 : pv;
+    }
     const item = {
       id: '库存-' + (maxNum + 1),
       type: t,
@@ -493,6 +513,7 @@
       spec: spec || '',
       total: q || 0,
       remaining: q || 0,
+      perSheetMeters: perSheet,
     };
     state.data.unshift(item);
     saveDraft();

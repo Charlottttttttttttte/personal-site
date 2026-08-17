@@ -314,7 +314,8 @@
     if (!it) return;
     const remain = it.remaining ?? (it.type === '长卷' ? it.meters : it.qty);
     const unit = it.type === '长卷' ? '米' : '张';
-    $('invHint').textContent = `将使用「${it.name}」，当前剩余 ${remain}${unit}，保存后自动扣减`;
+    const perText = (it.type !== '长卷' && it.perSheetMeters) ? `，每张 ${it.perSheetMeters} 米` : '';
+    $('invHint').textContent = `将使用「${it.name}」，当前剩余 ${remain}${unit}${perText}，保存后自动扣减`;
     if (it.type === '长卷') {
       state.type = 'scroll';
       setTypeUI('scroll');
