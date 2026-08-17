@@ -177,6 +177,9 @@
     return state.records.filter(r => r.date === dateStr && !r.deleted)
       .reduce((s, r) => s + (r.meters || 0), 0);
   }
+  function dayHasRec(dateStr) {
+    return state.records.some(r => r.date === dateStr && !r.deleted);
+  }
 
   // ---------- 统计 ----------
   function renderStats() {
@@ -207,35 +210,37 @@
       const d = prevDays - i;
       const ds = fmtDate(month === 1 ? year-1 : year, month === 1 ? 12 : month-1, d);
       const mtr = dayMeters(ds);
-      html += cell(d, ds, mtr, false);
+      html += cell(d, ds, mtr, false, false, dayHasRec(ds));
     }
     // 当月
     for (let i = 1; i <= totalDays; i++) {
       const ds = fmtDate(year, month, i);
       const mtr = dayMeters(ds);
-      html += cell(i, ds, mtr, true, ds === today);
+      html += cell(i, ds, mtr, true, ds === today, dayHasRec(ds));
     }
     // 下月填充（补满42格）
     let fill = 42 - (startWeekday + totalDays);
     for (let i = 1; i <= fill; i++) {
       const ds = fmtDate(month === 12 ? year+1 : year, month === 12 ? 1 : month+1, i);
-      html += cell(i, ds, 0, false);
+      html += cell(i, ds, 0, false, false, dayHasRec(ds));
     }
     $('daysGrid').innerHTML = html;
     document.querySelectorAll('.day-cell').forEach(el => {
       el.addEventListener('click', () => onDayTap(el.dataset.date));
     });
   }
-  function cell(day, ds, meters, isCur, isToday) {
+  function cell(day, ds, meters, isCur, isToday, hasRec) {
     const cls = [
       'day-cell',
       isCur ? '' : 'other',
       isToday ? 'today' : '',
-      meters > 0 ? 'has-record' : ''
+      hasRec ? 'has-record' : ''
     ].join(' ');
+    const dot = hasRec ? '<div class="day-dot"></div>' : '';
+    const mtr = meters > 0 ? `<div class="day-meters">${meters.toFixed(1)}m</div>` : '';
     return `<div class="${cls}" data-date="${ds}">
       <div class="day-number">${day}</div>
-      ${meters > 0 ? `<div class="day-dot"></div><div class="day-meters">${meters.toFixed(1)}m</div>` : ''}
+      ${dot}${mtr}
     </div>`;
   }
 
