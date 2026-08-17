@@ -408,6 +408,13 @@
     const qtyNum = parseFloat($('fQty').value) || 0;
     if (qtyNum <= 0) { alert('请填写数量'); return false; }
     const meters = calcMeters();
+    // 选了库存但库存没有"每张米数"→ 米数会是 0，提醒用户
+    if (qtyNum > 0 && meters === 0 && state.type === 'sheet' && $('fInventory').value) {
+      const it = state.inventory.find(x => x.id === $('fInventory').value);
+      if (it && !it.perSheetMeters) {
+        if (!confirm(`库存「${it.name}」还没设置每张米数，这条记录米数会记为 0。\n「确定」=仍然保存，「取消」=先去库存页补充`)) return false;
+      }
+    }
 
     // 纸型 snapshot
     const invId = $('fInventory').value;
