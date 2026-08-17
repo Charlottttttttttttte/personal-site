@@ -436,6 +436,7 @@
     } else {
       item.remaining = Math.max(0, remainOf(item) - 1);
     }
+    item.lastConsumedAt = new Date().toISOString(); // 供记录页"最近消耗在前"排序
     saveDraft();
     closeSheet();
     renderAll();

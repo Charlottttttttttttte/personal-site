@@ -67,6 +67,23 @@
   .tab{flex:1;text-align:center;padding:10px 0 8px;color:var(--ink);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;}
   .tab .ic{display:block;font-size:1.3rem;margin-bottom:2px;}
   .tab.active{background:var(--yellow);}
+
+  /* 库存选择弹层（可搜索） */
+  .inv-sheet{position:fixed;inset:0;z-index:300;display:none;}
+  .inv-sheet.open{display:block;}
+  .inv-mask{position:absolute;inset:0;background:rgba(23,23,26,.42);}
+  .inv-panel{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-top:3px solid var(--ink);border-radius:20px 20px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom) + 16px);max-height:78vh;display:flex;flex-direction:column;box-shadow:0 -6px 0 rgba(23,23,26,.08);}
+  .inv-panel-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1rem;}
+  .inv-search{width:100%;border:2.5px solid var(--ink);border-radius:10px;background:var(--card);padding:10px 12px;font-size:.95rem;font-family:inherit;box-shadow:2px 2px 0 var(--ink);margin:10px 0 12px;color:var(--ink);}
+  .inv-list{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .inv-opt{border:2.5px solid var(--ink);border-radius:12px;background:var(--card);box-shadow:2px 2px 0 var(--ink);padding:11px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .inv-opt:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+  .inv-opt.empty{opacity:.45;}
+  .inv-opt.placeholder{opacity:.55;}
+  .io-name{font-weight:700;font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .io-remain{font-size:.78rem;font-weight:700;color:#2E7D5B;flex:0 0 auto;}
+  .inv-opt.empty .io-remain{color:#C2543C;}
+  .inv-empty-note{text-align:center;opacity:.55;padding:18px 0;font-size:.85rem;}
 </style>
 </head>
 <body>
@@ -115,7 +132,8 @@
     <div class="form-row">
       <span class="form-label">📦 库存</span>
       <div class="form-value">
-        <select class="picker" id="fInventory">
+        <div class="picker" id="fInventoryPicker">不使用库存</div>
+        <select class="picker" id="fInventory" style="display:none">
           <option value="">不使用库存</option>
         </select>
       </div>
@@ -156,6 +174,16 @@
   <a class="tab" href="shufa-inventory.html"><span class="ic">📦</span>库存</a>
   <a class="tab" href="shufa-history.html"><span class="ic">🗂️</span>历史</a>
 </nav>
+
+<!-- 库存选择弹层（可搜索） -->
+<div class="inv-sheet" id="invSheet">
+  <div class="inv-mask" id="invMask"></div>
+  <div class="inv-panel">
+    <div class="inv-panel-title">选择库存</div>
+    <input class="inv-search" id="invSearch" placeholder="🔍 搜索库存名称…" autocomplete="off" />
+    <div class="inv-list" id="invList"></div>
+  </div>
+</div>
 
 <script src="js/shufa-data.js"></script>
 <script src="js/shufa-parser.js"></script>
@@ -208,14 +236,75 @@
   }
 
   // ---------- 库存联动 ----------
+  function invRemain(it) {
+    return it.remaining ?? (it.type === '长卷' ? it.meters : it.qty);
+  }
+  function invRemainText(it) {
+    return `余${invRemain(it)}${it.type === '长卷' ? '米' : '张'}`;
+  }
+  // 排序：库存为 0 的最下面；其余按最近消耗时间倒序（未消耗过的保持原顺序）
+  function sortInventory(list) {
+    return list.slice().sort((a, b) => {
+      const za = invRemain(a) <= 0, zb = invRemain(b) <= 0;
+      if (za !== zb) return za ? 1 : -1;
+      const ta = a.lastConsumedAt || '', tb = b.lastConsumedAt || '';
+      if (ta !== tb) return tb.localeCompare(ta);
+      return 0;
+    });
+  }
+
   function initInventory() {
+    // 隐藏 select 仍构建（供旧逻辑读取 value），展示走自定义 picker + 弹层
     let html = '<option value="">不使用库存</option>';
-    for (const it of state.inventory) {
-      const remain = it.remaining ?? (it.type === '长卷' ? it.meters : it.qty);
-      const unit = it.type === '长卷' ? '米' : '张';
-      html += `<option value="${it.id}">${it.name}（余${remain}${unit}）</option>`;
+    for (const it of sortInventory(state.inventory)) {
+      html += `<option value="${it.id}">${it.name}（${invRemainText(it)}）</option>`;
     }
     $('fInventory').innerHTML = html;
+    updateInvPicker();
+  }
+
+  function updateInvPicker() {
+    const id = $('fInventory').value;
+    const it = state.inventory.find(x => x.id === id);
+    $('fInventoryPicker').textContent = it ? `${it.name}（${invRemainText(it)}）` : '不使用库存';
+    $('fInventoryPicker').classList.toggle('placeholder', !it);
+  }
+
+  // ---------- 库存选择弹层 ----------
+  function openInvSheet() {
+    renderInvSheetList($('invSearch').value);
+    $('invSheet').classList.add('open');
+  }
+  function closeInvSheet() {
+    $('invSheet').classList.remove('open');
+    $('invSearch').value = '';
+  }
+  function renderInvSheetList(q) {
+    const kw = (q || '').trim().toLowerCase();
+    const sorted = sortInventory(state.inventory);
+    const list = kw ? sorted.filter(it => it.name.toLowerCase().includes(kw)) : sorted;
+    let html = '<div class="inv-opt placeholder" data-id="">不使用库存</div>';
+    if (!list.length) {
+      html += '<div class="inv-empty-note">没有匹配的库存</div>';
+    } else {
+      html += list.map(it => {
+        const r = invRemain(it);
+        const zero = r <= 0;
+        return `<div class="inv-opt${zero ? ' empty' : ''}" data-id="${it.id}">
+          <span class="io-name">${it.name}${it.type === '长卷' ? '（长卷）' : ''}</span>
+          <span class="io-remain">${zero ? '已用完' : invRemainText(it)}</span>
+        </div>`;
+      }).join('');
+    }
+    $('invList').innerHTML = html;
+    $('invList').querySelectorAll('.inv-opt').forEach(el => {
+      el.addEventListener('click', () => {
+        $('fInventory').value = el.dataset.id;
+        updateInvPicker();
+        closeInvSheet();
+        $('fInventory').dispatchEvent(new Event('change'));
+      });
+    });
   }
 
   function onInventoryChange() {
@@ -399,6 +488,7 @@
         // 长卷=追加语义（全量扣）；单张=覆盖语义（差值调整）
         const deduct = state.type === 'scroll' || oldInvId !== invId ? qtyNum : (qtyNum - oldQty);
         it.remaining = Math.max(0, curRemain(it) - deduct);
+        if (deduct > 0) it.lastConsumedAt = new Date().toISOString(); // 供库存排序"最近消耗在前"
         const invData = { updatedAt: new Date().toISOString().slice(0,10), items: state.inventory };
         SHUFA_STORE.saveDraft('inventory', invData);
       }
@@ -423,6 +513,7 @@
       // 尽量回选库存
       initInventory();
       $('fInventory').value = r.paperSnapshot.inventoryId;
+      updateInvPicker();
     } else if (r.paperSnapshot && D.PAPER_TYPES[r.paperSnapshot.id]) {
       $('fPaper').value = r.paperSnapshot.id;
     }
@@ -463,6 +554,9 @@
   $('btnScroll').addEventListener('click', () => setTypeUI('scroll'));
   $('fPaper').addEventListener('change', calcMeters);
   $('fInventory').addEventListener('change', () => { onInventoryChange(); calcMeters(); });
+  $('fInventoryPicker').addEventListener('click', openInvSheet);
+  $('invMask').addEventListener('click', closeInvSheet);
+  $('invSearch').addEventListener('input', () => renderInvSheetList($('invSearch').value));
   $('fQty').addEventListener('input', calcMeters);
   $('fCopybook').addEventListener('change', () => {
     if ($('fCopybook').value === '__custom__') {
