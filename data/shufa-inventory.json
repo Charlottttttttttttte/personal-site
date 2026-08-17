@@ -9,8 +9,9 @@
       "meters": null,
       "spec": "四尺四开",
       "total": 50,
-      "remaining": 23,
-      "lastConsumedAt": "2026-08-17T03:36:04.807Z"
+      "remaining": 0,
+      "lastConsumedAt": "2026-08-17T03:36:04.807Z",
+      "perSheetMeters": 0.69
     },
     {
       "id": "库存-1",
