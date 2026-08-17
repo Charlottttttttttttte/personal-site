@@ -1,6 +1,17 @@
 {
-  "updatedAt": "2026-08-14",
+  "updatedAt": "2026-08-17",
   "items": [
+    {
+      "id": "库存-110",
+      "type": "刀纸",
+      "name": "粉紫云丝",
+      "qty": 50,
+      "meters": null,
+      "spec": "四尺四开",
+      "total": 50,
+      "remaining": 0,
+      "lastConsumedAt": "2026-08-17T02:07:10.228Z"
+    },
     {
       "id": "库存-1",
       "type": "刀纸",
@@ -802,8 +813,9 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 50,
-      "remaining": 50,
-      "material": "半生熟"
+      "remaining": 46,
+      "material": "半生熟",
+      "lastConsumedAt": "2026-08-17T01:56:52.462Z"
     },
     {
       "id": "库存-68",
@@ -814,8 +826,9 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 50,
-      "remaining": 5,
-      "material": "半生熟"
+      "remaining": 0,
+      "material": "半生熟",
+      "lastConsumedAt": "2026-08-17T02:04:59.707Z"
     },
     {
       "id": "库存-69",
