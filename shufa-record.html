@@ -201,6 +201,16 @@
   }
   function setStatus(m) { $('syncStatus').textContent = m; }
 
+  // 规格 → 每张米数（四尺对开=1.38、四尺四开=0.69），无映射返回 0
+  function specToMeters(spec) {
+    const s = String(spec || '').trim();
+    const map = D.SPEC_TO_METERS || {};
+    for (const k in map) {
+      if (s.startsWith(k)) return map[k];
+    }
+    return 0;
+  }
+
   // ---------- 初始化纸型/字体/字帖选项 ----------
   // 字帖下拉框（内置 + 本机自定义），selectedId 用于重建后回选
   function renderCopybookOptions(selectedId) {
@@ -345,7 +355,7 @@
       let per = 0;
       if (invId) {
         const it = state.inventory.find(x => x.id === invId);
-        per = it && it.perSheetMeters ? it.perSheetMeters : 0;
+        per = it ? (it.perSheetMeters || specToMeters(it.spec)) : 0;
       } else if (paperId) {
         per = D.PAPER_TYPES[paperId].lengthPerSheet || 0;
       }
@@ -408,11 +418,11 @@
     const qtyNum = parseFloat($('fQty').value) || 0;
     if (qtyNum <= 0) { alert('请填写数量'); return false; }
     const meters = calcMeters();
-    // 选了库存但库存没有"每张米数"→ 米数会是 0，提醒用户
+    // 选了库存但米数算不出（无每张米数且规格也无法推算）→ 提醒用户
     if (qtyNum > 0 && meters === 0 && state.type === 'sheet' && $('fInventory').value) {
       const it = state.inventory.find(x => x.id === $('fInventory').value);
-      if (it && !it.perSheetMeters) {
-        if (!confirm(`库存「${it.name}」还没设置每张米数，这条记录米数会记为 0。\n「确定」=仍然保存，「取消」=先去库存页补充`)) return false;
+      if (it && !it.perSheetMeters && !specToMeters(it.spec)) {
+        if (!confirm(`库存「${it.name}」没设置每张米数，规格也识别不了，这条记录米数会记为 0。\n「确定」=仍然保存，「取消」=先去库存页补充`)) return false;
       }
     }
 

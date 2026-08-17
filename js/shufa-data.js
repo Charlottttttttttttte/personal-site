@@ -799,5 +799,9 @@ window.SHUFA_DATA = {
    "copybookId": "caotangshizhi",
    "copybookName": "草堂十志"
   }
- ]
+ ],
+ "SPEC_TO_METERS": {
+  "四尺对开": 1.38,
+  "四尺四开": 0.69
+ }
 };

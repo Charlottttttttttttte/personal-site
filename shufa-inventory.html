@@ -260,6 +260,7 @@
   </div>
 </div>
 
+<script src="js/shufa-data.js"></script>
 <script src="js/shufa-store.js"></script>
 <script>
 (() => {
@@ -283,6 +284,19 @@
   function totalOf(i) { return isLong(i) ? (i.meters ?? i.total ?? 0) : (i.qty ?? i.total ?? 0); }
   function remainOf(i) { return i.remaining ?? totalOf(i); }
   function unitOf(i) { return isLong(i) ? '米' : '张'; }
+
+  // 规格 → 每张米数（如四尺对开=1.38、四尺四开=0.69），无映射返回 0
+  function specToMeters(spec) {
+    const s = String(spec || '').trim();
+    const map = (window.SHUFA_DATA && SHUFA_DATA.SPEC_TO_METERS) || {};
+    for (const k in map) {
+      if (s.startsWith(k)) return map[k];
+    }
+    return 0;
+  }
+  function perSheetOf(i) {
+    return i.perSheetMeters || specToMeters(i.spec) || 0;
+  }
 
   // ---------- 数据加载（双通道+超时） ----------
   async function fetchWithTimeout(url, ms) {
@@ -345,16 +359,14 @@
     return list.slice().sort((a, b) => remainOf(a) - remainOf(b));
   }
 
-  // 每条折算米数：长卷=米数；刀纸/条屏=张数×每张米数
+  // 每条折算米数：长卷=米数；刀纸/条屏=张数×每张米数（规格可自动推算）
   function metersOf(i) {
     if (isLong(i)) return i.meters ?? i.total ?? 0;
-    const per = i.perSheetMeters || 0;
-    return (i.qty ?? i.total ?? 0) * per;
+    return (i.qty ?? i.total ?? 0) * perSheetOf(i);
   }
   function remainMetersOf(i) {
     if (isLong(i)) return i.remaining ?? i.meters ?? 0;
-    const per = i.perSheetMeters || 0;
-    return (i.remaining ?? i.qty ?? 0) * per;
+    return (i.remaining ?? i.qty ?? 0) * perSheetOf(i);
   }
 
   function renderStats() {
@@ -395,7 +407,7 @@
             <span class="item-name">${i.name}</span>
             <span class="item-id">${i.id}</span>
           </div>
-          <div class="item-spec">尺寸：${spec}${!isLong(i) && i.perSheetMeters ? ` · ${i.perSheetMeters}米/张` : ''}</div>
+          <div class="item-spec">尺寸：${spec}${!isLong(i) && perSheetOf(i) ? ` · ${perSheetOf(i)}米/张` : ''}</div>
           <div class="item-progress">
             <div class="progress-bar"><div class="progress-fill ${barCls}" style="width:${pct}%"></div></div>
             <div class="progress-text">
@@ -424,9 +436,9 @@
     $('sheetName').textContent = item.name + '（' + item.type + '）';
     $('editNum').value = remainOf(item);
     $('editUnit').textContent = unitOf(item);
-    // 非长卷显示"每张米数"编辑
+    // 非长卷显示"每张米数"编辑（规格可自动推算）
     $('perRow').style.display = isLong(item) ? 'none' : 'flex';
-    $('editPer').value = item.perSheetMeters ? String(item.perSheetMeters) : '';
+    $('editPer').value = perSheetOf(item) ? String(perSheetOf(item)) : '';
     $('btnConsumeText').textContent = `✍️ 写${isLong(item) ? '一米（扣减 1 米）' : '一张（扣减 1 张）'}`;
     $('sheet').classList.add('open');
     $('sheetMask').classList.add('open');
@@ -500,9 +512,12 @@
     const spec = prompt('尺寸规格（如：四尺对开）：', '');
     let perSheet = 0;
     if (!isL) {
-      const perRaw = prompt('每张米数（如四尺对开约 1.38 米；留空为 0）：', '1.38');
-      const pv = perRaw ? parseFloat(perRaw) : NaN;
-      perSheet = isNaN(pv) || pv < 0 ? 0 : pv;
+      perSheet = specToMeters(spec); // 规格可自动推算（四尺对开=1.38、四尺四开=0.69）
+      if (!perSheet) {
+        const perRaw = prompt('每张米数（留空为 0，之后可在库存里补）：', '');
+        const pv = perRaw ? parseFloat(perRaw) : NaN;
+        perSheet = isNaN(pv) || pv < 0 ? 0 : pv;
+      }
     }
     const item = {
       id: '库存-' + (maxNum + 1),
