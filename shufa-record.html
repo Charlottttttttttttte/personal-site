@@ -378,12 +378,27 @@
       }
     }
 
-    // 扣减库存
+    // 扣减库存（编辑时按差值调整，避免重复扣减；换库存时先归还原项）
+    const curRemain = (it) => it.remaining ?? (it.type === '长卷' ? it.meters : it.qty);
+    let oldInvId = null, oldQty = 0;
+    if (state.editingId) {
+      const old = state.records.find(r => r.id === state.editingId);
+      if (old && old.paperSnapshot && old.paperSnapshot.inventoryId) {
+        oldInvId = old.paperSnapshot.inventoryId;
+        oldQty = (old.quantity && old.quantity.number) ? old.quantity.number : 0;
+      }
+    }
+    if (oldInvId && oldInvId !== invId) {
+      // 换库存：归还原库存已扣数量
+      const oldIt = state.inventory.find(x => x.id === oldInvId);
+      if (oldIt) oldIt.remaining = curRemain(oldIt) + oldQty;
+    }
     if (invId) {
       const it = state.inventory.find(x => x.id === invId);
       if (it) {
-        const unit = state.type === 'scroll' ? 1 : 1;
-        it.remaining = Math.max(0, (it.remaining ?? (it.type === '长卷' ? it.meters : it.qty)) - qtyNum * unit);
+        // 长卷=追加语义（全量扣）；单张=覆盖语义（差值调整）
+        const deduct = state.type === 'scroll' || oldInvId !== invId ? qtyNum : (qtyNum - oldQty);
+        it.remaining = Math.max(0, curRemain(it) - deduct);
         const invData = { updatedAt: new Date().toISOString().slice(0,10), items: state.inventory };
         SHUFA_STORE.saveDraft('inventory', invData);
       }
@@ -432,7 +447,8 @@
       }
     }
     $('fNote').value = r.note || '';
-    $('btnSave').textContent = '保存修改';
+    $('btnSave').textContent = `保存修改（覆盖 ${r.date} 这条记录）`;
+    setStatus(`正在编辑 ${r.date} 的记录，保存将覆盖原记录；想补记同一天请从日历页点日期选「补记」`);
     calcMeters();
   }
 

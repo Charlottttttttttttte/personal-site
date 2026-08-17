@@ -242,8 +242,13 @@
   function onDayTap(dateStr) {
     const dayRecs = state.records.filter(r => r.date === dateStr && !r.deleted);
     if (dayRecs.length > 0) {
-      // 有记录 → 编辑第一条
-      location.href = `shufa-record.html?editId=${dayRecs[0].id}`;
+      // 有记录：选择补记新记录，还是编辑最近一条（避免误把补记当编辑覆盖）
+      const isNew = confirm(`这一天已有 ${dayRecs.length} 条记录。\n「确定」= 补记新记录\n「取消」= 编辑最近一条`);
+      if (isNew) {
+        location.href = `shufa-record.html?type=sheet&date=${dateStr}`;
+      } else {
+        location.href = `shufa-record.html?editId=${dayRecs[0].id}`;
+      }
     } else {
       // 无记录 → 弹选择
       const type = confirm('这一天还没有记录。点「确定」写单张，点「取消」写长卷？') ? 'sheet' : 'scroll';
