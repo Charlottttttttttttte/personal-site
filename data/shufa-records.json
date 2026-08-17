@@ -5,7 +5,7 @@
       "id": "rec_1786932430227",
       "date": "2026-08-16",
       "type": "sheet",
-      "meters": 0,
+      "meters": 16.56,
       "quantity": {
         "number": 24,
         "unit": "张"
@@ -23,7 +23,7 @@
         "copybookName": "朱子感兴诗"
       },
       "note": "",
-      "updatedAt": "2026-08-17T03:18:25.054Z",
+      "updatedAt": "2026-08-17T03:36:19.290Z",
       "deleted": false
     },
     {
