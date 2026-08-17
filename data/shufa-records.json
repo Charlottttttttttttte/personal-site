@@ -1,6 +1,84 @@
 {
-  "updatedAt": "2026-08-14",
+  "updatedAt": "2026-08-17",
   "records": [
+    {
+      "id": "rec_1786932430227",
+      "date": "2026-08-16",
+      "type": "sheet",
+      "meters": 0,
+      "quantity": {
+        "number": 24,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-110",
+        "name": "粉紫云丝",
+        "inventoryId": "库存-110",
+        "lengthPerSheet": 0
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-17T02:07:10.227Z",
+      "updatedAt": "2026-08-17T02:07:10.227Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1786932299707",
+      "date": "2026-08-15",
+      "type": "sheet",
+      "meters": 6.9,
+      "quantity": {
+        "number": 5,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-68",
+        "name": "清韵龙章",
+        "inventoryId": "库存-68",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-17T02:04:59.707Z",
+      "updatedAt": "2026-08-17T02:04:59.707Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1786931812462",
+      "date": "2026-08-17",
+      "type": "sheet",
+      "meters": 5.52,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-67",
+        "name": "彩缎条屏",
+        "inventoryId": "库存-67",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-17T01:56:52.462Z",
+      "updatedAt": "2026-08-17T01:56:52.462Z",
+      "deleted": false
+    },
     {
       "id": "rec_1786665777226",
       "date": "2026-08-14",
