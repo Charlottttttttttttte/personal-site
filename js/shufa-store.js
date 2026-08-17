@@ -182,6 +182,40 @@
     return true;
   }
 
+  // 按 id 合并两份列表：本机优先，线上补充（防多设备互覆盖、补全线上新增）
+  function mergeById(localItems, remoteItems) {
+    const merged = [];
+    const seen = new Set();
+    for (const list of [localItems, remoteItems]) {
+      for (const it of list) {
+        if (!it || !it.id || seen.has(it.id)) continue;
+        seen.add(it.id);
+        merged.push(it);
+      }
+    }
+    return merged;
+  }
+
+  // 合并同步单个数据文件：拉线上 → 按 id 合并 → 上传 → 写回本机草稿
+  // 本机草稿保留：页面始终显示本机最新数据，不依赖线上部署延迟
+  async function mergeSync(kind, local, message) {
+    let remote = null;
+    try {
+      const r = await loadFromGitHub(kind);
+      remote = r;
+    } catch (e) {
+      if (!String(e.message).includes('404')) throw e;
+    }
+    const listKey = kind === 'records' ? 'records' : 'items';
+    const merged = {
+      updatedAt: new Date().toISOString().slice(0, 10),
+      [listKey]: mergeById(local[listKey] || [], (remote && remote[listKey]) || [])
+    };
+    await syncToGitHub(kind, merged, message, true /* 保留本机草稿 */);
+    localStorage.setItem(FILES[kind].lsKey, JSON.stringify(merged));
+    return merged;
+  }
+
   // 一键同步全部数据（记录 + 库存 + 自定义字帖）。dataProvider: { records: data, inventory: data|null }
   // 未提供的数据文件会读本机草稿；无草稿则跳过（不空写覆盖线上）；自定义字帖总是双向合并同步
   async function syncAll(dataProvider) {
@@ -199,7 +233,7 @@
       if (d) recData = JSON.parse(d);
     }
     if (recData) {
-      await syncToGitHub('records', recData, '记录同步 ' + dateStr);
+      await mergeSync('records', recData, '记录同步 ' + dateStr);
       results.push('记录');
     }
 
@@ -212,7 +246,7 @@
       if (d) invData = JSON.parse(d);
     }
     if (invData) {
-      await syncToGitHub('inventory', invData, '库存同步 ' + dateStr);
+      await mergeSync('inventory', invData, '库存同步 ' + dateStr);
       results.push('库存');
     }
 
