@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "espanol 学习包",
-    "note": "由 scripts/gen_espanol.py 生成;每周/两周批量跑一次。"
+    "note": "由 scripts/gen_espanol.py 生成;--week 1/2 按周追加。"
   },
   "days": [
     {
@@ -313,6 +313,443 @@
       "weekday": "日",
       "type": "rest",
       "title": "周末休息 · 复习"
+    },
+    {
+      "date": "2026-08-24",
+      "weekday": "一",
+      "type": "listen",
+      "title": "精听 · 小猪佩奇:去购物(1)",
+      "extras": [
+        {
+          "es": "la compra",
+          "zh": "购物 / 买的东西",
+          "ex": "Nos vamos a la compra."
+        },
+        {
+          "es": "el carrito",
+          "zh": "购物车",
+          "ex": "A George le encanta ir en el carrito."
+        },
+        {
+          "es": "la lista",
+          "zh": "清单",
+          "ex": "Hay cuatro cosas en la lista."
+        },
+        {
+          "es": "encontrar",
+          "zh": "找到",
+          "ex": "Lo encontraré todo.",
+          "note": "encontrar → yo encuentro"
+        },
+        {
+          "es": "la cebolla",
+          "zh": "洋葱",
+          "ex": "Lo siguiente son cebollas."
+        },
+        {
+          "es": "tachar",
+          "zh": "划掉",
+          "ex": "Voy a tacharlos de la lista."
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 佩奇:去购物(1)",
+        "source": {
+          "type": "video",
+          "label": "小猪佩奇 S01E49 去购物(真实台词)",
+          "url": "https://www.youtube.com/results?search_query=peppa+pig+español+nos+vamos+a+la+compra"
+        },
+        "script": [
+          [
+            "Nos vamos a la compra.",
+            "我们去购物。"
+          ],
+          [
+            "¿Papi, puedo ir yo también en el carrito?",
+            "爸爸,我也能坐购物车吗?"
+          ],
+          [
+            "Ya eres muy mayor para eso, Peppa.",
+            "你已经很大了,佩奇。"
+          ],
+          [
+            "Nos ayudarás a hacer la compra.",
+            "你会帮我们购物。"
+          ],
+          [
+            "¡Sí! ¡Yo la haré!",
+            "好的!我来!"
+          ],
+          [
+            "Hay apuntadas cuatro cosas en la lista.",
+            "清单上记着四样东西。"
+          ],
+          [
+            "Unos tomates, spaghettis, cebollas y fruta.",
+            "西红柿、意大利面、洋葱和水果。"
+          ],
+          [
+            "Peppa, primero hay que buscar tomates.",
+            "佩奇,先要找西红柿。"
+          ],
+          [
+            "¡Ya los veo! Aquí están los tomates, mami.",
+            "我看到了!西红柿在这,妈妈。"
+          ],
+          [
+            "Muy bien, Peppa. Ahora mételos en el carro.",
+            "很好,佩奇。现在把它们放进购物车。"
+          ]
+        ],
+        "hint": "这是《小猪佩奇》的真实台词,反复听;再点上方链接看原片(带双语字幕站)。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你去超市会买什么?(Compro… / Necesito…)"
+      },
+      "day": 7
+    },
+    {
+      "date": "2026-08-25",
+      "weekday": "二",
+      "type": "read",
+      "title": "阅读 · 三只小猪(1)",
+      "extras": [
+        {
+          "es": "la paja",
+          "zh": "稻草",
+          "ex": "El primer cerdito construyó una casa de paja."
+        },
+        {
+          "es": "la madera",
+          "zh": "木头",
+          "ex": "El segundo cerdito usó madera."
+        },
+        {
+          "es": "el ladrillo",
+          "zh": "砖",
+          "ex": "La casa de ladrillos es muy fuerte."
+        },
+        {
+          "es": "el granjero",
+          "zh": "农夫",
+          "ex": "El granjero le dio la paja."
+        },
+        {
+          "es": "soplar",
+          "zh": "吹",
+          "ex": "El lobo sopló y sopló."
+        },
+        {
+          "es": "derrumbar",
+          "zh": "弄塌",
+          "ex": "El lobo derrumbó la casa."
+        }
+      ],
+      "input": {
+        "kind": "read",
+        "label": "阅读 · 三只小猪(1)",
+        "source": {
+          "type": "book",
+          "label": "三只小猪(西语童话,带英译+音频)",
+          "url": "https://www.thespanishexperiment.com/stories/threepigs"
+        },
+        "text": "Érase una vez una mamá cerda que tenía tres cerditos. No había suficiente comida, así que los cerditos tuvieron que ir a buscar su suerte. El primer cerdito encontró a un granjero con un atado de paja y le pidió: «¿Podría darme esa paja para construir una casa?» Como dijo «por favor», el granjero le dio la paja. El cerdito construyó una casa de paja y se echó una siesta. De pronto llegó el gran lobo malo: «¡Cerdito, ábreme la puerta!» El cerdito no abrió, y el lobo sopló y sopló y derrumbó la casa.",
+        "questions": [
+          {
+            "q": "La mamá cerda tenía tres cerditos.",
+            "zh": "猪妈妈有三只小猪",
+            "a": true
+          },
+          {
+            "q": "El primer cerdito construyó una casa de madera.",
+            "zh": "第一只小猪盖了木头房子",
+            "a": false
+          },
+          {
+            "q": "El lobo derrumbó la casa de paja.",
+            "zh": "狼吹倒了稻草房子",
+            "a": true
+          }
+        ],
+        "hint": "真实西语童话(有音频可听),读 1-2 遍做判断题;想听全文点上方链接。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你最喜欢的童话/故事是哪个?为什么?(Me gusta el cuento de… porque…)"
+      },
+      "day": 8
+    },
+    {
+      "date": "2026-08-26",
+      "weekday": "三",
+      "type": "listen",
+      "title": "精听 · 小猪佩奇:去购物(2)",
+      "extras": [
+        {
+          "es": "la comida preferida",
+          "zh": "最喜欢的食物",
+          "ex": "Los spaghettis son la comida preferida."
+        },
+        {
+          "es": "las chuches",
+          "zh": "糖果(西班牙口语)",
+          "ex": "Yo no veo chuches en la lista."
+        },
+        {
+          "es": "no me acuerdo",
+          "zh": "我不记得",
+          "ex": "La verdad es que no me acuerdo."
+        },
+        {
+          "es": "el dinosaurio",
+          "zh": "恐龙",
+          "ex": "No hay dinosaurios en los supermercados."
+        },
+        {
+          "es": "meter en el carro",
+          "zh": "放进购物车",
+          "ex": "Tienes que meterlos en el carro."
+        },
+        {
+          "es": "lo siguiente",
+          "zh": "下一项",
+          "ex": "¿Qué va ahora en la lista?"
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 佩奇:去购物(2)",
+        "source": {
+          "type": "video",
+          "label": "小猪佩奇 S01E49(真实台词)",
+          "url": "https://www.youtube.com/results?search_query=peppa+pig+español+nos+vamos+a+la+compra"
+        },
+        "script": [
+          [
+            "Los spaghettis son la comida preferida de Peppa y George.",
+            "意大利面是佩奇和乔治最喜欢的食物。"
+          ],
+          [
+            "¿Dónde estarán los spaghettis?",
+            "意大利面会在哪呢?"
+          ],
+          [
+            "¡Ya los veo! Mira, mami, aquí están.",
+            "我看到了!看,妈妈,在这。"
+          ],
+          [
+            "Muy bien. Ahora tienes que meterlos en el carro.",
+            "很好。现在你得把它们放进购物车。"
+          ],
+          [
+            "¿Qué va ahora en la lista, Peppa?",
+            "清单上现在是什么,佩奇?"
+          ],
+          [
+            "¡Chuches!",
+            "糖果!"
+          ],
+          [
+            "Yo no veo chuches en la lista.",
+            "我在清单上没看到糖果。"
+          ],
+          [
+            "Tienes muchas en casa, Peppa.",
+            "你家里已经有很多了,佩奇。"
+          ],
+          [
+            "La verdad es que no me acuerdo.",
+            "说实话,我不记得了。"
+          ],
+          [
+            "No hay dinosaurios en los supermercados.",
+            "超市里可没有恐龙。"
+          ]
+        ],
+        "hint": "真实台词,反复听;再点上方链接看原片。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你最喜欢的食物是什么?(Mi comida preferida es…)"
+      },
+      "day": 9
+    },
+    {
+      "date": "2026-08-27",
+      "weekday": "四",
+      "type": "read",
+      "title": "阅读 · 三只小猪(2)",
+      "extras": [
+        {
+          "es": "el techo",
+          "zh": "屋顶",
+          "ex": "El lobo subió al techo."
+        },
+        {
+          "es": "la chimenea",
+          "zh": "烟囱",
+          "ex": "Bajó por la chimenea."
+        },
+        {
+          "es": "la olla",
+          "zh": "锅",
+          "ex": "Cayó en una olla de sopa."
+        },
+        {
+          "es": "la sopa",
+          "zh": "汤",
+          "ex": "La sopa estaba muy caliente."
+        },
+        {
+          "es": "escalar / subir",
+          "zh": "爬上",
+          "ex": "El lobo escaló al techo."
+        },
+        {
+          "es": "huir",
+          "zh": "逃跑",
+          "ex": "El lobo salió huyendo."
+        }
+      ],
+      "input": {
+        "kind": "read",
+        "label": "阅读 · 三只小猪(2)",
+        "source": {
+          "type": "book",
+          "label": "三只小猪(西语童话,带英译+音频)",
+          "url": "https://www.thespanishexperiment.com/stories/threepigs"
+        },
+        "text": "El segundo cerdito encontró a un granjero que llevaba un atado de madera y le pidió: «¿Podría darme esa madera?» El granjero le dio la madera, y el cerdito construyó una casa de madera. El lobo llegó, tocó la puerta y dijo: «¡Cerdito, ábreme la puerta!» El cerdito no abrió, y el lobo sopló y sopló y derrumbó también esta casa. El tercer cerdito, el más trabajador, construyó una casa de ladrillos. El lobo sopló y sopló, pero no pudo derrumbarla. Entonces subió al techo y bajó por la chimenea… ¡y cayó en una olla de sopa muy caliente! El lobo salió huyendo y nunca volvió.",
+        "questions": [
+          {
+            "q": "El segundo cerdito construyó una casa de ladrillos.",
+            "zh": "第二只小猪盖了砖房子",
+            "a": false
+          },
+          {
+            "q": "El lobo no pudo derrumbar la casa de ladrillos.",
+            "zh": "狼吹不倒砖房子",
+            "a": true
+          },
+          {
+            "q": "El lobo cayó en una olla de sopa.",
+            "zh": "狼掉进了汤锅里",
+            "a": true
+          }
+        ],
+        "hint": "真实西语童话,读 1-2 遍做判断题;想听全文点上方链接。"
+      },
+      "writing": {
+        "prompt": "写 3 句:形容你的家 / 房间。(Mi casa tiene… / Mi habitación es…)"
+      },
+      "day": 10
+    },
+    {
+      "date": "2026-08-28",
+      "weekday": "五",
+      "type": "listen",
+      "title": "精听 · 小猪佩奇:去购物(3)",
+      "extras": [
+        {
+          "es": "la fruta",
+          "zh": "水果",
+          "ex": "Lo que falta es fruta."
+        },
+        {
+          "es": "la sandía",
+          "zh": "西瓜",
+          "ex": "Hay una sandía muy grande."
+        },
+        {
+          "es": "la tarta",
+          "zh": "蛋糕",
+          "ex": "La tarta de chocolate tiene buena pinta."
+        },
+        {
+          "es": "el postre",
+          "zh": "甜点",
+          "ex": "Pensé que sería un buen postre."
+        },
+        {
+          "es": "tener buena pinta",
+          "zh": "看起来不错",
+          "ex": "¡Tiene muy buena pinta!"
+        },
+        {
+          "es": "goloso",
+          "zh": "嘴馋的",
+          "ex": "¡Qué goloso, papi!"
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 佩奇:去购物(3)",
+        "source": {
+          "type": "video",
+          "label": "小猪佩奇 S01E49(真实台词)",
+          "url": "https://www.youtube.com/results?search_query=peppa+pig+español+nos+vamos+a+la+compra"
+        },
+        "script": [
+          [
+            "Sólo queda una cosa en la lista.",
+            "清单上只剩一样东西了。"
+          ],
+          [
+            "Lo que falta por comprar es fruta.",
+            "还缺的要买的是水果。"
+          ],
+          [
+            "Tú elegirás la fruta, George.",
+            "你来选水果,乔治。"
+          ],
+          [
+            "Hay manzanas, naranjas, plátanos y una sandía muy grande.",
+            "有苹果、橙子、香蕉和一个很大的西瓜。"
+          ],
+          [
+            "Esta es la caja donde se paga toda la compra.",
+            "这是付所有东西钱的地方。"
+          ],
+          [
+            "Peppa, ¿has puesto tú la tarta de chocolate en el carro?",
+            "佩奇,是你把巧克力蛋糕放进购物车的吗?"
+          ],
+          [
+            "Yo no, mami.",
+            "不是我,妈妈。"
+          ],
+          [
+            "Pensé que sería un buen postre.",
+            "我想它会是个不错的甜点。"
+          ],
+          [
+            "¡Qué goloso, papi!",
+            "爸爸你真馋!"
+          ],
+          [
+            "Lo apunto ahora en la lista y arreglado.",
+            "我现在把它记上清单,搞定。"
+          ]
+        ],
+        "hint": "真实台词,反复听;再点上方链接看原片。"
+      },
+      "writing": {
+        "prompt": "写 3 句:写一次你购物 / 逛街的经历。(Ayer fui a… y compré…)"
+      },
+      "day": 11
+    },
+    {
+      "date": "2026-08-29",
+      "weekday": "六",
+      "type": "rest",
+      "title": "周末休息 · 复习",
+      "day": 12
+    },
+    {
+      "date": "2026-08-30",
+      "weekday": "日",
+      "type": "rest",
+      "title": "周末休息 · 复习",
+      "day": 13
     }
   ]
 }
