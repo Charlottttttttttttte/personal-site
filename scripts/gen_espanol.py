@@ -19,6 +19,7 @@ from datetime import date, timedelta
 WEEKDAYS = ["一", "二", "三", "四", "五", "六", "日"]
 VAULT = "/Users/charlotte/Library/Mobile Documents/iCloud~md~obsidian/Documents/Charlotte"
 SR_FILE = os.path.join(VAULT, "📝 Personal", "西语学习", "补充词.md")
+LESSONS_DIR = os.path.join(VAULT, "📝 Personal", "西语学习", "学习包")
 OUT_DEFAULT = "data/espanol/days.json"
 
 # ===== 真实语料来源 =====
@@ -368,6 +369,55 @@ def sync_vault(days, out_path):
     return len(new_lines), len(existing)
 
 
+def sync_lessons(days, out_dir):
+    """把每天学习包写成 markdown 同步进 vault「学习包」目录(全量同步,先清后写,保证与 days.json 一致)。"""
+    os.makedirs(out_dir, exist_ok=True)
+    for f in os.listdir(out_dir):
+        if f.endswith(".md"):
+            os.remove(os.path.join(out_dir, f))
+    written = 0
+    for d in days:
+        if d["type"] == "rest":
+            continue
+        wd = d["weekday"]
+        kind = "精听" if d["type"] == "listen" else "阅读"
+        src = (d["input"].get("source") or {})
+        lines = [
+            f"# {d['date']} 星期{wd} · {d['title']}",
+            "",
+            f"> Día {d['day']} · {kind}日",
+        ]
+        if src.get("label"):
+            link = f" <{src['url']}>" if src.get("url") else ""
+            lines.append(f"> 真实语料:{src['label']}{link}")
+        lines += ["", "## 补充词(欧洲西语)"]
+        for w in d["extras"]:
+            note = f"(note: {w['note']})" if w.get("note") else ""
+            lines.append(f"- **{w['es']}** — {w['zh']} — *{w['ex']}* {note}")
+        lines.append("")
+        inp = d["input"]
+        lines.append(f"## {inp.get('label','')}")
+        if inp["kind"] == "listen":
+            for s in inp.get("script", []):
+                lines.append(f"- {s[0]} — {s[1]}")
+        else:
+            lines.append("")
+            lines.append(inp.get("text", ""))
+            lines.append("")
+            lines.append("### 判断题(答案已标)")
+            for q in inp.get("questions", []):
+                lines.append(f"- [ ] {q['q']} ({q['zh']}) → {'对' if q['a'] else '错'}")
+        lines.append("")
+        if inp.get("hint"):
+            lines.append(f"> 💡 {inp['hint']}")
+        lines += ["", "## 写作(3 句)", d["writing"]["prompt"], ""]
+        fname = d["date"] + "-" + re.sub(r"[\s·:：/\\?]", "", d["title"]) + ".md"
+        with open(os.path.join(out_dir, fname), "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+        written += 1
+    return written
+
+
 def main():
     ap = argparse.ArgumentParser(description="生成/合并 espanol 学习包 days.json + vault 补充词")
     ap.add_argument("--start", required=True, help="起始日期 YYYY-MM-DD")
@@ -400,6 +450,8 @@ def main():
     if not args.no_vault:
         total, kept = sync_vault(merged, SR_FILE)
         print(f"vault 补充词:共 {total} 条(保留 {kept},新增 {total - kept})")
+        n = sync_lessons(merged, LESSONS_DIR)
+        print(f"vault 学习包:同步 {n} 天 → {LESSONS_DIR}")
 
 
 if __name__ == "__main__":
