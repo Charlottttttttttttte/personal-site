@@ -1,0 +1,396 @@
+{
+  "meta": {
+    "name": "espanol 学习包",
+    "note": "由 scripts/gen_espanol.py 生成;每周/两周批量跑一次。"
+  },
+  "days": [
+    {
+      "date": "2026-08-17",
+      "day": 1,
+      "weekday": "一",
+      "type": "listen",
+      "title": "精听 · 谈论动物",
+      "extras": [
+        {
+          "es": "el perro",
+          "zh": "狗",
+          "ex": "Tengo un perro pequeño."
+        },
+        {
+          "es": "el gato",
+          "zh": "猫",
+          "ex": "Mi gato es negro."
+        },
+        {
+          "es": "el pájaro",
+          "zh": "鸟",
+          "ex": "El pájaro canta por la mañana."
+        },
+        {
+          "es": "el pez",
+          "zh": "鱼",
+          "ex": "Tengo dos peces en casa."
+        },
+        {
+          "es": "la mascota",
+          "zh": "宠物",
+          "ex": "¿Tienes mascota?"
+        },
+        {
+          "es": "cuidar",
+          "zh": "照顾",
+          "ex": "Cuido a mi perro todos los días."
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 聊宠物",
+        "source": {
+          "type": "video",
+          "label": "小猪佩奇(西语版)",
+          "url": "https://www.youtube.com/results?search_query=peppa+pig+español"
+        },
+        "script": [
+          [
+            "¿Tienes mascota?",
+            "你有宠物吗?"
+          ],
+          [
+            "Sí, tengo un perro y dos gatos.",
+            "有,我有一只狗和两只猫。"
+          ],
+          [
+            "¿Cómo se llama tu perro?",
+            "你的狗叫什么?"
+          ],
+          [
+            "Se llama Lobo. Es muy cariñoso.",
+            "它叫洛博,很亲人。"
+          ],
+          [
+            "¿Y los gatos?",
+            "那猫呢?"
+          ],
+          [
+            "Son pequeños y muy traviesos.",
+            "它们很小,很调皮。"
+          ]
+        ],
+        "hint": "同一段反复听,不看字幕能全听懂再换下一个;再看一条真实视频磨耳朵。"
+      },
+      "writing": {
+        "prompt": "用今天学的词写 3 句:你家有什么宠物 / 动物?(¿Qué animales tienes?)"
+      }
+    },
+    {
+      "date": "2026-08-18",
+      "day": 2,
+      "weekday": "二",
+      "type": "read",
+      "title": "阅读 · 动物园一日",
+      "extras": [
+        {
+          "es": "el zoo",
+          "zh": "动物园",
+          "ex": "Vamos al zoo el domingo."
+        },
+        {
+          "es": "salvaje",
+          "zh": "野生的",
+          "ex": "El león es un animal salvaje."
+        },
+        {
+          "es": "la granja",
+          "zh": "农场",
+          "ex": "Mi abuelo tiene una granja."
+        },
+        {
+          "es": "el caballo",
+          "zh": "马",
+          "ex": "El caballo corre mucho."
+        },
+        {
+          "es": "la vaca",
+          "zh": "牛",
+          "ex": "La vaca da leche."
+        },
+        {
+          "es": "tener miedo de",
+          "zh": "害怕",
+          "ex": "Tengo miedo de los elefantes."
+        }
+      ],
+      "input": {
+        "kind": "read",
+        "label": "阅读 · 动物园一日",
+        "source": {
+          "type": "book",
+          "label": "Difusión 分级读物(A1)",
+          "url": ""
+        },
+        "text": "El domingo, Marta y su hermano van al zoo. Les gustan mucho los animales. Primero ven a los leones, que son muy grandes. Después, van a la granja del zoo y dan de comer a las cabras. Su hermano quiere ver a los elefantes, pero Marta tiene miedo de ellos. Al final, compran un helado y vuelven a casa contentos.",
+        "questions": [
+          {
+            "q": "Van al zoo el domingo.",
+            "zh": "他们周日去动物园",
+            "a": true
+          },
+          {
+            "q": "Marta tiene miedo de los elefantes.",
+            "zh": "玛尔塔害怕大象",
+            "a": true
+          },
+          {
+            "q": "Compran palomitas al final.",
+            "zh": "最后他们买了爆米花",
+            "a": false
+          }
+        ],
+        "hint": "读 1-2 遍,然后做判断题;答案第二天核对。有余力翻 1-2 页真实分级读物。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你最喜欢的动物和为什么。(Me gusta… porque…)"
+      }
+    },
+    {
+      "date": "2026-08-19",
+      "day": 3,
+      "weekday": "三",
+      "type": "listen",
+      "title": "精听 · 宠物店",
+      "extras": [
+        {
+          "es": "el conejo",
+          "zh": "兔子",
+          "ex": "El conejo come zanahorias."
+        },
+        {
+          "es": "adoptar",
+          "zh": "领养",
+          "ex": "Quiero adoptar un perro."
+        },
+        {
+          "es": "el veterinario",
+          "zh": "兽医",
+          "ex": "Llevo al gato al veterinario."
+        },
+        {
+          "es": "dar de comer",
+          "zh": "喂食",
+          "ex": "Doy de comer a los peces."
+        },
+        {
+          "es": "la jaula",
+          "zh": "笼子",
+          "ex": "El pájaro está en la jaula."
+        },
+        {
+          "es": "ladrar",
+          "zh": "叫(狗吠)",
+          "ex": "El perro ladra mucho."
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 宠物店",
+        "source": {
+          "type": "video",
+          "label": "小猪佩奇(西语版)",
+          "url": "https://www.youtube.com/results?search_query=peppa+pig+español"
+        },
+        "script": [
+          [
+            "Buenas tardes, ¿busca algo?",
+            "下午好,您找什么?"
+          ],
+          [
+            "Sí, quiero adoptar un gato pequeño.",
+            "是的,我想领养一只小猫。"
+          ],
+          [
+            "Tenemos dos gatitos muy cariñosos.",
+            "我们有两只很亲人的小猫。"
+          ],
+          [
+            "¿Y qué comen?",
+            "它们吃什么?"
+          ],
+          [
+            "Comen pienso y beben mucha agua.",
+            "吃猫粮,喝很多水。"
+          ],
+          [
+            "Perfecto, me llevo el gris, por favor.",
+            "太好了,我就要那只灰色的。"
+          ]
+        ],
+        "hint": "同一段反复听,不看字幕能全听懂再换下一个;再看一条真实视频磨耳朵。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你想养什么宠物?(Quiero adoptar…)"
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "day": 4,
+      "weekday": "四",
+      "type": "read",
+      "title": "阅读 · 露西亚家的动物",
+      "extras": [
+        {
+          "es": "la tortuga",
+          "zh": "乌龟",
+          "ex": "La tortuga vive muchos años."
+        },
+        {
+          "es": "la serpiente",
+          "zh": "蛇",
+          "ex": "La serpiente no tiene patas."
+        },
+        {
+          "es": "morder",
+          "zh": "咬",
+          "ex": "El perro no muerde."
+        },
+        {
+          "es": "la pata",
+          "zh": "爪子 / 腿(动物)",
+          "ex": "El gato tiene cuatro patas."
+        },
+        {
+          "es": "el animal doméstico",
+          "zh": "家养动物",
+          "ex": "El perro es un animal doméstico."
+        },
+        {
+          "es": "gritar",
+          "zh": "喊叫",
+          "ex": "Cuando ve una araña, grita."
+        }
+      ],
+      "input": {
+        "kind": "read",
+        "label": "阅读 · 露西亚家的动物",
+        "source": {
+          "type": "book",
+          "label": "Difusión 分级读物(A1)",
+          "url": ""
+        },
+        "text": "En casa de Lucía hay muchos animales. Tiene una tortuga que se llama Mancha, dos pájaros y un acuario con peces de colores. A su hermano le encantan los reptiles y quiere una serpiente, pero su madre dice que no. A Lucía, en cambio, le dan miedo las arañas. Por eso, cuando ve una, grita y llama a su padre.",
+        "questions": [
+          {
+            "q": "Lucía tiene una tortuga llamada Mancha.",
+            "zh": "露西亚有一只叫曼查的乌龟",
+            "a": true
+          },
+          {
+            "q": "Su hermano quiere un perro.",
+            "zh": "她哥哥想要一只狗",
+            "a": false
+          },
+          {
+            "q": "A Lucía le dan miedo las arañas.",
+            "zh": "露西亚害怕蜘蛛",
+            "a": true
+          }
+        ],
+        "hint": "读 1-2 遍,然后做判断题;答案第二天核对。有余力翻 1-2 页真实分级读物。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你害怕什么动物?(Tengo miedo de… / Me dan miedo…)"
+      }
+    },
+    {
+      "date": "2026-08-21",
+      "day": 5,
+      "weekday": "五",
+      "type": "listen",
+      "title": "精听 · 遛狗",
+      "extras": [
+        {
+          "es": "pasear",
+          "zh": "遛(狗)",
+          "ex": "Paseo al perro por la mañana."
+        },
+        {
+          "es": "la correa",
+          "zh": "牵引绳",
+          "ex": "El perro lleva correa."
+        },
+        {
+          "es": "la pelota",
+          "zh": "球",
+          "ex": "Al perro le gusta la pelota."
+        },
+        {
+          "es": "el parque",
+          "zh": "公园",
+          "ex": "Los perros corren en el parque."
+        },
+        {
+          "es": "obedecer",
+          "zh": "服从",
+          "ex": "Mi perro obedece bien."
+        },
+        {
+          "es": "correr detrás de",
+          "zh": "追着…跑",
+          "ex": "Corre detrás de la pelota."
+        }
+      ],
+      "input": {
+        "kind": "listen",
+        "label": "精听 · 遛狗",
+        "source": {
+          "type": "video",
+          "label": "Español con Juan(西班牙慢速)",
+          "url": "https://www.youtube.com/results?search_query=Español+con+Juan"
+        },
+        "script": [
+          [
+            "¿Dónde paseas a tu perro?",
+            "你在哪遛狗?"
+          ],
+          [
+            "En el parque, cerca de mi casa.",
+            "在我家附近的公园。"
+          ],
+          [
+            "¿Va sin correa?",
+            "它不拴绳吗?"
+          ],
+          [
+            "Sí, pero obedece muy bien.",
+            "不拴,但它很听话。"
+          ],
+          [
+            "¿Le gusta jugar a la pelota?",
+            "它喜欢玩球吗?"
+          ],
+          [
+            "¡Muchísimo! Corre detrás de la pelota todo el día.",
+            "超级喜欢!整天追着球跑。"
+          ]
+        ],
+        "hint": "同一段反复听,不看字幕能全听懂再换下一个;再看一条真实视频磨耳朵。"
+      },
+      "writing": {
+        "prompt": "写 3 句:你每天怎么照顾宠物 / 动物?(Cuido a… / Doy de comer a…)"
+      }
+    },
+    {
+      "date": "2026-08-22",
+      "day": 6,
+      "weekday": "六",
+      "type": "rest",
+      "title": "周末休息 · 复习"
+    },
+    {
+      "date": "2026-08-23",
+      "day": 7,
+      "weekday": "日",
+      "type": "rest",
+      "title": "周末休息 · 复习"
+    }
+  ]
+}

@@ -13,6 +13,7 @@
   :root{
     --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
     --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+    --es:#FF6B5E; --es-soft:#FFE3DF;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;overscroll-behavior:auto;-webkit-overflow-scrolling:touch;}
@@ -31,9 +32,11 @@
   .card--fin::after{background:var(--yellow);}
   .card--agent::after{background:var(--blue);}
   .card--shufa::after{background:var(--teal);}
+  .card--es::after{background:var(--es);}
   .tag{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:10px;}
   .card--fin .tag{background:var(--pink);}
   .card--agent .tag{background:var(--blue);}
+  .card--es .tag{background:var(--es-soft);}
   .ctitle{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px;}
   .cdesc{font-size:14px;line-height:1.6;opacity:.7;}
   .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:11px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;}
@@ -74,6 +77,13 @@
     <div class="cfoot"><span id="agentFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
   </div>
 
+  <div class="card card--es" id="esCard" role="button" tabindex="0">
+    <span class="tag" id="esTag">🇪🇸 西语</span>
+    <div class="ctitle" id="esTitle">—</div>
+    <p class="cdesc" id="esDesc"></p>
+    <div class="cfoot"><span id="esFoot">ESPAÑOL</span><span class="carrow">→</span></div>
+  </div>
+
   <a class="card card--shufa" href="shufa-calendar.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
     <span class="tag" style="background:var(--teal);">🖌️ 书法</span>
     <div class="ctitle">临池录 · 书法打卡</div>
@@ -90,7 +100,7 @@
     <button class="viewer-back" id="viewerBack">← 返回</button>
     <span class="viewer-title" id="viewerTitle"></span>
   </div>
-  <iframe id="viewerFrame" src="about:blank"></iframe>
+  <iframe id="viewerFrame" src="about:blank" allow="microphone; autoplay"></iframe>
 </div>
 
 <script>
@@ -221,6 +231,34 @@ function cur(d,max){ return Math.min(d,max); }
     e.preventDefault();
     openViewer(a.url, '🤖 Agent · 第'+agtDay+'期 '+a.t);
   });
+
+  /* ===== 西语卡:读 days.json 显示今日课,点击在查看器打开 espanol.html ===== */
+  const esCard=document.getElementById('esCard');
+  const WEEKNAME=['日','一','二','三','四','五','六'];
+  function setEsCard(day){
+    const tag=day
+      ? (day.type==='listen'?'🎧 精听日':day.type==='read'?'📖 阅读日':day.type==='rest'?'🌿 休息':'西语')
+        +' · 星期'+WEEKNAME[new Date(day.date+'T00:00:00').getDay()]
+      : '西语';
+    document.getElementById('esTag').textContent='🇪🇸 '+tag;
+    document.getElementById('esTitle').textContent=day
+      ? 'Día '+day.day+' · '+day.title
+      : 'Día 1 · 今天开始';
+    document.getElementById('esDesc').textContent=day
+      ? (day.words?day.words.length+' 个新词 · ':'')+(day.type==='listen'?'精听':day.type==='read'?'阅读':day.type==='rest'?'今天休息':'')+' · 30 分钟'
+      : '每天一课:词卡 + 输入 + 口语,约 30 分钟。';
+    document.getElementById('esFoot').textContent='ESPAÑOL'+(day?' · Día '+day.day:'');
+    esCard.onclick=function(e){
+      e.preventDefault();
+      openViewer('espanol.html?v=4','🇪🇸 西语 · '+(day?day.title:'今日一课'));
+    };
+  }
+  fetch('data/espanol/days.json').then(function(r){
+    return r.ok?r.json():Promise.reject(new Error('HTTP '+r.status));
+  }).then(function(j){
+    const t=todayISO();
+    setEsCard((j.days||[]).find(function(x){ return x.date===t; }));
+  }).catch(function(){ setEsCard(null); });
 })();
 </script>
 </body>
