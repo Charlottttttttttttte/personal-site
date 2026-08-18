@@ -5,86 +5,8 @@
   },
   "days": [
     {
-      "date": "2026-08-17",
-      "day": 1,
-      "weekday": "一",
-      "type": "listen",
-      "title": "精听 · 谈论动物",
-      "extras": [
-        {
-          "es": "el perro",
-          "zh": "狗",
-          "ex": "Tengo un perro pequeño."
-        },
-        {
-          "es": "el gato",
-          "zh": "猫",
-          "ex": "Mi gato es negro."
-        },
-        {
-          "es": "el pájaro",
-          "zh": "鸟",
-          "ex": "El pájaro canta por la mañana."
-        },
-        {
-          "es": "el pez",
-          "zh": "鱼",
-          "ex": "Tengo dos peces en casa."
-        },
-        {
-          "es": "la mascota",
-          "zh": "宠物",
-          "ex": "¿Tienes mascota?"
-        },
-        {
-          "es": "cuidar",
-          "zh": "照顾",
-          "ex": "Cuido a mi perro todos los días."
-        }
-      ],
-      "input": {
-        "kind": "listen",
-        "label": "精听 · 聊宠物",
-        "source": {
-          "type": "video",
-          "label": "小猪佩奇(西语版)",
-          "url": "https://www.youtube.com/results?search_query=peppa+pig+español"
-        },
-        "script": [
-          [
-            "¿Tienes mascota?",
-            "你有宠物吗?"
-          ],
-          [
-            "Sí, tengo un perro y dos gatos.",
-            "有,我有一只狗和两只猫。"
-          ],
-          [
-            "¿Cómo se llama tu perro?",
-            "你的狗叫什么?"
-          ],
-          [
-            "Se llama Lobo. Es muy cariñoso.",
-            "它叫洛博,很亲人。"
-          ],
-          [
-            "¿Y los gatos?",
-            "那猫呢?"
-          ],
-          [
-            "Son pequeños y muy traviesos.",
-            "它们很小,很调皮。"
-          ]
-        ],
-        "hint": "同一段反复听,不看字幕能全听懂再换下一个;再看一条真实视频磨耳朵。"
-      },
-      "writing": {
-        "prompt": "用今天学的词写 3 句:你家有什么宠物 / 动物?(¿Qué animales tienes?)"
-      }
-    },
-    {
       "date": "2026-08-18",
-      "day": 2,
+      "day": 1,
       "weekday": "二",
       "type": "read",
       "title": "阅读 · 动物园一日",
@@ -154,7 +76,7 @@
     },
     {
       "date": "2026-08-19",
-      "day": 3,
+      "day": 2,
       "weekday": "三",
       "type": "listen",
       "title": "精听 · 宠物店",
@@ -232,7 +154,7 @@
     },
     {
       "date": "2026-08-20",
-      "day": 4,
+      "day": 3,
       "weekday": "四",
       "type": "read",
       "title": "阅读 · 露西亚家的动物",
@@ -302,7 +224,7 @@
     },
     {
       "date": "2026-08-21",
-      "day": 5,
+      "day": 4,
       "weekday": "五",
       "type": "listen",
       "title": "精听 · 遛狗",
@@ -380,14 +302,14 @@
     },
     {
       "date": "2026-08-22",
-      "day": 6,
+      "day": 5,
       "weekday": "六",
       "type": "rest",
       "title": "周末休息 · 复习"
     },
     {
       "date": "2026-08-23",
-      "day": 7,
+      "day": 6,
       "weekday": "日",
       "type": "rest",
       "title": "周末休息 · 复习"

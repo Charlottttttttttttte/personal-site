@@ -190,17 +190,17 @@ def sync_vault(days, out_path):
                 m = re.match(r"-\s+\*\*(.+?)\*\*", line)
                 if m:
                     existing[m.group(1).strip()] = line.rstrip("\n")
-    new_lines = []
+    new_lines = list(existing.values())  # 保留全部历史词条(按文件顺序)
+    seen = set(existing.keys())
     tomorrow = (date.today() + timedelta(days=1)).isoformat()
     for d in days:
         if d["type"] == "rest":
             continue
         for w in d["extras"]:
             es = w["es"].strip()
-            if es in existing:
-                if existing[es] not in new_lines:
-                    new_lines.append(existing[es])
+            if es in seen:
                 continue
+            seen.add(es)
             note = f"(note: {w['note']}) " if w.get("note") else ""
             line = f"- **{es}** — {w['zh']} — *{w['ex']}* {note}<!--SR:!{tomorrow},1,300-->"
             new_lines.append(line)
