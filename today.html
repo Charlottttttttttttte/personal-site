@@ -253,7 +253,7 @@ function cur(d,max){ return Math.min(d,max); }
       openViewer('espanol.html?v=4','🇪🇸 西语 · '+(day?day.title:'今日一课'));
     };
   }
-  fetch('data/espanol/days.json').then(function(r){
+  fetch('data/espanol/days.json?v='+Date.now()).then(function(r){
     return r.ok?r.json():Promise.reject(new Error('HTTP '+r.status));
   }).then(function(j){
     const t=todayISO();
