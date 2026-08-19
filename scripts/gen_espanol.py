@@ -26,6 +26,8 @@ OUT_DEFAULT = "data/espanol/days.json"
 PEPPA_E49 = "https://spanishboom.com/spanish-cartoons-with-transcription/peppa-pig-s01-e49"
 PEPPA_E49_VIDEO = "https://www.youtube.com/results?search_query=peppa+pig+español+nos+vamos+a+la+compra"
 CERDITOS = "https://www.thespanishexperiment.com/stories/threepigs"
+BILI_PEPPA_E03 = "https://player.bilibili.com/player.html?bvid=BV1Gf4y1S7US&page=1&high_quality=1&danmaku=0"
+BILI_PEPPA_E03_URL = "https://www.bilibili.com/video/BV1Gf4y1S7US"
 
 # ===== 第一周:动物主题(A1→A2 过渡)=====
 WEEK1_CURRICULUM = {
@@ -41,7 +43,7 @@ WEEK1_CURRICULUM = {
         ],
         "input": {
             "kind": "listen", "label": "精听 · 聊宠物",
-            "source": {"type": "video", "label": "小猪佩奇(西语版)", "url": "https://www.youtube.com/results?search_query=peppa+pig+español"},
+            "source": {"type": "video", "label": "场景对话(自编 · A1)", "url": ""},
             "script": [
                 ["¿Tienes mascota?", "你有宠物吗?"],
                 ["Sí, tengo un perro y dos gatos.", "有,我有一只狗和两只猫。"],
@@ -89,7 +91,7 @@ WEEK1_CURRICULUM = {
         ],
         "input": {
             "kind": "listen", "label": "精听 · 宠物店",
-            "source": {"type": "video", "label": "小猪佩奇(西语版)", "url": "https://www.youtube.com/results?search_query=peppa+pig+español"},
+            "source": {"type": "video", "label": "场景对话(自编 · A1)", "url": ""},
             "script": [
                 ["Buenas tardes, ¿busca algo?", "下午好,您找什么?"],
                 ["Sí, quiero adoptar un gato pequeño.", "是的,我想领养一只小猫。"],
@@ -137,7 +139,7 @@ WEEK1_CURRICULUM = {
         ],
         "input": {
             "kind": "listen", "label": "精听 · 遛狗",
-            "source": {"type": "video", "label": "Español con Juan(西班牙慢速)", "url": "https://www.youtube.com/results?search_query=Español+con+Juan"},
+            "source": {"type": "video", "label": "场景对话(自编 · A1)", "url": ""},
             "script": [
                 ["¿Dónde paseas a tu perro?", "你在哪遛狗?"],
                 ["En el parque, cerca de mi casa.", "在我家附近的公园。"],
@@ -155,33 +157,33 @@ WEEK1_CURRICULUM = {
 # ===== 第二周:真实语料(佩奇去购物 / 三只小猪)=====
 WEEK2_CURRICULUM = {
     "一": {
-        "title": "精听 · 小猪佩奇:去购物(1)",
+        "title": "精听 · 小猪佩奇:小佩奇和小苏西(1)",
         "extras": [
-            {"es": "la compra", "zh": "购物 / 买的东西", "ex": "Nos vamos a la compra."},
-            {"es": "el carrito", "zh": "购物车", "ex": "A George le encanta ir en el carrito."},
-            {"es": "la lista", "zh": "清单", "ex": "Hay cuatro cosas en la lista."},
-            {"es": "encontrar", "zh": "找到", "ex": "Lo encontraré todo.", "note": "encontrar → yo encuentro" },
-            {"es": "la cebolla", "zh": "洋葱", "ex": "Lo siguiente son cebollas."},
-            {"es": "tachar", "zh": "划掉", "ex": "Voy a tacharlos de la lista."},
+            {"es": "esperar", "zh": "等待", "ex": "Peppa está esperando a su mejor amiga."},
+            {"es": "la mejor amiga", "zh": "最好的朋友(女)", "ex": "Son las mejores amigas."},
+            {"es": "el cuarto", "zh": "房间", "ex": "¿Por qué no vais a jugar a tu cuarto?"},
+            {"es": "mayor", "zh": "年长的 / 大的", "ex": "Este juego es solo para niñas mayores."},
+            {"es": "el cuento", "zh": "童话 / 故事", "ex": "Soy una princesa salida de un cuento."},
+            {"es": "convertir", "zh": "变成", "ex": "Voy a convertirte en rana."},
         ],
         "input": {
-            "kind": "listen", "label": "精听 · 佩奇:去购物(1)",
-            "source": {"type": "video", "label": "小猪佩奇 S01E49 去购物(真实台词)", "url": PEPPA_E49_VIDEO},
+            "kind": "listen", "label": "精听 · 小佩奇和小苏西(1)",
+            "source": {"type": "video", "label": "小猪佩奇 S01E03 小佩奇和小苏西(B站内嵌)", "url": BILI_PEPPA_E03_URL, "embed": BILI_PEPPA_E03},
             "script": [
-                ["Nos vamos a la compra.", "我们去购物。"],
-                ["¿Papi, puedo ir yo también en el carrito?", "爸爸,我也能坐购物车吗?"],
-                ["Ya eres muy mayor para eso, Peppa.", "你已经很大了,佩奇。"],
-                ["Nos ayudarás a hacer la compra.", "你会帮我们购物。"],
-                ["¡Sí! ¡Yo la haré!", "好的!我来!"],
-                ["Hay apuntadas cuatro cosas en la lista.", "清单上记着四样东西。"],
-                ["Unos tomates, spaghettis, cebollas y fruta.", "西红柿、意大利面、洋葱和水果。"],
-                ["Peppa, primero hay que buscar tomates.", "佩奇,先要找西红柿。"],
-                ["¡Ya los veo! Aquí están los tomates, mami.", "我看到了!西红柿在这,妈妈。"],
-                ["Muy bien, Peppa. Ahora mételos en el carro.", "很好,佩奇。现在把它们放进购物车。"],
+                ["Peppa está esperando a su mejor amiga, Susi Sheep.", "佩奇在等她最好的朋友,苏西羊。"],
+                ["¡Hola, Susi!", "你好,苏西!"],
+                ["¡Hola, Peppa!", "你好,佩奇!"],
+                ["Son las mejores amigas.", "她们是最好的朋友。"],
+                ["Peppa, ¿por qué no vais Susi y tú a jugar a tu cuarto?", "佩奇,你和苏西怎么不去你房间玩?"],
+                ["¡Vale, mami!", "好的,妈妈!"],
+                ["A Peppa y a Susi les encanta jugar en la habitación de Peppa.", "佩奇和苏西喜欢在佩奇房间里玩。"],
+                ["¡No, George! Este juego es solo para niñas mayores.", "不行,乔治!这个游戏只给大女孩玩。"],
+                ["¡Soy una princesa salida de un cuento!", "我是从童话里走出来的公主!"],
+                ["Voy a convertirte en rana.", "我要把你变成青蛙。"],
             ],
-            "hint": "这是《小猪佩奇》的真实台词,反复听;再点上方链接看原片(带双语字幕站)。",
+            "hint": "这是 B站《小猪佩奇》西语版的真实台词,页面内直接看原片,反复听,不看字幕能全听懂再换。",
         },
-        "writing": {"prompt": "写 3 句:你去超市会买什么?(Compro… / Necesito…)"},
+        "writing": {"prompt": "写 3 句:你最好的朋友是谁?你们一起玩什么?(Mi mejor amiga es… / Jugamos a…)"},
     },
     "二": {
         "title": "阅读 · 三只小猪(1)",
@@ -195,7 +197,7 @@ WEEK2_CURRICULUM = {
         ],
         "input": {
             "kind": "read", "label": "阅读 · 三只小猪(1)",
-            "source": {"type": "book", "label": "三只小猪(西语童话,带英译+音频)", "url": CERDITOS},
+            "source": {"type": "book", "label": "三只小猪(西语童话,带英译+音频)", "url": CERDITOS, "audio": "https://media.thespanishexperiment.com/sp/audio/stories/threepigs/threepigs-sp-full-128.mp3"},
             "text": "Érase una vez una mamá cerda que tenía tres cerditos. No había suficiente comida, así que los cerditos tuvieron que ir a buscar su suerte. El primer cerdito encontró a un granjero con un atado de paja y le pidió: «¿Podría darme esa paja para construir una casa?» Como dijo «por favor», el granjero le dio la paja. El cerdito construyó una casa de paja y se echó una siesta. De pronto llegó el gran lobo malo: «¡Cerdito, ábreme la puerta!» El cerdito no abrió, y el lobo sopló y sopló y derrumbó la casa.",
             "questions": [
                 {"q": "La mamá cerda tenía tres cerditos.", "zh": "猪妈妈有三只小猪", "a": True},
@@ -207,33 +209,33 @@ WEEK2_CURRICULUM = {
         "writing": {"prompt": "写 3 句:你最喜欢的童话/故事是哪个?为什么?(Me gusta el cuento de… porque…)"},
     },
     "三": {
-        "title": "精听 · 小猪佩奇:去购物(2)",
+        "title": "精听 · 小猪佩奇:小佩奇和小苏西(2)",
         "extras": [
-            {"es": "la comida preferida", "zh": "最喜欢的食物", "ex": "Los spaghettis son la comida preferida."},
-            {"es": "las chuches", "zh": "糖果(西班牙口语)", "ex": "Yo no veo chuches en la lista."},
-            {"es": "no me acuerdo", "zh": "我不记得", "ex": "La verdad es que no me acuerdo."},
-            {"es": "el dinosaurio", "zh": "恐龙", "ex": "No hay dinosaurios en los supermercados."},
-            {"es": "meter en el carro", "zh": "放进购物车", "ex": "Tienes que meterlos en el carro."},
-            {"es": "lo siguiente", "zh": "下一项", "ex": "¿Qué va ahora en la lista?"},
+            {"es": "las galletas", "zh": "饼干", "ex": "Estoy haciendo galletas de chocolate."},
+            {"es": "la enfermera", "zh": "护士", "ex": "Yo seré la enfermera."},
+            {"es": "la doctora", "zh": "医生(女)", "ex": "Y yo seré la doctora."},
+            {"es": "el enfermo", "zh": "病人", "ex": "¿Quién va a ser el enfermo?"},
+            {"es": "el cuenco", "zh": "碗", "ex": "Alguien tiene que chupetear el cuenco."},
+            {"es": "ayudar", "zh": "帮助", "ex": "A George le gusta ayudar a mamá."},
         ],
         "input": {
-            "kind": "listen", "label": "精听 · 佩奇:去购物(2)",
-            "source": {"type": "video", "label": "小猪佩奇 S01E49(真实台词)", "url": PEPPA_E49_VIDEO},
+            "kind": "listen", "label": "精听 · 小佩奇和小苏西(2)",
+            "source": {"type": "video", "label": "小猪佩奇 S01E03 小佩奇和小苏西(B站内嵌)", "url": BILI_PEPPA_E03_URL, "embed": BILI_PEPPA_E03},
             "script": [
-                ["Los spaghettis son la comida preferida de Peppa y George.", "意大利面是佩奇和乔治最喜欢的食物。"],
-                ["¿Dónde estarán los spaghettis?", "意大利面会在哪呢?"],
-                ["¡Ya los veo! Mira, mami, aquí están.", "我看到了!看,妈妈,在这。"],
-                ["Muy bien. Ahora tienes que meterlos en el carro.", "很好。现在你得把它们放进购物车。"],
-                ["¿Qué va ahora en la lista, Peppa?", "清单上现在是什么,佩奇?"],
-                ["¡Chuches!", "糖果!"],
-                ["Yo no veo chuches en la lista.", "我在清单上没看到糖果。"],
-                ["Tienes muchas en casa, Peppa.", "你家里已经有很多了,佩奇。"],
-                ["La verdad es que no me acuerdo.", "说实话,我不记得了。"],
-                ["No hay dinosaurios en los supermercados.", "超市里可没有恐龙。"],
+                ["George, necesito ayuda, estoy haciendo galletas de chocolate.", "乔治,我需要帮忙,我在做巧克力饼干。"],
+                ["Alguien tiene que chupetear el cuenco.", "得有个人舔碗。"],
+                ["A George le gusta ayudar a mamá a hacer galletas.", "乔治喜欢帮妈妈做饼干。"],
+                ["Yo seré la enfermera.", "我来当护士。"],
+                ["Y yo seré la doctora.", "我来当医生。"],
+                ["¿Pero entonces quién va a ser el enfermo?", "那谁来当病人?"],
+                ["George.", "乔治。"],
+                ["A Peppa y a Susi les encanta jugar a los médicos.", "佩奇和苏西喜欢玩医生游戏。"],
+                ["Ahora George, respira hondo.", "现在,乔治,深呼吸。"],
+                ["Creo que tienes el corazón un poco flojo.", "我觉得你心脏有点弱。"],
             ],
-            "hint": "真实台词,反复听;再点上方链接看原片。",
+            "hint": "真实台词,页面内直接看原片,反复听,不看字幕能全听懂再换。",
         },
-        "writing": {"prompt": "写 3 句:你最喜欢的食物是什么?(Mi comida preferida es…)"},
+        "writing": {"prompt": "写 3 句:你小时候喜欢玩什么游戏?(Me gustaba jugar a…)"},
     },
     "四": {
         "title": "阅读 · 三只小猪(2)",
@@ -247,7 +249,7 @@ WEEK2_CURRICULUM = {
         ],
         "input": {
             "kind": "read", "label": "阅读 · 三只小猪(2)",
-            "source": {"type": "book", "label": "三只小猪(西语童话,带英译+音频)", "url": CERDITOS},
+            "source": {"type": "book", "label": "三只小猪(西语童话,带英译+音频)", "url": CERDITOS, "audio": "https://media.thespanishexperiment.com/sp/audio/stories/threepigs/threepigs-sp-full-128.mp3"},
             "text": "El segundo cerdito encontró a un granjero que llevaba un atado de madera y le pidió: «¿Podría darme esa madera?» El granjero le dio la madera, y el cerdito construyó una casa de madera. El lobo llegó, tocó la puerta y dijo: «¡Cerdito, ábreme la puerta!» El cerdito no abrió, y el lobo sopló y sopló y derrumbó también esta casa. El tercer cerdito, el más trabajador, construyó una casa de ladrillos. El lobo sopló y sopló, pero no pudo derrumbarla. Entonces subió al techo y bajó por la chimenea… ¡y cayó en una olla de sopa muy caliente! El lobo salió huyendo y nunca volvió.",
             "questions": [
                 {"q": "El segundo cerdito construyó una casa de ladrillos.", "zh": "第二只小猪盖了砖房子", "a": False},
@@ -259,33 +261,33 @@ WEEK2_CURRICULUM = {
         "writing": {"prompt": "写 3 句:形容你的家 / 房间。(Mi casa tiene… / Mi habitación es…)"},
     },
     "五": {
-        "title": "精听 · 小猪佩奇:去购物(3)",
+        "title": "精听 · 小猪佩奇:小佩奇和小苏西(3)",
         "extras": [
-            {"es": "la fruta", "zh": "水果", "ex": "Lo que falta es fruta."},
-            {"es": "la sandía", "zh": "西瓜", "ex": "Hay una sandía muy grande."},
-            {"es": "la tarta", "zh": "蛋糕", "ex": "La tarta de chocolate tiene buena pinta."},
-            {"es": "el postre", "zh": "甜点", "ex": "Pensé que sería un buen postre."},
-            {"es": "tener buena pinta", "zh": "看起来不错", "ex": "¡Tiene muy buena pinta!"},
-            {"es": "goloso", "zh": "嘴馋的", "ex": "¡Qué goloso, papi!"},
+            {"es": "el termómetro", "zh": "体温计", "ex": "Susi le pone el termómetro a George."},
+            {"es": "arder", "zh": "发烧 / 燃烧", "ex": "¡Si estás ardiendo!"},
+            {"es": "la cama", "zh": "床", "ex": "Vas a tener que estar en cama."},
+            {"es": "recibir visitas", "zh": "接受探视", "ex": "¿Puede recibir visitas?"},
+            {"es": "la barriga", "zh": "肚子", "ex": "Me duele la barriga."},
+            {"es": "la tirita", "zh": "创可贴", "ex": "Hay que poner una tirita."},
         ],
         "input": {
-            "kind": "listen", "label": "精听 · 佩奇:去购物(3)",
-            "source": {"type": "video", "label": "小猪佩奇 S01E49(真实台词)", "url": PEPPA_E49_VIDEO},
+            "kind": "listen", "label": "精听 · 小佩奇和小苏西(3)",
+            "source": {"type": "video", "label": "小猪佩奇 S01E03 小佩奇和小苏西(B站内嵌)", "url": BILI_PEPPA_E03_URL, "embed": BILI_PEPPA_E03},
             "script": [
-                ["Sólo queda una cosa en la lista.", "清单上只剩一样东西了。"],
-                ["Lo que falta por comprar es fruta.", "还缺的要买的是水果。"],
-                ["Tú elegirás la fruta, George.", "你来选水果,乔治。"],
-                ["Hay manzanas, naranjas, plátanos y una sandía muy grande.", "有苹果、橙子、香蕉和一个很大的西瓜。"],
-                ["Esta es la caja donde se paga toda la compra.", "这是付所有东西钱的地方。"],
-                ["Peppa, ¿has puesto tú la tarta de chocolate en el carro?", "佩奇,是你把巧克力蛋糕放进购物车的吗?"],
-                ["Yo no, mami.", "不是我,妈妈。"],
-                ["Pensé que sería un buen postre.", "我想它会是个不错的甜点。"],
-                ["¡Qué goloso, papi!", "爸爸你真馋!"],
-                ["Lo apunto ahora en la lista y arreglado.", "我现在把它记上清单,搞定。"],
+                ["Abre la boca, por favor.", "请张开嘴。"],
+                ["Susi le pone el termómetro a George.", "苏西给乔治量体温。"],
+                ["¡Madre mía, si estás ardiendo!", "天哪,你烧得厉害!"],
+                ["Vas a tener que estar en cama unos tres años.", "你得卧床大约三年。"],
+                ["¿Qué le pasa a George?", "乔治怎么了?"],
+                ["Nada, papá, estamos jugando. George es nuestro paciente.", "没什么,爸爸,我们在玩。乔治是我们的病人。"],
+                ["¿Y puede recibir visitas?", "那他能接受探视吗?"],
+                ["Sí, pero solo un ratito.", "可以,但只能一小会儿。"],
+                ["¡Galletas! Son su medicina para que cure pronto.", "饼干!是让他快点好起来的药。"],
+                ["Me duele la barriga.", "我肚子疼。"],
             ],
-            "hint": "真实台词,反复听;再点上方链接看原片。",
+            "hint": "真实台词,页面内直接看原片,反复听,不看字幕能全听懂再换。",
         },
-        "writing": {"prompt": "写 3 句:写一次你购物 / 逛街的经历。(Ayer fui a… y compré…)"},
+        "writing": {"prompt": "写 3 句:你生病时怎么办?(Cuando estoy enfermo… / Voy al médico…)"},
     },
 }
 

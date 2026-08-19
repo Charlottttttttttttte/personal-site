@@ -68,6 +68,9 @@
     padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer;background:var(--es-soft);
     margin-bottom:10px;font-family:'Fredoka',-apple-system,sans-serif;}
   .playall:active{transform:translate(1px,1px);}
+  .embed-wrap{position:relative;width:100%;aspect-ratio:16/9;margin-bottom:10px;}
+  .embed-player{width:100%;height:100%;border:2px solid var(--ink);border-radius:12px;background:#000;}
+  .embed-audio{width:100%;margin-bottom:10px;}
   textarea#writeBox{width:100%;border:2px solid var(--ink);border-radius:10px;padding:10px;font-size:14px;
     background:var(--card);font-family:inherit;resize:vertical;min-height:84px;}
   .write-actions{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
@@ -154,6 +157,15 @@ function say(text){
   if(!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   speechSynthesis.speak(uttr(text));
+}
+/* 连播当前课的全部精听/跟读句 */
+function sayAll(){
+  if(!('speechSynthesis' in window)||!DAY) return;
+  const src=DAY.speaking&&DAY.speaking.sentences?DAY.speaking.sentences
+           :(DAY.input&&DAY.input.script?DAY.input.script:null);
+  if(!src) return;
+  speechSynthesis.cancel();
+  src.forEach(s=>speechSynthesis.speak(uttr(s[0])));
 }
 
 
@@ -265,11 +277,21 @@ function renderStudy(day,idx){
   if(day.input){
     const src=day.input.source;
     if(src){
-      inputBody+=src.type==='video'
-        ? `<a class="playall" href="${esc(src.url||'')}" target="_blank" rel="noopener" style="text-decoration:none">🎬 真实语料 · ${esc(src.label||'')} ↗</a>`
-        : `<div class="hint" style="margin:0 0 8px">📖 真实语料 · ${esc(src.label||'')}(手头有就读 1-2 页)</div>`;
+      if(src.embed){
+        inputBody+=`<div class="hint" style="margin:0 0 8px">🎬 ${esc(src.label||'真实语料')}(页面内直接播放)</div>
+          <div class="embed-wrap"><iframe class="embed-player" src="${esc(src.embed)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+      } else if(src.audio){
+        inputBody+=`<div class="hint" style="margin:0 0 8px">🎧 ${esc(src.label||'真实语料')}(页面内直接播放)</div>
+          <audio class="embed-audio" controls preload="none" src="${esc(src.audio)}"></audio>`;
+      } else if(src.type==='video'){
+        inputBody+=`<div class="hint" style="margin:0 0 8px">🎬 ${esc(src.label||'真实语料')}:本页内用 🔊 连播 / 逐句听</div>`;
+      } else if(src.type==='book'){
+        inputBody+=`<div class="hint" style="margin:0 0 8px">📖 真实语料 · ${esc(src.label||'')}(手头有就读 1-2 页)</div>`;
+      }
     }
-    if(day.input.kind==='listen') inputBody+=scriptList(day.input.script||[]);
+    if(day.input.kind==='listen') inputBody+=`<div class="write-actions" style="margin-bottom:8px">
+        <button class="playall" onclick="sayAll()">🔊 连播全文</button>
+        <button class="playall" onclick="speechSynthesis.cancel()">⏹ 停止</button></div>`+scriptList(day.input.script||[]);
     else if(day.input.kind==='read') inputBody+=`<button class="playall" onclick="say('${esc(day.input.text||'').replace(/'/g,"\\'")}')">🔊 听全文</button><p class="reading">${esc(day.input.text||'')}</p>`;
     inputBody+=quizBlock(day.input);
     if(day.input.hint) inputBody+=`<div class="hint">💡 ${esc(day.input.hint)}</div>`;
@@ -406,7 +428,7 @@ function renderEmpty(next){
 
 (async function init(){
   DAYS=await loadDays();
-  const today=todayISO();
+  const today=new URLSearchParams(location.search).get('date')||todayISO();
   const idx=DAYS.findIndex(d=>d.date===today);
   const next=DAYS.find(d=>d.date>today&&d.type!=='rest');
   if(idx>=0){
