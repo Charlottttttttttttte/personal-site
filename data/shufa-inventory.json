@@ -442,7 +442,7 @@
       "spec": "四尺四开",
       "perSheetMeters": 0.69,
       "total": 200,
-      "remaining": 198,
+      "remaining": 142,
       "material": "",
       "lastConsumedAt": "2026-08-19T01:20:09.898Z"
     },
@@ -815,7 +815,7 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 50,
-      "remaining": 44,
+      "remaining": 19,
       "material": "半生熟",
       "lastConsumedAt": "2026-08-19T01:19:53.337Z"
     },
