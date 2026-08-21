@@ -1,6 +1,58 @@
 {
-  "updatedAt": "2026-08-19",
+  "updatedAt": "2026-08-21",
   "records": [
+    {
+      "id": "rec_1787273151177",
+      "date": "2026-08-21",
+      "type": "sheet",
+      "meters": 5.52,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-67",
+        "name": "彩缎条屏",
+        "inventoryId": "库存-67",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-21T00:45:51.177Z",
+      "updatedAt": "2026-08-21T00:45:51.177Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1787190081502",
+      "date": "2026-08-20",
+      "type": "sheet",
+      "meters": 5.52,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-67",
+        "name": "彩缎条屏",
+        "inventoryId": "库存-67",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-20T01:41:21.502Z",
+      "updatedAt": "2026-08-20T01:41:21.502Z",
+      "deleted": false
+    },
     {
       "id": "rec_1787102409898",
       "date": "2026-08-19",
