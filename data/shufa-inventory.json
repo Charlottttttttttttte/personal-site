@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-21",
+  "updatedAt": "2026-08-23",
   "items": [
     {
       "id": "库存-110",
@@ -815,9 +815,9 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 50,
-      "remaining": 11,
+      "remaining": 0,
       "material": "半生熟",
-      "lastConsumedAt": "2026-08-21T00:45:51.177Z"
+      "lastConsumedAt": "2026-08-23T04:10:04.989Z"
     },
     {
       "id": "库存-68",
