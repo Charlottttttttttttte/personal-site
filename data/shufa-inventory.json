@@ -804,9 +804,9 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 40,
-      "remaining": 33,
+      "remaining": 32,
       "material": "半生熟",
-      "lastConsumedAt": "2026-08-23T09:17:12.587Z"
+      "lastConsumedAt": "2026-08-25T23:43:19.531Z"
     },
     {
       "id": "库存-67",
@@ -854,9 +854,9 @@
       "spec": "四尺对开",
       "perSheetMeters": 1.38,
       "total": 50,
-      "remaining": 48,
+      "remaining": 46,
       "material": "半生熟",
-      "lastConsumedAt": "2026-08-25T02:37:06.628Z"
+      "lastConsumedAt": "2026-08-25T23:43:05.925Z"
     },
     {
       "id": "库存-71",
