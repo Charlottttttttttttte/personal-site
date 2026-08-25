@@ -2,6 +2,58 @@
   "updatedAt": "2026-08-25",
   "records": [
     {
+      "id": "rec_1787701399530",
+      "date": "2026-08-26",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-25T23:43:19.530Z",
+      "updatedAt": "2026-08-25T23:43:19.530Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1787701385924",
+      "date": "2026-08-26",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-70",
+        "name": "拓青龙",
+        "inventoryId": "库存-70",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "朱子感兴诗"
+      },
+      "note": "",
+      "createdAt": "2026-08-25T23:43:05.924Z",
+      "updatedAt": "2026-08-25T23:43:05.924Z",
+      "deleted": false
+    },
+    {
       "id": "rec_1787625442705",
       "date": "2026-08-25",
       "type": "sheet",
