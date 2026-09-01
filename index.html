@@ -249,12 +249,12 @@ body {
     <h2 class="sec-title fun">正在学</h2>
   </div>
   <div class="learning">
-    <div class="work-card work-card--tall" id="learn1">
-      <img class="work-thumb work-thumb--full" src="img/day12-card.png" alt="财经知识卡片 day12 钱转多快">
-      <span class="work-num fun">DAY 12 · 财经钱转多快</span>
-      <p class="work-desc">同样的钱，一年能赚几遍？给公司装个转速表——用存货、应收账款、总资产三个周转率，看懂茅台与伊利的生意节奏。</p>
+    <div class="work-card work-card--tall" id="learn1" style="cursor:pointer;" role="button" tabindex="0">
+      <img class="work-thumb work-thumb--full" src="img/stock/day29-股市地图.png" alt="炒股知识卡片 day29 股市地图">
+      <span class="work-num fun">DAY 29 · 股市地图</span>
+      <p class="work-desc">炒股学习进行中：规则 / 风险 / 方法 / 实战，四周课表每天 +1 自动推进，详见「今日事」页。</p>
       <div class="work-foot">
-        <span>FINANCE / CARDS · 12/28</span>
+        <span>STOCK / CARDS · D29 起</span>
         <span class="work-arrow">→</span>
       </div>
     </div>
@@ -270,6 +270,60 @@ body {
   </div>
 </section>
 
+<script>
+/* 炒股进度：财经 8/21 结营 → 8/22 = Day 29 起，每天 +1，封顶 56；当天自动换卡，失败时保留静态回退 */
+(function(){
+  var STOCK = [
+    {d:29,t:'股市地图',i:'day29-股市地图.png',s:'沪深北交易所、板块定位'},
+    {d:30,t:'开户流程',i:'day30-开户流程.png',s:'投资者适当性、风险测评'},
+    {d:31,t:'交易规则',i:'day31-交易规则.png',s:'T+1、涨跌停、竞价方式'},
+    {d:32,t:'交易成本',i:'day32-交易成本.png',s:'佣金 / 印花税 / 过户费'},
+    {d:33,t:'股票代码与指数',i:'day33-股票代码与指数.png',s:'代码规则、主要指数'},
+    {d:34,t:'复习日',i:'day35-周复盘.png',s:'本周错题全部重考'},
+    {d:35,t:'周复盘',i:'day35-周复盘.png',s:'速查表沉淀 + W2 预告'},
+    {d:36,t:'风险的种类',i:'day36-风险的种类.png',s:'系统性 vs 非系统性'},
+    {d:37,t:'市场风险',i:'day37-市场风险度量.png',s:'波动、回撤、怎么度量'},
+    {d:38,t:'适当性实战',i:'day38-适当性实战.png',s:'你的钱能碰什么'},
+    {d:39,t:'防骗①',i:'day39-非法荐股与场外配资.png',s:'非法荐股、场外配资'},
+    {d:40,t:'防骗②',i:'day40-杀猪盘与维权.png',s:'假冒平台、杀猪盘、维权'},
+    {d:41,t:'复习日',i:'day42-周复盘.png',s:'本周错题全部重考'},
+    {d:42,t:'周复盘',i:'day42-周复盘.png',s:'速查表沉淀 + W3 预告'},
+    {d:43,t:'估值实战①',i:'day43-估值实战①-PE怎么用.png',s:'PE 怎么用'},
+    {d:44,t:'估值实战②',i:'day44-PB与股息率.png',s:'PB、股息率'},
+    {d:45,t:'技术分析①',i:'day45-K线与均线.png',s:'K线、均线'},
+    {d:46,t:'技术分析②',i:'day46-技术分析②量价支撑压力.png',s:'量价、支撑压力'},
+    {d:47,t:'指数定投',i:'day47-指数定投.png',s:'宽基、怎么投'},
+    {d:48,t:'复习日',i:'day49-周复盘.png',s:'本周错题全部重考'},
+    {d:49,t:'周复盘',i:'day49-周复盘.png',s:'速查表沉淀 + W4 预告'},
+    {d:50,t:'模拟交易①',i:'day50-模拟交易.png',s:'下单流程、市价/限价'},
+    {d:51,t:'模拟交易②',i:'day51-仓位止损.png',s:'仓位管理、止损'},
+    {d:52,t:'复盘方法',i:'day52-复盘方法.png',s:'交易日志怎么写'},
+    {d:53,t:'法规底线',i:'day53-法规底线.png',s:'内幕交易、操纵市场'},
+    {d:54,t:'交易纪律',i:'day54-交易纪律.png',s:'反人性的四个坑'},
+    {d:55,t:'复习日',i:'day56-结营.png',s:'本周错题全部重考'},
+    {d:56,t:'结营',i:'day56-结营.png',s:'验收产出 + 速查表终版'}
+  ];
+  try{
+    var today=new Date(); today.setHours(0,0,0,0);           /* 归零到当天 0 点,避免时间偏差 */
+    var anchor=new Date('2026-08-22T00:00:00');
+    var day = 29 + Math.round((today - anchor) / 86400000);
+    if(day < 29) day = 29;
+    if(day > 56) day = 56;
+    var hit = null;
+    for(var k = 0; k < STOCK.length; k++){ if(STOCK[k].d === day){ hit = STOCK[k]; break; } }
+    if(hit){
+      var card = document.getElementById('learn1');
+      card.querySelector('img').src = 'img/stock/' + hit.i;
+      card.querySelector('img').alt = '炒股知识卡片 day' + hit.d + ' ' + hit.t;
+      card.querySelector('.work-num').textContent = '炒股 · Day ' + day + ' · ' + hit.t;
+      card.querySelector('.work-desc').textContent = hit.s + '。炒股四周课表每天 +1 自动推进，详情见「今日事」页。';
+      card.querySelector('.work-foot span').textContent = 'STOCK / CARDS · ' + day + '/56';
+      card.onclick = function(){ window.open('cards/stock-card-view.html?d=' + day, '_blank'); };
+    }
+  }catch(e){ /* 保持静态回退 */ }
+})();
+</script>
+
 <!-- ============ 作品集 ============ -->
 <section class="section" id="works">
   <div class="sec-head">
@@ -277,6 +331,15 @@ body {
     <h2 class="sec-title fun">作品集</h2>
   </div>
   <div class="works">
+    <a class="work-card" id="work1" href="cards/finance-card-view.html" style="text-decoration:none;color:inherit;display:block;">
+      <img class="work-thumb work-thumb--full" src="img/finance/day28-结营.png" alt="财经知识卡片 day28 结营">
+      <span class="work-num fun">01 财经知识卡片 · 已完成</span>
+      <p class="work-desc">4 周 · 三大报表 / 宏观 / 估值，28 天知识卡片全量归档，点击浏览。</p>
+      <div class="work-foot">
+        <span>FINANCE / CARDS · 4 周</span>
+        <span class="work-arrow">→</span>
+      </div>
+    </a>
     <a class="work-card" id="work2" href="shufa-calendar.html" style="text-decoration:none;color:inherit;display:block;">
       <span class="work-num fun">02 临池录 · 书法打卡</span>
       <p class="work-desc">每日练习打卡 · 日历记录 · 纸张库存 · 长卷进度，手机随时记。</p>

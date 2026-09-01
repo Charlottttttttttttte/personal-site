@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFF9F0">
+<title>财经知识卡片 · Charlotte</title>
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 24px) 20px calc(env(safe-area-inset-bottom) + 32px);}
+  header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
+  .date{font-size:14px;color:var(--ink);opacity:.6;font-weight:600;}
+  .brand{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
+  h1{font-family:'Fredoka',sans-serif;font-size:34px;font-weight:700;line-height:1.2;}
+  h1 .dot{color:var(--pink);}
+  .sub{font-size:14px;color:var(--ink);opacity:.6;margin:6px 0 22px;}
+  .back{display:inline-block;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);text-decoration:none;margin-bottom:18px;background:var(--card);}
+  .back:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
+  .cell{border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);background:var(--card);cursor:pointer;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}
+  .cell:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .cell img{display:block;width:100%;height:auto;}
+  .cell .lab{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;}
+  .cell .lab .day{background:var(--ink);color:#fff;padding:1px 8px;border-radius:999px;font-size:11px;}
+  /* 全屏查看 */
+  #lightbox{position:fixed;inset:0;background:rgba(23,23,26,.92);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+  #lightbox.open{display:flex;}
+  #lightbox img{max-width:92vw;max-height:80vh;border:4px solid var(--card);border-radius:10px;box-shadow:0 0 40px rgba(0,0,0,.5);}
+  #lbTitle{color:var(--card);font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
+  .lb-close{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--card);background:transparent;color:var(--card);border-radius:10px;padding:6px 18px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="brand">CHARLOTTE<span style="color:var(--pink)">.</span></span><span class="date">FINANCE · 已结课</span></header>
+  <a class="back" href="../index.html">← 回首页</a>
+  <h1>财经知识卡片<span class="dot">.</span></h1>
+  <p class="sub">4 周 · 三大报表 / 宏观 / 估值 · D1–D28,共 24 张单卡,点击看大图。</p>
+  <div class="grid" id="grid"></div>
+</div>
+<div id="lightbox">
+  <img id="lbImg" alt="">
+  <span id="lbTitle"></span>
+  <button class="lb-close" id="lbClose">关闭 ✕</button>
+</div>
+<script>
+/* 从 img/finance/ 载入卡图列表(由页面渲染时生成,按 day 排序) */
+const IMAGES = [
+  "day01-三大报表.png","day02-恒等式.png","day03-利润漏斗.png","day04-三股水流.png",
+  "day05-三表成网.png","day06-一周全景.png","day07-速查表.png","day08-年报地图.png",
+  "day09-两层温度计.png","day10-杜邦三杠杆.png","day11-风险体温计.png","day12-钱转多快.png",
+  "day13-指标仪表盘.png","day14-速查表2.png","day15-央行的角色.png","day16-钱的价格.png",
+  "day17-钱毛了.png","day18-钱从哪来.png","day19-央行工具箱.png","day20-宏观仪表盘.png",
+  "day21-速查表3.png","day26-写你的mini公司分析.png","day27-答辩日.png","day28-结营.png"
+];
+(function init(){
+  const grid=document.getElementById('grid');
+  IMAGES.forEach(function(f){
+    const day=(f.match(/day(\d+)-/)||[])[1]||'';
+    const label=f.replace(/\.png$/,'').replace(/^day\d+-/,'');
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.innerHTML='<img src="../img/finance/'+f+'" alt="财经知识卡片 '+label+'" loading="lazy">'
+      +'<div class="lab"><span>'+label+'</span><span class="day">D'+day+'</span></div>';
+    cell.addEventListener('click',function(){
+      document.getElementById('lbImg').src='../img/finance/'+f;
+      document.getElementById('lbTitle').textContent='D'+day+' · '+label;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+    grid.appendChild(cell);
+  });
+  document.getElementById('lbClose').addEventListener('click',function(){
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow='';
+  });
+  document.getElementById('lightbox').addEventListener('click',function(e){
+    if(e.target===this){ this.classList.remove('open'); document.body.style.overflow=''; }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
+  });
+})();
+</script>
+</body>
+</html>

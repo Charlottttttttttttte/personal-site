@@ -56,4 +56,6 @@
 6. 向用户汇报：放了几张卡、改了什么、已推送。
 
 ### 状态
-- 未执行（2026-08-11 记录）。执行完成后把本节「状态」改为「已执行（日期）」。
+- ✅ 已执行（2026-09-01）。
+- 实际锚点：炒股 **2026-08-22 = Day 29** 起，每天 +1、封顶 56（today.html 与 index.html 共用该锚点；炒股 README 中 8/11=D29 的日期为并排财经时的预排，未采用）。
+- 执行内容：财经 24 张卡图 → `img/finance/`（day22–25 无单卡）、炒股 24 张 → `img/stock/`（复习日无卡）；新增 `cards/finance-card-view.html`（作品集财经完成态入口）与 `cards/stock-card-view.html`（炒股卡画廊，支持 `?d=N` 定位当天）；today.html 财经卡 → 炒股卡、index.html「正在学」切炒股（带当天自动推进 JS）；**西语板块已整体删除**（today.html 西语卡、espanol.html、data/espanol/、scripts/gen_espanol.py；Obsidian vault 内西语资料未动）。

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFF9F0">
+<title>炒股知识卡片 · Charlotte</title>
+<style>
+  :root{
+    --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
+    --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 24px) 20px calc(env(safe-area-inset-bottom) + 32px);}
+  header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
+  .date{font-size:14px;color:var(--ink);opacity:.6;font-weight:600;}
+  .brand{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
+  h1{font-family:'Fredoka',sans-serif;font-size:34px;font-weight:700;line-height:1.2;}
+  h1 .dot{color:var(--pink);}
+  .sub{font-size:14px;color:var(--ink);opacity:.6;margin:6px 0 22px;}
+  .back{display:inline-block;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);text-decoration:none;margin-bottom:18px;background:var(--card);}
+  .back:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
+  .cell{border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);background:var(--card);cursor:pointer;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}
+  .cell:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .cell img{display:block;width:100%;height:auto;}
+  .cell .lab{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;}
+  .cell .lab .day{background:var(--ink);color:#fff;padding:1px 8px;border-radius:999px;font-size:11px;}
+  .cell.hl{outline:4px solid var(--pink);box-shadow:8px 8px 0 var(--pink);transform:rotate(-1deg);}
+  .cell.hl .lab .day{background:var(--pink);color:var(--ink);}
+  /* 全屏查看 */
+  #lightbox{position:fixed;inset:0;background:rgba(23,23,26,.92);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+  #lightbox.open{display:flex;}
+  #lightbox img{max-width:92vw;max-height:80vh;border:4px solid var(--card);border-radius:10px;box-shadow:0 0 40px rgba(0,0,0,.5);}
+  #lbTitle{color:var(--card);font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
+  .lb-close{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--card);background:transparent;color:var(--card);border-radius:10px;padding:6px 18px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="brand">CHARLOTTE<span style="color:var(--pink)">.</span></span><span class="date">STOCK · 进行中</span></header>
+  <a class="back" href="../index.html">← 回首页</a>
+  <h1>炒股知识卡片<span class="dot">.</span></h1>
+  <p class="sub">D29–D56 · 规则 / 风险 / 方法 / 实战,共 24 张单卡,点击看大图。</p>
+  <div class="grid" id="grid"></div>
+</div>
+<div id="lightbox">
+  <img id="lbImg" alt="">
+  <span id="lbTitle"></span>
+  <button class="lb-close" id="lbClose">关闭 ✕</button>
+</div>
+<script>
+/* 炒股单卡清单(复习日无卡,共 24 张) */
+const IMAGES = [
+  "day29-股市地图.png","day30-开户流程.png","day31-交易规则.png","day32-交易成本.png",
+  "day33-股票代码与指数.png","day35-周复盘.png","day36-风险的种类.png","day37-市场风险度量.png",
+  "day38-适当性实战.png","day39-非法荐股与场外配资.png","day40-杀猪盘与维权.png","day42-周复盘.png",
+  "day43-估值实战①-PE怎么用.png","day44-PB与股息率.png","day45-K线与均线.png","day46-技术分析②量价支撑压力.png",
+  "day47-指数定投.png","day49-周复盘.png","day50-模拟交易.png","day51-仓位止损.png",
+  "day52-复盘方法.png","day53-法规底线.png","day54-交易纪律.png","day56-结营.png"
+];
+(function init(){
+  const params=new URLSearchParams(location.search);
+  const want=parseInt(params.get('d'),10); /* 要定位的 Day N */
+  const grid=document.getElementById('grid');
+  const cells={};
+  IMAGES.forEach(function(f){
+    const day=parseInt((f.match(/day(\d+)-/)||[])[1],10);
+    const label=f.replace(/\.png$/,'').replace(/^day\d+-/,'');
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.innerHTML='<img src="../img/stock/'+f+'" alt="炒股知识卡片 '+label+'" loading="lazy">'
+      +'<div class="lab"><span>'+label+'</span><span class="day">D'+day+'</span></div>';
+    cell.addEventListener('click',function(){
+      document.getElementById('lbImg').src='../img/stock/'+f;
+      document.getElementById('lbTitle').textContent='D'+day+' · '+label;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+    grid.appendChild(cell);
+    if(day) cells[day]=cell;
+  });
+  /* 定位当天卡:滚动到可见并高亮 */
+  if(want && cells[want]){
+    const el=cells[want];
+    el.classList.add('hl');
+    setTimeout(function(){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.style.transition='outline-color .8s ease';
+    },300);
+  }
+  function closeLb(){
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  document.getElementById('lbClose').addEventListener('click',closeLb);
+  document.getElementById('lightbox').addEventListener('click',function(e){
+    if(e.target===this) closeLb();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeLb();
+  });
+})();
+</script>
+</body>
+</html>
