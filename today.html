@@ -98,8 +98,8 @@
  * 财经：2026-08-10 学到 D15（当天），此后每天 +1
  * Agent：2026-08-10 开始第 1 期，此后每天 +1（18 期课程，来自 agent-knowledge-cards）
  * 改进度只需改这两个锚点 */
-const STOCK_ANCHOR_DATE = '2026-08-22';  // 锚点日期
-const STOCK_ANCHOR_DAY  = 29;            // 锚点当天是炒股 Day 29(财经 8/21 结营,次日开课)
+const STOCK_ANCHOR_DATE = '2026-09-01';  // 锚点日期
+const STOCK_ANCHOR_DAY  = 37;            // 锚点当天是炒股 Day 37(2026-09-01 用户确认的实际进度)
 const AGT_ANCHOR_DATE = '2026-08-10';  // 锚点日期
 const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent 第 1 期
 const STOCK_MAX = 56, AGT_MAX = 28;
@@ -182,7 +182,7 @@ function cur(d,max){ return Math.min(d,max); }
   const agtDay=cur(AGT_ANCHOR_DAY+agtDiff,AGT_MAX);
 
   document.getElementById('date').textContent=t;
-  const s=STOCK[stockDay-STOCK_ANCHOR_DAY], a=AGT[agtDay-1];
+  const s=STOCK[stockDay-29], a=AGT[agtDay-1];
 
   document.getElementById('stockTag').textContent='📈 炒股 · D'+stockDay;
   document.getElementById('stockTitle').textContent=s.t;

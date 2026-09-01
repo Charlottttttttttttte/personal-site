@@ -305,8 +305,8 @@ body {
   ];
   try{
     var today=new Date(); today.setHours(0,0,0,0);           /* 归零到当天 0 点,避免时间偏差 */
-    var anchor=new Date('2026-08-22T00:00:00');
-    var day = 29 + Math.round((today - anchor) / 86400000);
+    var anchor=new Date('2026-09-01T00:00:00');   /* 锚点:2026-09-01 = Day 37(用户确认) */
+    var day = 37 + Math.round((today - anchor) / 86400000);
     if(day < 29) day = 29;
     if(day > 56) day = 56;
     var hit = null;

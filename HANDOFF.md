@@ -57,5 +57,5 @@
 
 ### 状态
 - ✅ 已执行（2026-09-01）。
-- 实际锚点：炒股 **2026-08-22 = Day 29** 起，每天 +1、封顶 56（today.html 与 index.html 共用该锚点；炒股 README 中 8/11=D29 的日期为并排财经时的预排，未采用）。
+- 实际锚点：炒股 **2026-09-01 = Day 37**（2026-09-01 用户确认真实进度），每天 +1、封顶 56（today.html 与 index.html 共用该锚点；此前按 8/22=D29 预排，经用户更正为 9/1=D37）。
 - 执行内容：财经 24 张卡图 → `img/finance/`（day22–25 无单卡）、炒股 24 张 → `img/stock/`（复习日无卡）；新增 `cards/finance-card-view.html`（作品集财经完成态入口）与 `cards/stock-card-view.html`（炒股卡画廊，支持 `?d=N` 定位当天）；today.html 财经卡 → 炒股卡、index.html「正在学」切炒股（带当天自动推进 JS）；**西语板块已整体删除**（today.html 西语卡、espanol.html、data/espanol/、scripts/gen_espanol.py；Obsidian vault 内西语资料未动）。
