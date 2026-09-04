@@ -1,0 +1,148 @@
+{
+  "days": [
+    {
+      "day": 29,
+      "title": "股市地图",
+      "dir": "day29-股市地图",
+      "pages": 9
+    },
+    {
+      "day": 30,
+      "title": "开户流程",
+      "dir": "day30-开户流程",
+      "pages": 9
+    },
+    {
+      "day": 31,
+      "title": "交易规则",
+      "dir": "day31-交易规则",
+      "pages": 9
+    },
+    {
+      "day": 32,
+      "title": "交易成本",
+      "dir": "day32-交易成本",
+      "pages": 9
+    },
+    {
+      "day": 33,
+      "title": "股票代码与指数",
+      "dir": "day33-股票代码与指数",
+      "pages": 9
+    },
+    {
+      "day": 35,
+      "title": "周复盘",
+      "dir": "day35-周复盘",
+      "pages": 1
+    },
+    {
+      "day": 36,
+      "title": "风险的种类",
+      "dir": "day36-风险的种类",
+      "pages": 9
+    },
+    {
+      "day": 37,
+      "title": "市场风险度量",
+      "dir": "day37-市场风险度量",
+      "pages": 9
+    },
+    {
+      "day": 38,
+      "title": "适当性实战",
+      "dir": "day38-适当性实战",
+      "pages": 9
+    },
+    {
+      "day": 39,
+      "title": "非法荐股与场外配资",
+      "dir": "day39-非法荐股与场外配资",
+      "pages": 9
+    },
+    {
+      "day": 40,
+      "title": "杀猪盘与维权",
+      "dir": "day40-杀猪盘与维权",
+      "pages": 9
+    },
+    {
+      "day": 42,
+      "title": "周复盘",
+      "dir": "day42-周复盘",
+      "pages": 1
+    },
+    {
+      "day": 43,
+      "title": "估值实战①-PE怎么用",
+      "dir": "day43-估值实战①-PE怎么用",
+      "pages": 9
+    },
+    {
+      "day": 44,
+      "title": "PB与股息率",
+      "dir": "day44-PB与股息率",
+      "pages": 9
+    },
+    {
+      "day": 45,
+      "title": "K线与均线",
+      "dir": "day45-K线与均线",
+      "pages": 9
+    },
+    {
+      "day": 46,
+      "title": "技术分析②量价支撑压力",
+      "dir": "day46-技术分析②量价支撑压力",
+      "pages": 9
+    },
+    {
+      "day": 47,
+      "title": "指数定投",
+      "dir": "day47-指数定投",
+      "pages": 9
+    },
+    {
+      "day": 49,
+      "title": "周复盘",
+      "dir": "day49-周复盘",
+      "pages": 1
+    },
+    {
+      "day": 50,
+      "title": "模拟交易",
+      "dir": "day50-模拟交易",
+      "pages": 9
+    },
+    {
+      "day": 51,
+      "title": "仓位止损",
+      "dir": "day51-仓位止损",
+      "pages": 9
+    },
+    {
+      "day": 52,
+      "title": "复盘方法",
+      "dir": "day52-复盘方法",
+      "pages": 9
+    },
+    {
+      "day": 53,
+      "title": "法规底线",
+      "dir": "day53-法规底线",
+      "pages": 9
+    },
+    {
+      "day": 54,
+      "title": "交易纪律",
+      "dir": "day54-交易纪律",
+      "pages": 9
+    },
+    {
+      "day": 56,
+      "title": "结营",
+      "dir": "day56-结营",
+      "pages": 1
+    }
+  ]
+}

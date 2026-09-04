@@ -318,7 +318,7 @@ body {
       card.querySelector('.work-num').textContent = '炒股 · Day ' + day + ' · ' + hit.t;
       card.querySelector('.work-desc').textContent = hit.s + '。炒股四周课表每天 +1 自动推进，详情见「今日事」页。';
       card.querySelector('.work-foot span').textContent = 'STOCK / CARDS · ' + day + '/56';
-      card.onclick = function(){ window.open('cards/stock-card-view.html?d=' + day, '_blank'); };
+      card.onclick = function(){ window.open('cards/stock-course/index.html?d=' + day, '_blank'); };
     }
   }catch(e){ /* 保持静态回退 */ }
 })();
