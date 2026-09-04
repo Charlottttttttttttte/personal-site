@@ -1,6 +1,110 @@
 {
-  "updatedAt": "2026-08-30",
+  "updatedAt": "2026-09-04",
   "records": [
+    {
+      "id": "rec_1788527979667",
+      "date": "2026-09-04",
+      "type": "sheet",
+      "meters": 5.52,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-70",
+        "name": "拓青龙",
+        "inventoryId": "库存-70",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "前后赤壁赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-04T13:19:39.667Z",
+      "updatedAt": "2026-09-04T13:19:39.667Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788307553573",
+      "date": "2026-09-02",
+      "type": "sheet",
+      "meters": 4.14,
+      "quantity": {
+        "number": 3,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-70",
+        "name": "拓青龙",
+        "inventoryId": "库存-70",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-02T00:05:53.573Z",
+      "updatedAt": "2026-09-02T00:05:53.573Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788241822558",
+      "date": "2026-09-01",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-70",
+        "name": "拓青龙",
+        "inventoryId": "库存-70",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-01T05:50:22.558Z",
+      "updatedAt": "2026-09-01T05:50:22.558Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788135402302",
+      "date": "2026-08-31",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-70",
+        "name": "拓青龙",
+        "inventoryId": "库存-70",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-08-31T00:16:42.302Z",
+      "updatedAt": "2026-08-31T00:16:42.302Z",
+      "deleted": false
+    },
     {
       "id": "rec_1788063634844",
       "date": "2026-08-30",
