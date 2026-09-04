@@ -4,52 +4,107 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFF9F0">
+<link rel="icon" href="../img/icon-192.png">
 <title>炒股知识卡片 · Charlotte</title>
 <style>
   :root{
     --paper:#FFF9F0; --card:#FFFFFF; --ink:#17171A;
     --pink:#FF87AB; --yellow:#FFD23F; --blue:#6FB1FF; --teal:#4ECDC4; --leaf:#7FB77E;
+    --top-h:52px; --bar-h:86px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;}
-  .wrap{max-width:960px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 24px) 20px calc(env(safe-area-inset-bottom) + 32px);}
-  header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
-  .date{font-size:14px;color:var(--ink);opacity:.6;font-weight:600;}
-  .brand{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
-  h1{font-family:'Fredoka',sans-serif;font-size:34px;font-weight:700;line-height:1.2;}
-  h1 .dot{color:var(--pink);}
-  .sub{font-size:14px;color:var(--ink);opacity:.6;margin:6px 0 22px;}
-  .back{display:inline-block;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink);color:var(--ink);text-decoration:none;margin-bottom:18px;background:var(--card);}
-  .back:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
-  .cell{border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);background:var(--card);cursor:pointer;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;}
-  .cell:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
+  html,body{height:100%;background:var(--paper);background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;color:var(--ink);font-family:'Noto Sans SC',sans-serif;}
+  body{overflow:hidden;overscroll-behavior:none;}
+
+  /* ===== 顶栏:极简,标题随卡更新 ===== */
+  .top{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:10px;
+    padding:calc(env(safe-area-inset-top) + 8px) 12px 6px;background:linear-gradient(rgba(255,249,240,.96),rgba(255,249,240,0));}
+  .top h1{flex:1;min-width:0;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;order:2;}
+  .back{order:1;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:5px 12px;box-shadow:2px 2px 0 var(--ink);color:var(--ink);text-decoration:none;background:var(--card);}
+  .back:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+  .ov-btn{order:3;flex:0 0 auto;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:5px 12px;box-shadow:2px 2px 0 var(--ink);color:var(--ink);background:var(--card);cursor:pointer;}
+  .ov-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink);}
+
+  /* ===== 主体:横向滑动轨道(一屏一卡,原生 scroll-snap) ===== */
+  .deck{position:fixed;top:0;left:0;right:0;bottom:0;z-index:10;
+    padding:calc(env(safe-area-inset-top) + var(--top-h)) 0 calc(env(safe-area-inset-bottom) + var(--bar-h));
+    display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .deck::-webkit-scrollbar{display:none;}
+  .slide{flex:0 0 100%;height:100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;padding:6px 4px;}
+  .frame{display:inline-block;flex:0 0 auto;border:3px solid var(--ink);border-radius:14px;box-shadow:6px 6px 0 var(--ink);background:var(--card);overflow:hidden;}
+  .frame img{display:block;max-width:min(88vw, calc((100svh - var(--top-h) - var(--bar-h) - 64px) * .75));
+    max-height:calc(100svh - var(--top-h) - var(--bar-h) - 60px);object-fit:contain;user-select:none;-webkit-user-drag:none;}
+
+  /* 左右翻页浮钮(鼠标设备显示,触屏用原生滑动) */
+  .nav{position:fixed;top:50%;transform:translateY(-50%);z-index:20;width:44px;height:44px;border-radius:999px;
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);font-size:17px;font-weight:700;
+    box-shadow:3px 3px 0 var(--ink);cursor:pointer;opacity:.95;}
+  .nav:disabled{opacity:.25;cursor:default;}
+  .nav:not(:disabled):active{transform:translateY(-50%) translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+  #prev{left:10px;} #next{right:10px;}
+  @media (hover:none){ .nav{display:none;} }
+
+  /* ===== 底栏:页码 + 缩略图索引(可横向滚动,点击跳转) ===== */
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;flex-direction:column;gap:7px;
+    padding:8px 12px calc(env(safe-area-inset-bottom) + 10px);
+    background:linear-gradient(rgba(255,249,240,0),rgba(255,249,240,.97) 32%);}
+  .count{align-self:center;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;color:var(--ink);
+    background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:2px 12px;}
+  .thumbs{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;padding:2px 2px 4px;}
+  .thumbs::-webkit-scrollbar{display:none;}
+  .thumbs button{flex:0 0 auto;width:34px;height:45px;border:2px solid var(--ink);border-radius:7px;padding:0;
+    background:var(--card);cursor:pointer;overflow:hidden;opacity:.45;box-shadow:2px 2px 0 var(--ink);}
+  .thumbs button.on{border-color:var(--pink);outline:3px solid var(--pink);opacity:1;transform:translateY(-2px);}
+  .thumbs img{display:block;width:100%;height:100%;object-fit:cover;}
+
+  /* ===== 总览(复习/跳转):全屏网格,点卡回到该卡 ===== */
+  #ov{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;background:var(--paper);
+    background-image:radial-gradient(rgba(23,23,26,.14) 2px,transparent 2.2px);background-size:34px 34px;}
+  #ov.open{display:flex;}
+  #ov .ov-head{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 14px 8px;}
+  #ov .ov-head h2{flex:1;font-size:16px;font-weight:700;text-align:center;}
+  .ov-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:16px;padding:8px 16px calc(env(safe-area-inset-bottom) + 24px);align-content:start;}
+  .cell{border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);background:var(--card);
+    cursor:pointer;overflow:hidden;transition:transform .12s ease,box-shadow .12s ease;}
+  .cell:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
   .cell img{display:block;width:100%;height:auto;}
-  .cell .lab{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;}
-  .cell .lab .day{background:var(--ink);color:#fff;padding:1px 8px;border-radius:999px;font-size:11px;}
-  .cell.hl{outline:4px solid var(--pink);box-shadow:8px 8px 0 var(--pink);transform:rotate(-1deg);}
-  .cell.hl .lab .day{background:var(--pink);color:var(--ink);}
-  /* 全屏查看 */
-  #lightbox{position:fixed;inset:0;background:rgba(23,23,26,.92);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
-  #lightbox.open{display:flex;}
-  #lightbox img{max-width:92vw;max-height:80vh;border:4px solid var(--card);border-radius:10px;box-shadow:0 0 40px rgba(0,0,0,.5);}
-  #lbTitle{color:var(--card);font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;}
-  .lb-close{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--card);background:transparent;color:var(--card);border-radius:10px;padding:6px 18px;cursor:pointer;}
+  .cell .lab{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 8px;
+    border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:11px;font-weight:700;}
+  .cell .lab .day{background:var(--ink);color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;flex:0 0 auto;}
+  .cell.on{border-color:var(--pink);box-shadow:5px 5px 0 var(--pink);}
+  .cell.on .lab .day{background:var(--pink);color:var(--ink);}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header><span class="brand">CHARLOTTE<span style="color:var(--pink)">.</span></span><span class="date">STOCK · 进行中</span></header>
-  <a class="back" href="../index.html">← 回首页</a>
-  <h1>炒股知识卡片<span class="dot">.</span></h1>
-  <p class="sub">D29–D56 · 规则 / 风险 / 方法 / 实战,共 24 张单卡,点击看大图。</p>
-  <div class="grid" id="grid"></div>
+
+<header class="top">
+  <a class="back" href="../index.html">← 首页</a>
+  <h1 id="title">炒股知识卡</h1>
+  <button class="ov-btn" id="ovBtn" type="button">总览 24</button>
+</header>
+
+<main class="deck" id="deck" tabindex="0" aria-label="炒股知识卡片,左右滑动浏览" aria-roledescription="卡片滑动器"></main>
+
+<button class="nav" id="prev" type="button" aria-label="上一张">◀</button>
+<button class="nav" id="next" type="button" aria-label="下一张">▶</button>
+
+<div class="bar">
+  <span class="count" id="count">1 / 24</span>
+  <div class="thumbs" id="thumbs" aria-label="卡片缩略索引"></div>
 </div>
-<div id="lightbox">
-  <img id="lbImg" alt="">
-  <span id="lbTitle"></span>
-  <button class="lb-close" id="lbClose">关闭 ✕</button>
+
+<!-- 总览:全屏网格,复习/跳转 -->
+<div id="ov" role="dialog" aria-label="全部炒股知识卡片">
+  <div class="ov-head">
+    <button class="back" id="ovClose" type="button">← 收起</button>
+    <h2>全部 24 张 · 点击跳转</h2>
+  </div>
+  <div class="ov-grid" id="ovGrid"></div>
 </div>
+
 <script>
 /* 炒股单卡清单(复习日无卡,共 24 张) */
 const IMAGES = [
@@ -61,46 +116,136 @@ const IMAGES = [
   "day52-复盘方法.png","day53-法规底线.png","day54-交易纪律.png","day56-结营.png"
 ];
 (function init(){
-  const params=new URLSearchParams(location.search);
-  const want=parseInt(params.get('d'),10); /* 要定位的 Day N */
-  const grid=document.getElementById('grid');
-  const cells={};
+  const deck=document.getElementById('deck');
+  const title=document.getElementById('title');
+  const countEl=document.getElementById('count');
+  const thumbs=document.getElementById('thumbs');
+  const ov=document.getElementById('ov');
+  const ovGrid=document.getElementById('ovGrid');
+  const ovBtn=document.getElementById('ovBtn');
+  const ovClose=document.getElementById('ovClose');
+  const prevBtn=document.getElementById('prev');
+  const nextBtn=document.getElementById('next');
+
+  const INFO={}; /* 文件名 → {day,label} */
   IMAGES.forEach(function(f){
     const day=parseInt((f.match(/day(\d+)-/)||[])[1],10);
-    const label=f.replace(/\.png$/,'').replace(/^day\d+-/,'');
-    const cell=document.createElement('div');
-    cell.className='cell';
-    cell.innerHTML='<img src="../img/stock/'+f+'" alt="炒股知识卡片 '+label+'" loading="lazy">'
-      +'<div class="lab"><span>'+label+'</span><span class="day">D'+day+'</span></div>';
-    cell.addEventListener('click',function(){
-      document.getElementById('lbImg').src='../img/stock/'+f;
-      document.getElementById('lbTitle').textContent='D'+day+' · '+label;
-      document.getElementById('lightbox').classList.add('open');
-      document.body.style.overflow='hidden';
-    });
-    grid.appendChild(cell);
-    if(day) cells[day]=cell;
+    INFO[f]={day:day,label:f.replace(/\.png$/,'').replace(/^day\d+-/,'')};
   });
-  /* 定位当天卡:滚动到可见并高亮 */
-  if(want && cells[want]){
-    const el=cells[want];
-    el.classList.add('hl');
-    setTimeout(function(){
-      el.scrollIntoView({behavior:'smooth',block:'center'});
-      el.style.transition='outline-color .8s ease';
-    },300);
+
+  /* --- 构建滑动轨道与缩略索引 --- */
+  const slides=[];
+  IMAGES.forEach(function(f,i){
+    const s=document.createElement('div');
+    s.className='slide';
+    s.innerHTML='<div class="frame"><img src="../img/stock/'+f+'" alt="炒股知识卡片 '+INFO[f].label+'"></div>';
+    deck.appendChild(s);
+    slides.push(s);
+
+    const th=document.createElement('button');
+    th.type='button';
+    th.title='D'+INFO[f].day+' '+INFO[f].label;
+    th.innerHTML='<img src="../img/stock/'+f+'" alt="" loading="lazy">';
+    th.addEventListener('click',function(){ go(i); });
+    thumbs.appendChild(th);
+  });
+
+  const ovCells=[];
+  IMAGES.forEach(function(f,i){
+    const c=document.createElement('div');
+    c.className='cell';
+    c.innerHTML='<img src="../img/stock/'+f+'" alt="炒股知识卡片 '+INFO[f].label+'" loading="lazy">'
+      +'<div class="lab"><span>'+INFO[f].label+'</span><span class="day">D'+INFO[f].day+'</span></div>';
+    c.addEventListener('click',function(){ closeOv(); go(i); });
+    ovGrid.appendChild(c);
+    ovCells.push(c);
+  });
+
+  let cur=0;
+
+  function step(){ return slides[0]?slides[0].offsetWidth:1; }
+  function clamp(i){ return Math.max(0,Math.min(IMAGES.length-1,i)); }
+  function setCur(i,scroll){
+    cur=clamp(i);
+    const info=INFO[IMAGES[cur]];
+    title.textContent='炒股知识卡 · D'+info.day+' '+info.label;
+    countEl.textContent=(cur+1)+' / '+IMAGES.length;
+    document.title='炒股知识卡片 D'+info.day+' '+info.label+' · Charlotte';
+    prevBtn.disabled=(cur<=0);
+    nextBtn.disabled=(cur>=IMAGES.length-1);
+    Array.prototype.forEach.call(thumbs.children,function(b,k){ b.classList.toggle('on',k===cur); });
+    ovCells.forEach(function(c,k){ c.classList.toggle('on',k===cur); });
+    const on=thumbs.children[cur];
+    if(on && scroll!==false) on.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
   }
-  function closeLb(){
-    document.getElementById('lightbox').classList.remove('open');
+  function go(i,instant){
+    setCur(i);
+    const s=clamp(i)*step();
+    deck.scrollTo({left:s,behavior:instant?'auto':'smooth'});
+  }
+  function curFromScroll(){
+    const s=deck.scrollLeft;
+    return clamp(Math.round(s/step()));
+  }
+
+  /* 滑动/翻页时同步标题、页码、高亮 */
+  let ticking=false;
+  deck.addEventListener('scroll',function(){
+    if(!ticking){
+      ticking=true;
+      requestAnimationFrame(function(){
+        ticking=false;
+        setCur(curFromScroll(),false);
+      });
+    }
+  });
+
+  prevBtn.addEventListener('click',function(){ if(cur>0) go(cur-1); });
+  nextBtn.addEventListener('click',function(){ if(cur<IMAGES.length-1) go(cur+1); });
+
+  /* 键盘:←/→ 翻卡;总览打开时 Esc 收起 */
+  document.addEventListener('keydown',function(e){
+    if(ov.classList.contains('open')){
+      if(e.key==='Escape') closeOv();
+      return;
+    }
+    if(e.key==='ArrowLeft' && cur>0){ e.preventDefault(); go(cur-1); }
+    if(e.key==='ArrowRight' && cur<IMAGES.length-1){ e.preventDefault(); go(cur+1); }
+  });
+
+  /* 总览开关 */
+  function openOv(){
+    ov.classList.add('open');
+    ovCells[cur].scrollIntoView({block:'center',behavior:'smooth'});
+    document.body.style.overflow='hidden';
+  }
+  function closeOv(){
+    ov.classList.remove('open');
     document.body.style.overflow='';
   }
-  document.getElementById('lbClose').addEventListener('click',closeLb);
-  document.getElementById('lightbox').addEventListener('click',function(e){
-    if(e.target===this) closeLb();
+  ovBtn.addEventListener('click',openOv);
+  ovClose.addEventListener('click',closeOv);
+  ov.addEventListener('click',function(e){ if(e.target===ov) closeOv(); });
+
+  /* 窗口尺寸变化后保持当前卡定位 */
+  let lastW=innerWidth;
+  window.addEventListener('resize',function(){
+    if(innerWidth===lastW) return;
+    lastW=innerWidth;
+    deck.scrollLeft=cur*step();
   });
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape') closeLb();
-  });
+
+  /* ?d=N 深链:定位到 day≥N 的首张(复习日无卡,自动落到其后首张);无参从 D29 开始 */
+  const want=parseInt(new URLSearchParams(location.search).get('d'),10);
+  let start=0;
+  if(want){
+    for(let i=0;i<IMAGES.length;i++){
+      if(INFO[IMAGES[i]].day>=want){ start=i; break; }
+    }
+  }
+  setCur(start);
+  deck.scrollLeft=start*step();
+  go(start,true);
 })();
 </script>
 </body>
