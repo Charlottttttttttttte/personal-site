@@ -1,6 +1,292 @@
 {
-  "updatedAt": "2026-09-05",
+  "updatedAt": "2026-09-13",
   "records": [
+    {
+      "id": "rec_1789343625247",
+      "date": "2026-09-14",
+      "type": "sheet",
+      "meters": 0.69,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-59",
+        "name": "金箔楮笺",
+        "inventoryId": "库存-59",
+        "lengthPerSheet": 0.69
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-13T23:53:45.247Z",
+      "updatedAt": "2026-09-13T23:53:45.247Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789343612527",
+      "date": "2026-09-14",
+      "type": "sheet",
+      "meters": 4.14,
+      "quantity": {
+        "number": 3,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-13T23:53:32.527Z",
+      "updatedAt": "2026-09-13T23:53:32.527Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789302178667",
+      "date": "2026-09-13",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-13T12:22:58.667Z",
+      "updatedAt": "2026-09-13T12:22:58.667Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789301215189",
+      "date": "2026-09-13",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-13T12:06:55.189Z",
+      "updatedAt": "2026-09-13T12:06:55.189Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789301202378",
+      "date": "2026-09-13",
+      "type": "sheet",
+      "meters": 6.9,
+      "quantity": {
+        "number": 5,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-13T12:06:42.379Z",
+      "updatedAt": "2026-09-13T12:06:42.379Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789221121062",
+      "date": "2026-09-12",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-12T13:52:01.062Z",
+      "updatedAt": "2026-09-12T13:52:01.063Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788825320547",
+      "date": "2026-09-08",
+      "type": "sheet",
+      "meters": 6.9,
+      "quantity": {
+        "number": 5,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-07T23:55:20.547Z",
+      "updatedAt": "2026-09-07T23:55:20.547Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788742789416",
+      "date": "2026-09-07",
+      "type": "sheet",
+      "meters": 4.14,
+      "quantity": {
+        "number": 3,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-07T00:59:49.416Z",
+      "updatedAt": "2026-09-07T00:59:49.416Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788702296752",
+      "date": "2026-09-06",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-06T13:44:56.752Z",
+      "updatedAt": "2026-09-06T13:44:56.752Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788700170832",
+      "date": "2026-09-06",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-64",
+        "name": "九天彩云",
+        "inventoryId": "库存-64",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-06T13:09:30.832Z",
+      "updatedAt": "2026-09-06T13:09:30.832Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1788700015491",
+      "date": "2026-09-06",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "行书千字文"
+      },
+      "note": "",
+      "createdAt": "2026-09-06T13:06:55.491Z",
+      "updatedAt": "2026-09-06T13:06:55.491Z",
+      "deleted": false
+    },
     {
       "id": "rec_1788617202092",
       "date": "2026-09-05",
