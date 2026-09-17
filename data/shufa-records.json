@@ -1,6 +1,110 @@
 {
-  "updatedAt": "2026-09-13",
+  "updatedAt": "2026-09-17",
   "records": [
+    {
+      "id": "rec_1789652899789",
+      "date": "2026-09-17",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 1,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-12",
+        "name": "桦皮宝相金枝",
+        "inventoryId": "库存-12",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-17T13:48:19.789Z",
+      "updatedAt": "2026-09-17T13:48:19.789Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789651613126",
+      "date": "2026-09-17",
+      "type": "sheet",
+      "meters": 4.14,
+      "quantity": {
+        "number": 3,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-17T13:26:53.126Z",
+      "updatedAt": "2026-09-17T13:26:53.126Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789569026797",
+      "date": "2026-09-16",
+      "type": "sheet",
+      "meters": 4.14,
+      "quantity": {
+        "number": 3,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-16T14:30:26.797Z",
+      "updatedAt": "2026-09-16T14:30:26.797Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1789521238494",
+      "date": "2026-09-15",
+      "type": "sheet",
+      "meters": 5.52,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-66",
+        "name": "扎染纸韵",
+        "inventoryId": "库存-66",
+        "lengthPerSheet": 1.38
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "闲居赋"
+      },
+      "note": "",
+      "createdAt": "2026-09-16T01:13:58.494Z",
+      "updatedAt": "2026-09-16T01:13:58.494Z",
+      "deleted": false
+    },
     {
       "id": "rec_1789343625247",
       "date": "2026-09-14",
