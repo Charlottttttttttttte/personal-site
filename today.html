@@ -28,12 +28,12 @@
   .card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:20px 18px 16px;margin-bottom:18px;cursor:pointer;position:relative;overflow:hidden;display:block;text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease;}
   .card:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink);}
   .card::after{content:'';position:absolute;top:-18px;right:-18px;width:56px;height:56px;border-radius:50%;border:3px solid var(--ink);}
-  .card--stock::after{background:var(--yellow);}
-  .card--agent::after{background:var(--blue);}
+  .card--labor::after{background:var(--yellow);}
+  .card--ai::after{background:var(--blue);}
   .card--shufa::after{background:var(--teal);}
   .tag{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:10px;}
-  .card--stock .tag{background:var(--pink);}
-  .card--agent .tag{background:var(--blue);}
+  .card--labor .tag{background:var(--leaf);}
+  .card--ai .tag{background:var(--blue);}
   .ctitle{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px;}
   .cdesc{font-size:14px;line-height:1.6;opacity:.7;}
   .cfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:11px;border-top:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;}
@@ -60,18 +60,18 @@
   <h1>今日事，今日毕<span class="dot">.</span></h1>
   <p class="sub" id="sub">每天打开，学今天该学的两门课。</p>
 
-  <div class="card card--stock" id="stockCard" role="button" tabindex="0">
-    <span class="tag" id="stockTag">📈 炒股</span>
-    <div class="ctitle" id="stockTitle">—</div>
-    <p class="cdesc" id="stockDesc"></p>
-    <div class="cfoot"><span id="stockFoot">STOCK</span><span class="carrow">→</span></div>
+  <div class="card card--labor" id="laborCard" role="button" tabindex="0">
+    <span class="tag" id="laborTag">⚖️ 劳动法</span>
+    <div class="ctitle" id="laborTitle">—</div>
+    <p class="cdesc" id="laborDesc"></p>
+    <div class="cfoot"><span id="laborFoot">LABOR</span><span class="carrow">→</span></div>
   </div>
 
-  <div class="card card--agent" id="agentCard" role="button" tabindex="0">
-    <span class="tag" id="agentTag">🤖 Agent</span>
-    <div class="ctitle" id="agentTitle">—</div>
-    <p class="cdesc" id="agentDesc"></p>
-    <div class="cfoot"><span id="agentFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
+  <div class="card card--ai" id="aiCard" role="button" tabindex="0">
+    <span class="tag" id="aiTag">🧠 AI</span>
+    <div class="ctitle" id="aiTitle">—</div>
+    <p class="cdesc" id="aiDesc"></p>
+    <div class="cfoot"><span id="aiFoot">LEARNING PROJECT</span><span class="carrow">→</span></div>
   </div>
 
   <a class="card card--shufa" href="shufa-calendar.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
@@ -95,75 +95,79 @@
 
 <script>
 /* ===== 进度锚点（实际进度，非课表日期）=====
- * 财经：2026-08-10 学到 D15（当天），此后每天 +1
- * Agent：2026-08-10 开始第 1 期，此后每天 +1（18 期课程，来自 agent-knowledge-cards）
+ * 劳动法：2026-10-07 学到 D5（当天），此后每天 +1
+ * AI：2026-10-07 学到 D20（当天），此后每天 +1
  * 改进度只需改这两个锚点 */
-const STOCK_ANCHOR_DATE = '2026-09-01';  // 锚点日期
-const STOCK_ANCHOR_DAY  = 37;            // 锚点当天是炒股 Day 37(2026-09-01 用户确认的实际进度)
-const AGT_ANCHOR_DATE = '2026-08-10';  // 锚点日期
-const AGT_ANCHOR_DAY  = 1;             // 锚点当天是 Agent 第 1 期
-const STOCK_MAX = 56, AGT_MAX = 28;
+const LABOR_ANCHOR_DATE = '2026-10-07';  // 锚点日期
+const LABOR_ANCHOR_DAY  = 5;             // 锚点当天是劳动法 Day 5（2026-10-07 用户确认的实际进度）
+const AI_ANCHOR_DATE = '2026-10-07';     // 锚点日期
+const AI_ANCHOR_DAY  = 20;               // 锚点当天是 AI Day 20（2026-10-07 用户确认的实际进度）
+const LABOR_MAX = 30, AI_MAX = 28;
 
-/* ===== 炒股课程表（D29–D56，标题 + 一句话描述；打开炒股学习卡讲义站）===== */
-const STOCK = [
-  {t:'股市地图', d:'沪深北交易所、板块定位', url:'cards/stock-course/index.html?d=29'},
-  {t:'开户流程', d:'投资者适当性、风险测评', url:'cards/stock-course/index.html?d=30'},
-  {t:'交易规则', d:'T+1、涨跌停、竞价方式', url:'cards/stock-course/index.html?d=31'},
-  {t:'交易成本', d:'佣金 / 印花税 / 过户费', url:'cards/stock-course/index.html?d=32'},
-  {t:'股票代码与指数', d:'代码规则、主要指数', url:'cards/stock-course/index.html?d=33'},
-  {t:'复习日', d:'本周错题全部重考', url:'cards/stock-course/index.html?d=34'},
-  {t:'周复盘', d:'速查表沉淀 + W2 预告', url:'cards/stock-course/index.html?d=35'},
-  {t:'风险的种类', d:'系统性 vs 非系统性', url:'cards/stock-course/index.html?d=36'},
-  {t:'市场风险', d:'波动、回撤、怎么度量', url:'cards/stock-course/index.html?d=37'},
-  {t:'适当性实战', d:'你的钱能碰什么', url:'cards/stock-course/index.html?d=38'},
-  {t:'防骗①', d:'非法荐股、场外配资', url:'cards/stock-course/index.html?d=39'},
-  {t:'防骗②', d:'假冒平台、杀猪盘、维权', url:'cards/stock-course/index.html?d=40'},
-  {t:'复习日', d:'本周错题全部重考', url:'cards/stock-course/index.html?d=41'},
-  {t:'周复盘', d:'速查表沉淀 + W3 预告', url:'cards/stock-course/index.html?d=42'},
-  {t:'估值实战①', d:'PE 怎么用', url:'cards/stock-course/index.html?d=43'},
-  {t:'估值实战②', d:'PB、股息率', url:'cards/stock-course/index.html?d=44'},
-  {t:'技术分析①', d:'K线、均线', url:'cards/stock-course/index.html?d=45'},
-  {t:'技术分析②', d:'量价、支撑压力', url:'cards/stock-course/index.html?d=46'},
-  {t:'指数定投', d:'宽基、怎么投', url:'cards/stock-course/index.html?d=47'},
-  {t:'复习日', d:'本周错题全部重考', url:'cards/stock-course/index.html?d=48'},
-  {t:'周复盘', d:'速查表沉淀 + W4 预告', url:'cards/stock-course/index.html?d=49'},
-  {t:'模拟交易①', d:'下单流程、市价/限价', url:'cards/stock-course/index.html?d=50'},
-  {t:'模拟交易②', d:'仓位管理、止损', url:'cards/stock-course/index.html?d=51'},
-  {t:'复盘方法', d:'交易日志怎么写', url:'cards/stock-course/index.html?d=52'},
-  {t:'法规底线', d:'内幕交易、操纵市场', url:'cards/stock-course/index.html?d=53'},
-  {t:'交易纪律', d:'反人性的四个坑', url:'cards/stock-course/index.html?d=54'},
-  {t:'复习日', d:'本周错题全部重考', url:'cards/stock-course/index.html?d=55'},
-  {t:'结营', d:'验收产出 + 速查表终版', url:'cards/stock-course/index.html?d=56'},
+/* ===== 劳动法课程表（D1–D30，打开劳动法学习卡讲义站）===== */
+const LABOR = [
+  {t:'劳动法管谁', d:'哪些人和关系归它管', url:'cards/labor-course/index.html?d=1'},
+  {t:'不签合同', d:'不签？双倍工资', url:'cards/labor-course/index.html?d=2'},
+  {t:'合同必备条款', d:'合同到手，先看这 9 条', url:'cards/labor-course/index.html?d=3'},
+  {t:'试用期规则', d:'试用期不是随便试', url:'cards/labor-course/index.html?d=4'},
+  {t:'竞业限制', d:'竞业限制？钱要给够', url:'cards/labor-course/index.html?d=5'},
+  {t:'周复习', d:'W1 复习：合同那些事', url:'cards/labor-course/index.html?d=6'},
+  {t:'最低工资', d:'低于最低标准？违法', url:'cards/labor-course/index.html?d=7'},
+  {t:'加班费', d:'加班别白干，三档算清', url:'cards/labor-course/index.html?d=8'},
+  {t:'工时制度', d:'你的工时属于哪种', url:'cards/labor-course/index.html?d=9'},
+  {t:'拖欠工资', d:'欠薪？三步拿回', url:'cards/labor-course/index.html?d=10'},
+  {t:'工资条扣款', d:'工资被扣？看红线', url:'cards/labor-course/index.html?d=11'},
+  {t:'周复盘', d:'W2 复习：钱的事', url:'cards/labor-course/index.html?d=12'},
+  {t:'带薪年假', d:'年假你有几天', url:'cards/labor-course/index.html?d=13'},
+  {t:'病假医疗期', d:'生病了，公司不能乱开除', url:'cards/labor-course/index.html?d=14'},
+  {t:'社保五险', d:'五险一金扣的是啥', url:'cards/labor-course/index.html?d=15'},
+  {t:'公积金', d:'不是可缴可不缴', url:'cards/labor-course/index.html?d=16'},
+  {t:'工伤认定', d:'出了工伤怎么办', url:'cards/labor-course/index.html?d=17'},
+  {t:'周复习', d:'W3 复习：保障的事', url:'cards/labor-course/index.html?d=18'},
+  {t:'调岗降薪', d:'能说调就调？', url:'cards/labor-course/index.html?d=19'},
+  {t:'裁员补偿', d:'被裁员，N+1 怎么算', url:'cards/labor-course/index.html?d=20'},
+  {t:'违法解除', d:'被违法辞退？拿 2N', url:'cards/labor-course/index.html?d=21'},
+  {t:'劳动仲裁', d:'仲裁怎么走', url:'cards/labor-course/index.html?d=22'},
+  {t:'维权证据', d:'维权要趁早，证据要留好', url:'cards/labor-course/index.html?d=23'},
+  {t:'周复盘', d:'W4 复习：维权的事', url:'cards/labor-course/index.html?d=24'},
+  {t:'辞职攻略', d:'辞职怎么提不踩坑', url:'cards/labor-course/index.html?d=25'},
+  {t:'离职证明', d:'离职证明必须给', url:'cards/labor-course/index.html?d=26'},
+  {t:'经济补偿金', d:'N 到底怎么算', url:'cards/labor-course/index.html?d=27'},
+  {t:'职场红线', d:'这些红线别碰也别忍', url:'cards/labor-course/index.html?d=28'},
+  {t:'维权工具箱', d:'打工人维权总表', url:'cards/labor-course/index.html?d=29'},
+  {t:'结营复盘', d:'劳动法 30 天完结', url:'cards/labor-course/index.html?d=30'},
 ];
-const AGT = [
-  {t:'什么是 AI Agent', d:'模型+工具+编排层+运行时，in a loop 转圈', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=1'},
-  {t:'Agent 四要素', d:'模型 / 工具 / 编排 / 部署，缺一不可', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=2'},
-  {t:'五步循环 Think–Act–Observe', d:'先想、再做、看了结果再想，直到达成目标', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=3'},
-  {t:'Agent 分级 Level 0-4', d:'从简单对话到自主多步，你处在哪一级', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=4'},
-  {t:'上下文工程', d:'模型太万能，窗口里放什么才是关键', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=5'},
-  {t:'模型选型与路由', d:'不同任务配不同模型，省成本又不掉链子', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=6'},
-  {t:'RAG：先查资料再回答', d:'开卷考试，减少幻觉、补上时效性', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=7'},
-  {t:'函数调用与 MCP', d:'OpenAPI 是说明书，MCP 是 USB-C 插座', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=8'},
-  {t:'短期记忆 vs 长期记忆', d:'草稿本与档案柜——转头就忘 vs 越用越懂你', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=9'},
-  {t:'多 Agent 四大设计模式', d:'分工、协作、编排——一个不够就组队', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=10'},
-  {t:'Agent Ops：怎么评测 Agent', d:'把「好不好」变成「多少分」', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=11'},
-  {t:'LM as Judge 大模型当考官', d:'让另一个模型打分，稳定又省人', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=12'},
-  {t:'A2A：Agent 与 Agent 互联', d:'Agent 之间握手协作，像人加入组织', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=13'},
-  {t:'提示注入与纵深防御', d:'模型会被骗，两层防护一起兜底', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=14'},
-  {t:'Agent 身份（SPIFFE）', d:'每个 Agent 一张身份证，谁能信谁', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=15'},
-  {t:'治理网关与 Agent 蔓延', d:'Agent 多了要管，别让它们失控', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=16'},
-  {t:'Agent 怎么学习进化', d:'自动实验循环，越用越强', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=17'},
-  {t:'实例：Co-Scientist / AlphaEvolve', d:'看看真正的 Agent 长什么样', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=18'},
-  {t:'Agent Skills', d:'把 know-how 打包成可复用能力单元', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=19'},
-  {t:'Tool-Use 深入', d:'模型怎么调用工具、从对话到行动', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=20'},
-  {t:'子代理 Subagent', d:'并行分解任务：10 人干 1 天 > 1 人干 10 天', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=21'},
-  {t:'长期记忆方案', d:'跨会话记住你：记录→压缩→回注', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=22'},
-  {t:'Prompt 工程', d:'Zero-Shot / Few-Shot / 思维链，让模型听懂人话', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=23'},
-  {t:'Meta-Prompt', d:'让 AI 自己写提示词，不懂术语也能用', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=24'},
-  {t:'Agent 部署', d:'从开发到生产：延迟/成本/安全/可观测', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=25'},
-  {t:'记忆分层', d:'core/memo/daily：按生命周期分层存', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=26'},
-  {t:'Skill 系统', d:'SKILL.md 结构、仓库管理与渐进式加载', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=27'},
-  {t:'多 Agent 架构', d:'生产级组队：规划/记忆/工具/执行模块化', url:'https://charlottttttttttttte.github.io/agent-knowledge-cards/?day=28'},
+
+/* ===== AI 课程表（30天看懂AI，D1–D28，打开 AI 学习卡讲义站）===== */
+const AI = [
+  {t:'AI是接话机', d:'AI 只是特别会接话', url:'cards/ai-course/index.html?d=1'},
+  {t:'词碎片', d:'AI 眼中的「词碎片」', url:'cards/ai-course/index.html?d=2'},
+  {t:'AI会胡说', d:'AI 为什么胡说八道', url:'cards/ai-course/index.html?d=3'},
+  {t:'记性短', d:'记性差？是窗口装不下', url:'cards/ai-course/index.html?d=4'},
+  {t:'喂资料', d:'让 AI 开卷考试，别瞎编', url:'cards/ai-course/index.html?d=5'},
+  {t:'三件套', d:'AI 答得烂？先看问题', url:'cards/ai-course/index.html?d=6'},
+  {t:'第一周复盘', d:'一张图看懂 AI', url:'cards/ai-course/index.html?d=7'},
+  {t:'注意力', d:'注意力机制一次看懂', url:'cards/ai-course/index.html?d=8'},
+  {t:'温度', d:'脑洞开关：温度是什么', url:'cards/ai-course/index.html?d=9'},
+  {t:'写代码比写作文强', d:'AI 写代码比写作文强', url:'cards/ai-course/index.html?d=10'},
+  {t:'训练', d:'AI 变聪明：训练三阶段', url:'cards/ai-course/index.html?d=11'},
+  {t:'思维链', d:'让 AI 想慢点：思维链', url:'cards/ai-course/index.html?d=12'},
+  {t:'说不知道', d:'教 AI 说「不知道」', url:'cards/ai-course/index.html?d=13'},
+  {t:'第二周复盘', d:'看懂 AI 内部', url:'cards/ai-course/index.html?d=14'},
+  {t:'Agent循环', d:'Agent 循环一次看懂', url:'cards/ai-course/index.html?d=15'},
+  {t:'MCP', d:'MCP：AI 的万能接口', url:'cards/ai-course/index.html?d=16'},
+  {t:'我的AI助手', d:'我的 AI 助手在干嘛', url:'cards/ai-course/index.html?d=17'},
+  {t:'记忆', d:'AI 转头就忘？记忆真相', url:'cards/ai-course/index.html?d=18'},
+  {t:'个人知识库', d:'让 AI 记住你：关于我', url:'cards/ai-course/index.html?d=19'},
+  {t:'多Agent', d:'一个 AI 不够？组队来凑', url:'cards/ai-course/index.html?d=20'},
+  {t:'第三周复盘', d:'Agent 四件套复盘', url:'cards/ai-course/index.html?d=21'},
+  {t:'AI会取代我吗', d:'取代你的是不会用 AI 的人', url:'cards/ai-course/index.html?d=22'},
+  {t:'AI帮我做知识卡', d:'AI 帮我一天做张知识卡', url:'cards/ai-course/index.html?d=23'},
+  {t:'提示注入', d:'AI 会被骗？提示注入', url:'cards/ai-course/index.html?d=24'},
+  {t:'偏见', d:'AI 的偏见从哪来', url:'cards/ai-course/index.html?d=25'},
+  {t:'普通人工作流', d:'普通人 AI 工作流清单', url:'cards/ai-course/index.html?d=26'},
+  {t:'本地模型', d:'数据不出门？本地模型', url:'cards/ai-course/index.html?d=27'},
+  {t:'结营', d:'30 天看懂 AI，完结', url:'cards/ai-course/index.html?d=28'},
 ];
 
 /* ===== 计算今天 ===== */
@@ -176,25 +180,25 @@ function cur(d,max){ return Math.min(d,max); }
 
 (function init(){
   const t=todayISO();
-  const stockDiff=dayDiff(STOCK_ANCHOR_DATE,t);
-  const stockDay=cur(STOCK_ANCHOR_DAY+stockDiff,STOCK_MAX);
-  const agtDiff=dayDiff(AGT_ANCHOR_DATE,t);
-  const agtDay=cur(AGT_ANCHOR_DAY+agtDiff,AGT_MAX);
+  const laborDiff=dayDiff(LABOR_ANCHOR_DATE,t);
+  const laborDay=cur(LABOR_ANCHOR_DAY+laborDiff,LABOR_MAX);
+  const aiDiff=dayDiff(AI_ANCHOR_DATE,t);
+  const aiDay=cur(AI_ANCHOR_DAY+aiDiff,AI_MAX);
 
   document.getElementById('date').textContent=t;
-  const s=STOCK[stockDay-29], a=AGT[agtDay-1];
+  const l=LABOR[laborDay-1], a=AI[aiDay-1];
 
-  document.getElementById('stockTag').textContent='📈 炒股 · D'+stockDay;
-  document.getElementById('stockTitle').textContent=s.t;
-  document.getElementById('stockDesc').textContent=s.d;
-  document.getElementById('stockFoot').textContent='STOCK · '+stockDay+'/56';
+  document.getElementById('laborTag').textContent='⚖️ 劳动法 · D'+laborDay;
+  document.getElementById('laborTitle').textContent=l.t;
+  document.getElementById('laborDesc').textContent=l.d;
+  document.getElementById('laborFoot').textContent='LABOR · '+laborDay+'/30';
 
-  document.getElementById('agentTag').textContent='🤖 Agent · 第'+agtDay+'期';
-  document.getElementById('agentTitle').textContent=a.t;
-  document.getElementById('agentDesc').textContent=a.d;
-  document.getElementById('agentFoot').textContent='AGENT · '+agtDay+'/28';
+  document.getElementById('aiTag').textContent='🧠 AI · D'+aiDay;
+  document.getElementById('aiTitle').textContent=a.t;
+  document.getElementById('aiDesc').textContent=a.d;
+  document.getElementById('aiFoot').textContent='AI · '+aiDay+'/28';
 
-  document.getElementById('sub').textContent='8/22 起炒股 Day 29、8/10 起 Agent 第 1 期，每天 +1 推进。';
+  document.getElementById('sub').textContent='10/7 起劳动法 Day 5、AI Day 20，每天 +1 推进。';
 
   /* ===== 课程查看器：点击卡片在 iframe 内打开，不跨站跳转 ===== */
   const viewer=document.getElementById('viewer');
@@ -214,13 +218,13 @@ function cur(d,max){ return Math.min(d,max); }
   }
   document.getElementById('viewerBack').addEventListener('click', closeViewer);
 
-  document.getElementById('stockCard').addEventListener('click', function(e){
+  document.getElementById('laborCard').addEventListener('click', function(e){
     e.preventDefault();
-    openViewer(s.url, '📈 炒股 · D'+stockDay+' '+s.t);
+    openViewer(l.url, '⚖️ 劳动法 · D'+laborDay+' '+l.t);
   });
-  document.getElementById('agentCard').addEventListener('click', function(e){
+  document.getElementById('aiCard').addEventListener('click', function(e){
     e.preventDefault();
-    openViewer(a.url, '🤖 Agent · 第'+agtDay+'期 '+a.t);
+    openViewer(a.url, '🧠 AI · D'+aiDay+' '+a.t);
   });
 })();
 </script>

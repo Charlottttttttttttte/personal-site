@@ -1,0 +1,184 @@
+{
+  "days": [
+    {
+      "day": 1,
+      "title": "劳动法管谁",
+      "dir": "day01-劳动法管谁",
+      "pages": 9
+    },
+    {
+      "day": 2,
+      "title": "不签合同",
+      "dir": "day02-不签合同",
+      "pages": 9
+    },
+    {
+      "day": 3,
+      "title": "合同必备条款",
+      "dir": "day03-合同必备条款",
+      "pages": 9
+    },
+    {
+      "day": 4,
+      "title": "试用期规则",
+      "dir": "day04-试用期规则",
+      "pages": 9
+    },
+    {
+      "day": 5,
+      "title": "竞业限制",
+      "dir": "day05-竞业限制",
+      "pages": 9
+    },
+    {
+      "day": 6,
+      "title": "周复习",
+      "dir": "day06-周复习",
+      "pages": 9
+    },
+    {
+      "day": 7,
+      "title": "最低工资",
+      "dir": "day07-最低工资",
+      "pages": 9
+    },
+    {
+      "day": 8,
+      "title": "加班费",
+      "dir": "day08-加班费",
+      "pages": 9
+    },
+    {
+      "day": 9,
+      "title": "工时制度",
+      "dir": "day09-工时制度",
+      "pages": 9
+    },
+    {
+      "day": 10,
+      "title": "拖欠工资",
+      "dir": "day10-拖欠工资",
+      "pages": 9
+    },
+    {
+      "day": 11,
+      "title": "工资条扣款",
+      "dir": "day11-工资条扣款",
+      "pages": 9
+    },
+    {
+      "day": 12,
+      "title": "周复盘",
+      "dir": "day12-周复盘",
+      "pages": 9
+    },
+    {
+      "day": 13,
+      "title": "带薪年假",
+      "dir": "day13-带薪年假",
+      "pages": 9
+    },
+    {
+      "day": 14,
+      "title": "病假医疗期",
+      "dir": "day14-病假医疗期",
+      "pages": 9
+    },
+    {
+      "day": 15,
+      "title": "社保五险",
+      "dir": "day15-社保五险",
+      "pages": 9
+    },
+    {
+      "day": 16,
+      "title": "公积金",
+      "dir": "day16-公积金",
+      "pages": 9
+    },
+    {
+      "day": 17,
+      "title": "工伤认定",
+      "dir": "day17-工伤认定",
+      "pages": 9
+    },
+    {
+      "day": 18,
+      "title": "周复习",
+      "dir": "day18-周复习",
+      "pages": 9
+    },
+    {
+      "day": 19,
+      "title": "调岗降薪",
+      "dir": "day19-调岗降薪",
+      "pages": 9
+    },
+    {
+      "day": 20,
+      "title": "裁员补偿",
+      "dir": "day20-裁员补偿",
+      "pages": 9
+    },
+    {
+      "day": 21,
+      "title": "违法解除",
+      "dir": "day21-违法解除",
+      "pages": 9
+    },
+    {
+      "day": 22,
+      "title": "劳动仲裁",
+      "dir": "day22-劳动仲裁",
+      "pages": 9
+    },
+    {
+      "day": 23,
+      "title": "维权证据",
+      "dir": "day23-维权证据",
+      "pages": 9
+    },
+    {
+      "day": 24,
+      "title": "周复盘",
+      "dir": "day24-周复盘",
+      "pages": 9
+    },
+    {
+      "day": 25,
+      "title": "辞职攻略",
+      "dir": "day25-辞职攻略",
+      "pages": 9
+    },
+    {
+      "day": 26,
+      "title": "离职证明",
+      "dir": "day26-离职证明",
+      "pages": 9
+    },
+    {
+      "day": 27,
+      "title": "经济补偿金",
+      "dir": "day27-经济补偿金",
+      "pages": 9
+    },
+    {
+      "day": 28,
+      "title": "职场红线",
+      "dir": "day28-职场红线",
+      "pages": 9
+    },
+    {
+      "day": 29,
+      "title": "维权工具箱",
+      "dir": "day29-维权工具箱",
+      "pages": 9
+    },
+    {
+      "day": 30,
+      "title": "结营复盘",
+      "dir": "day30-结营复盘",
+      "pages": 9
+    }
+  ]
+}

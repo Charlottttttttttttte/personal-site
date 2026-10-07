@@ -1,0 +1,172 @@
+{
+  "days": [
+    {
+      "day": 1,
+      "title": "AI是接话机",
+      "dir": "day01-AI是接话机",
+      "pages": 7
+    },
+    {
+      "day": 2,
+      "title": "词碎片",
+      "dir": "day02-词碎片",
+      "pages": 7
+    },
+    {
+      "day": 3,
+      "title": "AI会胡说",
+      "dir": "day03-AI会胡说",
+      "pages": 7
+    },
+    {
+      "day": 4,
+      "title": "记性短",
+      "dir": "day04-记性短",
+      "pages": 7
+    },
+    {
+      "day": 5,
+      "title": "喂资料",
+      "dir": "day05-喂资料",
+      "pages": 7
+    },
+    {
+      "day": 6,
+      "title": "三件套",
+      "dir": "day06-三件套",
+      "pages": 7
+    },
+    {
+      "day": 7,
+      "title": "第一周复盘",
+      "dir": "day07-第一周复盘",
+      "pages": 7
+    },
+    {
+      "day": 8,
+      "title": "注意力",
+      "dir": "day08-注意力",
+      "pages": 7
+    },
+    {
+      "day": 9,
+      "title": "温度",
+      "dir": "day09-温度",
+      "pages": 7
+    },
+    {
+      "day": 10,
+      "title": "写代码比写作文强",
+      "dir": "day10-写代码比写作文强",
+      "pages": 7
+    },
+    {
+      "day": 11,
+      "title": "训练",
+      "dir": "day11-训练",
+      "pages": 7
+    },
+    {
+      "day": 12,
+      "title": "思维链",
+      "dir": "day12-思维链",
+      "pages": 7
+    },
+    {
+      "day": 13,
+      "title": "说不知道",
+      "dir": "day13-说不知道",
+      "pages": 7
+    },
+    {
+      "day": 14,
+      "title": "第二周复盘",
+      "dir": "day14-第二周复盘",
+      "pages": 7
+    },
+    {
+      "day": 15,
+      "title": "Agent循环",
+      "dir": "day15-Agent循环",
+      "pages": 7
+    },
+    {
+      "day": 16,
+      "title": "MCP",
+      "dir": "day16-MCP",
+      "pages": 7
+    },
+    {
+      "day": 17,
+      "title": "我的AI助手",
+      "dir": "day17-我的AI助手",
+      "pages": 7
+    },
+    {
+      "day": 18,
+      "title": "记忆",
+      "dir": "day18-记忆",
+      "pages": 7
+    },
+    {
+      "day": 19,
+      "title": "个人知识库",
+      "dir": "day19-个人知识库",
+      "pages": 7
+    },
+    {
+      "day": 20,
+      "title": "多Agent",
+      "dir": "day20-多Agent",
+      "pages": 7
+    },
+    {
+      "day": 21,
+      "title": "第三周复盘",
+      "dir": "day21-第三周复盘",
+      "pages": 7
+    },
+    {
+      "day": 22,
+      "title": "AI会取代我吗",
+      "dir": "day22-AI会取代我吗",
+      "pages": 7
+    },
+    {
+      "day": 23,
+      "title": "AI帮我做知识卡",
+      "dir": "day23-AI帮我做知识卡",
+      "pages": 7
+    },
+    {
+      "day": 24,
+      "title": "提示注入",
+      "dir": "day24-提示注入",
+      "pages": 7
+    },
+    {
+      "day": 25,
+      "title": "偏见",
+      "dir": "day25-偏见",
+      "pages": 7
+    },
+    {
+      "day": 26,
+      "title": "普通人工作流",
+      "dir": "day26-普通人工作流",
+      "pages": 7
+    },
+    {
+      "day": 27,
+      "title": "本地模型",
+      "dir": "day27-本地模型",
+      "pages": 7
+    },
+    {
+      "day": 28,
+      "title": "结营",
+      "dir": "day28-结营",
+      "pages": 7
+    }
+  ]
+}
