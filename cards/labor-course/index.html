@@ -114,7 +114,7 @@ async function goDay(i){
   document.getElementById('picker').value=manifest.days[dayIdx].day;
   const day=manifest.days[dayIdx];
   const imgs=[];
-  for(let p=1;p<=day.pages;p++) imgs.push('page-'+String(p).padStart(2,'0')+'.png');
+  for(let p=1;p<=day.pages;p++) imgs.push('page-'+String(p).padStart(2,'0')+'.webp');
   seq=imgs.map(s=>({src:'days/'+day.dir+'/'+s}));
   pos=0; render();
   // 后台预加载当天全部图片，翻页时直接从缓存出图
