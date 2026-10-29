@@ -1,6 +1,146 @@
 {
-  "updatedAt": "2026-10-18",
+  "updatedAt": "2026-10-29",
   "records": [
+    {
+      "id": "rec_1793277194915",
+      "date": "2026-10-29",
+      "type": "scroll",
+      "meters": 30,
+      "quantity": {
+        "number": 30,
+        "unit": "米"
+      },
+      "paperSnapshot": {
+        "id": "库存-109",
+        "name": "景阳阁处理55g蜡染砑光纸",
+        "inventoryId": "库存-109",
+        "lengthPerSheet": 0
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "临王羲之圣教序"
+      },
+      "note": "",
+      "createdAt": "2026-10-29T12:33:14.915Z",
+      "updatedAt": "2026-10-29T12:33:14.915Z",
+      "deleted": false,
+      "length": 30,
+      "status": "ongoing",
+      "progressLog": [
+        {
+          "addedAt": "2026-10-29T12:33:14.915Z",
+          "addedLength": 30,
+          "totalLength": 30,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "rec_1792631206901",
+      "date": "2026-10-22",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-36",
+        "name": "箔如雪",
+        "inventoryId": "库存-36",
+        "lengthPerSheet": 0.69
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "临王羲之圣教序"
+      },
+      "note": "",
+      "createdAt": "2026-10-22T01:06:46.901Z",
+      "updatedAt": "2026-10-22T01:06:46.901Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1792631193529",
+      "date": "2026-10-20",
+      "type": "sheet",
+      "meters": 2.76,
+      "quantity": {
+        "number": 4,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-36",
+        "name": "箔如雪",
+        "inventoryId": "库存-36",
+        "lengthPerSheet": 0.69
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "临王羲之圣教序"
+      },
+      "note": "",
+      "createdAt": "2026-10-22T01:06:33.529Z",
+      "updatedAt": "2026-10-22T01:06:33.529Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1792370546799",
+      "date": "2026-10-19",
+      "type": "sheet",
+      "meters": 1.38,
+      "quantity": {
+        "number": 2,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-36",
+        "name": "箔如雪",
+        "inventoryId": "库存-36",
+        "lengthPerSheet": 0.69
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "临王羲之圣教序"
+      },
+      "note": "",
+      "createdAt": "2026-10-19T00:42:26.799Z",
+      "updatedAt": "2026-10-19T00:42:26.799Z",
+      "deleted": false
+    },
+    {
+      "id": "rec_1792370528548",
+      "date": "2026-10-19",
+      "type": "sheet",
+      "meters": 4.83,
+      "quantity": {
+        "number": 7,
+        "unit": "张"
+      },
+      "paperSnapshot": {
+        "id": "库存-59",
+        "name": "金箔楮笺",
+        "inventoryId": "库存-59",
+        "lengthPerSheet": 0.69
+      },
+      "copybookSnapshot": {
+        "fontId": "xingshu",
+        "fontName": "行书",
+        "authorName": "赵孟頫",
+        "copybookName": "临王羲之圣教序"
+      },
+      "note": "",
+      "createdAt": "2026-10-19T00:42:08.548Z",
+      "updatedAt": "2026-10-19T00:42:08.548Z",
+      "deleted": false
+    },
     {
       "id": "rec_1792311416518",
       "date": "2026-10-18",
